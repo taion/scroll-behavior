@@ -1,6 +1,6 @@
 {
   "name": "scroll-behavior",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Scroll behaviors for use with history",
   "files": [
     "lib"
