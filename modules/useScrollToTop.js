@@ -1,12 +1,11 @@
 import scrollTo from './utils/scrollTo'
 
 /**
- * `useScrollToTopBehavior` scrolls to the top of the page after any
- * transition.
+ * `useScrollToTop` scrolls to the top of the page after any transition.
  *
  * This is not fully reliable for `POP` transitions.
  */
-export default function useScrollToTopBehavior(createHistory) {
+export default function useScrollToTop(createHistory) {
   return options => {
     const history = createHistory(options)
 

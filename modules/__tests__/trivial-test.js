@@ -1,7 +1,7 @@
 import '..'
-import '../useScrollToTopBehavior'
-import '../useSimpleScrollBehavior'
-import '../useStandardScrollBehavior'
+import '../useScrollToTop'
+import '../useSimpleScroll'
+import '../useStandardScroll'
 
 describe('trivial test', () => {
   it('should successfully load all the modules', () => {})
