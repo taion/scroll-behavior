@@ -7,7 +7,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel ./modules -d lib --ignore '__tests__'",
+    "build": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
     "lint": "eslint modules",
     "mocha": "mocha --compilers js:babel-core/register modules/**/*-test.js",
     "prepublish": "npm run test && npm run build",
@@ -36,7 +36,8 @@
     "eslint": "^1.8.0",
     "eslint-config-rackt": "^1.1.1",
     "history": "^1.13.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "rimraf": "^2.4.3"
   },
   "peerDependencies": {
     "history": "^1.12.1"
