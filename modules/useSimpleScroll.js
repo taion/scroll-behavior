@@ -1,5 +1,6 @@
 import { POP } from 'history/lib/Actions'
 
+import createUseScroll from './utils/createUseScroll'
 import scrollTo from './utils/scrollTo'
 
 /**
@@ -14,20 +15,24 @@ import scrollTo from './utils/scrollTo'
  * the scroll position before emitting the location change.
  */
 export default function useSimpleScroll(createHistory) {
-  return options => {
-    const history = createHistory(options)
+  let unlisten
 
+  function start(history) {
     // Don't override the browser's scroll behavior here - we actively want the
-    // browser to take care of scrolling on `POP` transitions.
+    // the browser to take care of scrolling on `POP` transitions.
 
-    history.listen(({ action }) => {
+    unlisten = history.listen(({ action }) => {
       if (action === POP) {
         return
       }
 
       scrollTo(0, 0)
     })
-
-    return history
   }
+
+  function stop() {
+    unlisten()
+  }
+
+  return createUseScroll(start, stop)(createHistory)
 }

@@ -35,6 +35,7 @@
     "chai": "^3.4.0",
     "eslint": "^1.8.0",
     "eslint-config-rackt": "^1.1.1",
+    "expect": "^1.12.2",
     "history": "^1.13.0",
     "isparta-loader": "^1.0.0",
     "karma": "^0.13.15",

@@ -1,3 +1,4 @@
+import createUseScroll from './utils/createUseScroll'
 import scrollTo from './utils/scrollTo'
 import setScrollRestoration from './utils/setScrollRestoration'
 
@@ -7,15 +8,20 @@ import setScrollRestoration from './utils/setScrollRestoration'
  * This is not fully reliable for `POP` transitions.
  */
 export default function useScrollToTop(createHistory) {
-  return options => {
-    const history = createHistory(options)
+  let unsetScrollRestoration, unlisten
 
+  function start(history) {
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
-    setScrollRestoration('manual')
+    unsetScrollRestoration = setScrollRestoration('manual')
 
-    history.listen(() => scrollTo(0, 0))
-
-    return history
+    unlisten = history.listen(() => scrollTo(0, 0))
   }
+
+  function stop() {
+    unsetScrollRestoration()
+    unlisten()
+  }
+
+  return createUseScroll(start, stop)(createHistory)
 }
