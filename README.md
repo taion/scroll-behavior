@@ -1,7 +1,8 @@
-# scroll-behavior [![build status][build-badge]][build] [![npm package][npm-badge]][npm]
+# scroll-behavior [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
 Scroll behaviors for use with [`history`](https://github.com/rackt/history).
 
+[![Coveralls][coveralls-badge]][coveralls]
 [![Discord][discord-badge]][discord]
 
 ## Usage
@@ -48,6 +49,9 @@ This can give pretty good results with synchronous transitions on browsers like 
 
 [npm-badge]: https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/scroll-behavior
+
+[coveralls-badge]: https://img.shields.io/coveralls/rackt/scroll-behavior/master.svg?style=flat-square
+[coveralls]: https://coveralls.io/github/rackt/scroll-behavior
 
 [discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg?style=flat-square
 [discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
