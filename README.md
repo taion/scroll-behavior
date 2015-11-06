@@ -1,10 +1,8 @@
-# scroll-behavior 
-
-[![npm package](https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square)](https://www.npmjs.org/package/scroll-behavior)
-[![build status](https://img.shields.io/travis/rackt/scroll-behavior/master.svg?style=flat-square)](https://travis-ci.org/rackt/scroll-behavior)
-[![#rackt on freenode](https://img.shields.io/badge/irc-rackt_on_freenode-61DAFB.svg?style=flat-square)](https://webchat.freenode.net/)
+# scroll-behavior [![build status][build-badge]][build] [![npm package][npm-badge]][npm]
 
 Scroll behaviors for use with [`history`](https://github.com/rackt/history).
+
+[![Discord][discord-badge]][discord]
 
 ## Usage
 
@@ -44,3 +42,12 @@ This can give pretty good results with synchronous transitions on browsers like 
 #### `useStandardScroll`
 
 `useStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
+
+[build-badge]: https://img.shields.io/travis/rackt/scroll-behavior/master.svg?style=flat-square
+[build]: https://travis-ci.org/rackt/scroll-behavior
+
+[npm-badge]: https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square
+[npm]: https://www.npmjs.org/package/scroll-behavior
+
+[discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg?style=flat-square
+[discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
