@@ -1,12 +1,13 @@
 export default function setScrollRestoration(scrollRestoration) {
-  if (!('scrollRestoration' in window.history)) {
-    return function () {}
+  /* istanbul ignore if: not supported by any browsers on Travis */
+  if ('scrollRestoration' in window.history) {
+    const oldScrollRestoration = window.history.scrollRestoration
+    window.history.scrollRestoration = scrollRestoration
+
+    return function () {
+      window.history.scrollRestoration = oldScrollRestoration
+    }
   }
 
-  const oldScrollRestoration = window.history.scrollRestoration
-  window.history.scrollRestoration = scrollRestoration
-
-  return function () {
-    window.history.scrollRestoration = oldScrollRestoration
-  }
+  return function () {}
 }

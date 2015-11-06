@@ -24,6 +24,24 @@ export default function useStandardScroll(createHistory) {
     let currentKey
     let savePositionHandle = null
 
+    function getScrollPosition() {
+      const state = readState(currentKey)
+      if (!state) {
+        return null
+      }
+
+      return state.scrollPosition
+    }
+
+    // `history` will invoke this listener synchronously, so `currentKey` will
+    // always be defined.
+    unlisten = history.listen(({ key }) => {
+      currentKey = key
+
+      const scrollPosition = getScrollPosition() || [ 0, 0 ]
+      scrollTo(...scrollPosition)
+    })
+
     // We have to listen to each scroll update rather than to just location
     // updates, because some browsers will update scroll position before
     // emitting the location change.
@@ -38,10 +56,6 @@ export default function useStandardScroll(createHistory) {
       // if we observe a location update.
       savePositionHandle = requestAnimationFrame(() => {
         savePositionHandle = null
-
-        if (!currentKey) {
-          return
-        }
 
         const state = readState(currentKey)
         const scrollPosition = [ scrollLeft(window), scrollTop(window) ]
@@ -61,22 +75,6 @@ export default function useStandardScroll(createHistory) {
         requestAnimationFrame.cancel(savePositionHandle)
         savePositionHandle = null
       }
-    })
-
-    function getScrollPosition() {
-      const state = readState(currentKey)
-      if (!state) {
-        return null
-      }
-
-      return state.scrollPosition
-    }
-
-    unlisten = history.listen(({ key }) => {
-      currentKey = key
-
-      const scrollPosition = getScrollPosition() || [ 0, 0 ]
-      scrollTo(...scrollPosition)
     })
   }
 
