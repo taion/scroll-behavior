@@ -1,4 +1,9 @@
-# scroll-behavior [![npm package](https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square)](https://www.npmjs.org/package/scroll-behavior)
+# scroll-behavior 
+
+[![npm package](https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square)](https://www.npmjs.org/package/scroll-behavior)
+[![build status](https://img.shields.io/travis/rackt/scroll-behavior/master.svg?style=flat-square)](https://travis-ci.org/rackt/scroll-behavior)
+[![#rackt on freenode](https://img.shields.io/badge/irc-rackt_on_freenode-61DAFB.svg?style=flat-square)](https://webchat.freenode.net/)
+
 Scroll behaviors for use with [`history`](https://github.com/rackt/history).
 
 ## Usage
