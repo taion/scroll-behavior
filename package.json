@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
     "lint": "eslint modules *.js",
-    "prepublish": "npm run test && npm run build",
+    "prepublish": "npm run test -- --single-run && npm run build",
     "test": "npm run lint && karma start"
   },
   "repository": {
