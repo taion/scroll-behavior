@@ -1,9 +1,11 @@
+import off from 'dom-helpers/events/off'
 import on from 'dom-helpers/events/on'
 import scrollLeft from 'dom-helpers/query/scrollLeft'
 import scrollTop from 'dom-helpers/query/scrollTop'
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
 import { readState, saveState } from 'history/lib/DOMStateStorage'
 
+import createUseScroll from './utils/createUseScroll'
 import scrollTo from './utils/scrollTo'
 
 /**
@@ -12,9 +14,9 @@ import scrollTo from './utils/scrollTo'
  * scroll position upon a `POP` transition.
  */
 export default function useStandardScroll(createHistory) {
-  return options => {
-    const history = createHistory(options)
+  let unlistenScroll, unlistenBefore, unlisten
 
+  function start(history) {
     // Don't override the browser's scroll behavior here - it helps avoid a
     // little bit of jank when the browser actually does do the right thing
     // after a `POP` transition.
@@ -25,7 +27,7 @@ export default function useStandardScroll(createHistory) {
     // We have to listen to each scroll update rather than to just location
     // updates, because some browsers will update scroll position before
     // emitting the location change.
-    on(window, 'scroll', () => {
+    function onScroll() {
       if (savePositionHandle !== null) {
         return
       }
@@ -49,9 +51,12 @@ export default function useStandardScroll(createHistory) {
         // entire page, which would lead to observably bad scroll performance.
         saveState(currentKey, { ...state, scrollPosition })
       })
-    })
+    }
 
-    history.listenBefore(() => {
+    on(window, 'scroll', onScroll)
+    unlistenScroll = () => off(window, 'scroll', onScroll)
+
+    unlistenBefore = history.listenBefore(() => {
       if (savePositionHandle !== null) {
         requestAnimationFrame.cancel(savePositionHandle)
         savePositionHandle = null
@@ -67,13 +72,19 @@ export default function useStandardScroll(createHistory) {
       return state.scrollPosition
     }
 
-    history.listen(({ key }) => {
+    unlisten = history.listen(({ key }) => {
       currentKey = key
 
       const scrollPosition = getScrollPosition() || [ 0, 0 ]
       scrollTo(...scrollPosition)
     })
-
-    return history
   }
+
+  function stop() {
+    unlistenScroll()
+    unlistenBefore()
+    unlisten()
+  }
+
+  return createUseScroll(start, stop)(createHistory)
 }
