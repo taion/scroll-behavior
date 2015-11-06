@@ -17,6 +17,9 @@ export default function useSimpleScroll(createHistory) {
   return options => {
     const history = createHistory(options)
 
+    // Don't override the browser's scroll behavior here - we actively want the
+    // browser to take care of scrolling on `POP` transitions.
+
     history.listen(({ action }) => {
       if (action === POP) {
         return

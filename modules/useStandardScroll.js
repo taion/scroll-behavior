@@ -15,6 +15,10 @@ export default function useStandardScroll(createHistory) {
   return options => {
     const history = createHistory(options)
 
+    // Don't override the browser's scroll behavior here - it helps avoid a
+    // little bit of jank when the browser actually does do the right thing
+    // after a `POP` transition.
+
     let currentKey
     let savePositionHandle = null
 
