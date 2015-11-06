@@ -7,11 +7,11 @@ import { readState, saveState } from 'history/lib/DOMStateStorage'
 import scrollTo from './utils/scrollTo'
 
 /**
- * `useStandardScrollBehavior` attempts to imitate native browser scroll
- * behavior by recording updates to the window scroll position, then restoring
- * the previous scroll position upon a `POP` transition.
+ * `useStandardScroll` attempts to imitate native browser scroll behavior by
+ * recording updates to the window scroll position, then restoring the previous
+ * scroll position upon a `POP` transition.
  */
-export default function useStandardScrollBehavior(createHistory) {
+export default function useStandardScroll(createHistory) {
   return options => {
     const history = createHistory(options)
 

@@ -1,6 +1,6 @@
 // This is just for convenience; users should import the specific behavior
 // directly from `lib/`.
 
-export useScrollToTopBehavior from './useScrollToTopBehavior'
-export useSimpleScrollBehavior from './useSimpleScrollBehavior'
-export useStandardScrollBehavior from './useStandardScrollBehavior'
+export useScrollToTop from './useScrollToTop'
+export useSimpleScroll from './useSimpleScroll'
+export useStandardScroll from './useStandardScroll'
