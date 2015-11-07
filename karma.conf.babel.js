@@ -17,6 +17,7 @@ export default config => {
       exclude: /__tests__/,
       loader: 'isparta'
     })
+
     coverageReporters.push('coverage')
 
     if (isCi) {
@@ -44,7 +45,8 @@ export default config => {
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('test')
         })
-      ]
+      ],
+      devtool: 'inline-source-map'
     },
 
     webpackMiddleware: {
