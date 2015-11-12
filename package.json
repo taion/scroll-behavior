@@ -3,11 +3,15 @@
   "version": "0.2.0",
   "description": "Scroll behaviors for use with history",
   "files": [
+    "es6",
     "lib"
   ],
   "main": "lib/index.js",
+  "jsnext:main": "es6/index",
   "scripts": {
-    "build": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
+    "build": "npm run build-cjs && npm run build-es6",
+    "build-cjs": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
+    "build-es6": "rimraf es6 && babel ./modules -d es6 --blacklist=es6.modules --ignore '__tests__'",
     "lint": "eslint modules *.js",
     "prepublish": "npm run test -- --single-run && npm run build",
     "test": "npm run lint && karma start"
