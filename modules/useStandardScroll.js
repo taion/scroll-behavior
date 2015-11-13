@@ -80,6 +80,7 @@ export default function useStandardScroll(createHistory) {
   }
 
   function stop() {
+    /* istanbul ignore if: not supported by any browsers on Travis */
     if (unsetScrollRestoration) {
       unsetScrollRestoration()
     }

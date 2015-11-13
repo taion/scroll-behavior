@@ -17,7 +17,7 @@ export default function useScrollToTop(createHistory) {
     // then let the browser update to its remembered scroll position first,
     // before we set the actual correct scroll position.
     if (action === POP && !unsetScrollRestoration) {
-      setTimeout(() => scrollTo(action, 0, 0))
+      setTimeout(() => window.scrollTo(0, 0))
       return
     }
 
@@ -31,6 +31,7 @@ export default function useScrollToTop(createHistory) {
   }
 
   function stop() {
+    /* istanbul ignore if: not supported by any browsers on Travis */
     if (unsetScrollRestoration) {
       unsetScrollRestoration()
     }
