@@ -1,7 +1,6 @@
 import { POP } from 'history/lib/Actions'
 
 import createUseScroll from './utils/createUseScroll'
-import scrollTo from './utils/scrollTo'
 
 /**
  * `useSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE`
@@ -15,24 +14,16 @@ import scrollTo from './utils/scrollTo'
  * the scroll position before emitting the location change.
  */
 export default function useSimpleScroll(createHistory) {
-  let unlisten
+  // Don't override the browser's scroll behavior here - we actively want the
+  // the browser to take care of scrolling on `POP` transitions.
 
-  function start(history) {
-    // Don't override the browser's scroll behavior here - we actively want the
-    // the browser to take care of scrolling on `POP` transitions.
+  function updateScroll({ action }) {
+    if (action === POP) {
+      return
+    }
 
-    unlisten = history.listen(({ action }) => {
-      if (action === POP) {
-        return
-      }
-
-      scrollTo(0, 0)
-    })
+    window.scrollTo(0, 0)
   }
 
-  function stop() {
-    unlisten()
-  }
-
-  return createUseScroll(start, stop)(createHistory)
+  return createUseScroll(updateScroll)(createHistory)
 }

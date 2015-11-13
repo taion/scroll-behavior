@@ -9,5 +9,5 @@ export default function setScrollRestoration(scrollRestoration) {
     }
   }
 
-  return function () {}
+  return null
 }

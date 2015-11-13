@@ -10,15 +10,21 @@ import run from './run'
 describe('useStandardScroll', () => {
   HISTORIES.forEach(createHistory => {
     describe(createHistory.name, () => {
-      let history, unlisten
+      let history, listenBeforeSpy, unlistenBefore, unlisten
 
       beforeEach(() => {
         history = useRoutes(useStandardScroll(createHistory))()
+
+        listenBeforeSpy = expect.createSpy()
+        unlistenBefore = history.listenBefore(listenBeforeSpy)
       })
 
       afterEach(() => {
         if (unlisten) {
           unlisten()
+        }
+        if (unlistenBefore) {
+          unlistenBefore()
         }
       })
 
@@ -29,6 +35,7 @@ describe('useStandardScroll', () => {
             history.pushState(null, '/detail')
           },
           () => {
+            expect(listenBeforeSpy.calls.length).toBe(1)
             expect(scrollTop(window)).toBe(0)
             done()
           }
@@ -46,9 +53,11 @@ describe('useStandardScroll', () => {
             }))
           },
           () => {
+            expect(listenBeforeSpy.calls.length).toBe(1)
             history.goBack()
           },
           () => {
+            expect(listenBeforeSpy.calls.length).toBe(2)
             expect(scrollTop(window)).toBe(15000)
             done()
           }

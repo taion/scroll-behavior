@@ -44,6 +44,10 @@ This can give pretty good results with synchronous transitions on browsers like 
 
 `useStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
 
+### Notes
+
+- Support for async transitions is currently very poor. Fixing this will require major breaking API changes in the future.
+
 [build-badge]: https://img.shields.io/travis/rackt/scroll-behavior/master.svg?style=flat-square
 [build]: https://travis-ci.org/rackt/scroll-behavior
 

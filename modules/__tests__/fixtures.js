@@ -1,28 +1,27 @@
 import createUseScroll from '../utils/createUseScroll'
 
 export function useRoutes(createHistory) {
-  let element, unlisten
+  let element
 
-  function start(history) {
+  function updateScroll({ pathname }) {
+    if (pathname === '/') {
+      element.style.height = '20000px'
+    } else {
+      element.style.height = '10000px'
+    }
+
+    // Force reflow.
+    element.offsetHeight
+  }
+
+  function start() {
     element = document.createElement('div')
     document.body.appendChild(element)
-
-    unlisten = history.listen(({ pathname }) => {
-      if (pathname === '/') {
-        element.style.height = '20000px'
-      } else {
-        element.style.height = '10000px'
-      }
-
-      // Force reflow.
-      element.offsetHeight
-    })
   }
 
   function stop() {
     document.body.removeChild(element)
-    unlisten()
   }
 
-  return createUseScroll(start, stop)(createHistory)
+  return createUseScroll(updateScroll, start, stop)(createHistory)
 }
