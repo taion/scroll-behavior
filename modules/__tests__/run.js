@@ -8,6 +8,8 @@ export default function run(history, steps, delay) {
       return
     }
 
-    setTimeout(steps[i++], delay)
+    // First wait a extra tick for all the scroll callbacks to fire before
+    // position, even if we don't need an extra delay.
+    setTimeout(() => setTimeout(steps[i++], delay))
   })
 }

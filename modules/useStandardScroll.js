@@ -6,7 +6,7 @@ import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
 import { readState, saveState } from 'history/lib/DOMStateStorage'
 
 import createUseScroll from './utils/createUseScroll'
-import scrollTo from './utils/scrollTo'
+import setScrollRestoration from './utils/setScrollRestoration'
 
 /**
  * `useStandardScroll` attempts to imitate native browser scroll behavior by
@@ -14,33 +14,34 @@ import scrollTo from './utils/scrollTo'
  * scroll position upon a `POP` transition.
  */
 export default function useStandardScroll(createHistory) {
-  let unlistenScroll, unlistenBefore, unlisten
+  let currentKey
 
-  function start(history) {
-    // Don't override the browser's scroll behavior here - it helps avoid a
-    // little bit of jank when the browser actually does do the right thing
-    // after a `POP` transition.
-
-    let currentKey
-    let savePositionHandle = null
-
-    function getScrollPosition() {
-      const state = readState(currentKey)
-      if (!state) {
-        return null
-      }
-
-      return state.scrollPosition
+  function getScrollPosition() {
+    const state = readState(currentKey)
+    if (!state) {
+      return null
     }
 
-    // `history` will invoke this listener synchronously, so `currentKey` will
-    // always be defined.
-    unlisten = history.listen(({ key }) => {
-      currentKey = key
+    return state.scrollPosition
+  }
 
-      const scrollPosition = getScrollPosition() || [ 0, 0 ]
-      scrollTo(...scrollPosition)
-    })
+  // `history` will invoke this listener synchronously, so `currentKey` will
+  // always be defined.
+  function updateScroll({ key }) {
+    currentKey = key
+
+    const scrollPosition = getScrollPosition() || [ 0, 0 ]
+    window.scrollTo(...scrollPosition)
+  }
+
+  let unsetScrollRestoration, unlistenScroll, unlistenBefore
+
+  function start(history) {
+    // This helps avoid some jankiness in fighting against the browser's
+    // default scroll behavior on `POP` transitions.
+    unsetScrollRestoration = setScrollRestoration('manual')
+
+    let savePositionHandle = null
 
     // We have to listen to each scroll update rather than to just location
     // updates, because some browsers will update scroll position before
@@ -79,10 +80,13 @@ export default function useStandardScroll(createHistory) {
   }
 
   function stop() {
+    if (unsetScrollRestoration) {
+      unsetScrollRestoration()
+    }
+
     unlistenScroll()
     unlistenBefore()
-    unlisten()
   }
 
-  return createUseScroll(start, stop)(createHistory)
+  return createUseScroll(updateScroll, start, stop)(createHistory)
 }
