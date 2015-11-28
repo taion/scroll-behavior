@@ -67,10 +67,7 @@ export default config => {
       }
     },
 
-    browsers: [
-      isCi ? 'ChromeCi' : 'Chrome',
-      'Firefox'
-    ],
+    browsers: isCi ? [ env.BROWSER ] : [ 'Chrome', 'Firefox' ],
 
     singleRun: isCi
   })
