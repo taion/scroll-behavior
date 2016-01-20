@@ -1,13 +1,12 @@
 export default function createUseScroll(updateScroll, start, stop) {
-  return function (createHistory) {
+  return function (browserHistory) {
     return function (options) {
-      const history = createHistory(options)
 
       let numListeners = 0
 
       function checkStart() {
         if (++numListeners === 1 && start) {
-          start(history)
+          start(browserHistory)
         }
       }
 
@@ -19,7 +18,7 @@ export default function createUseScroll(updateScroll, start, stop) {
 
       function listenBefore(hook) {
         checkStart()
-        const unlisten = history.listenBefore(hook)
+        const unlisten = browserHistory.listenBefore(hook)
 
         return function () {
           unlisten()
@@ -40,7 +39,7 @@ export default function createUseScroll(updateScroll, start, stop) {
         checkStart()
 
         if (listeners.length === 0) {
-          unlisten = history.listen(onChange)
+          unlisten = browserHistory.listen(onChange)
         }
 
         // Add the listener to the list afterward so we can manage calling it
@@ -59,7 +58,7 @@ export default function createUseScroll(updateScroll, start, stop) {
       }
 
       return {
-        ...history,
+        ...browserHistory,
         listenBefore,
         listen
       }
