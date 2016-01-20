@@ -16,7 +16,7 @@
     "lint": "eslint modules *.js",
     "prepublish": "npm run build",
     "test": "npm run lint && karma start",
-    "postinstall": "npm install"
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
