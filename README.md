@@ -10,10 +10,10 @@ Scroll behaviors for use with [`history`](https://github.com/rackt/history).
 Enhance your history object with one of the scroll behaviors in this library to get the desired scroll behavior after transitions.
 
 ```js
-import createHistory from 'history/lib/createBrowserHistory'
+import browserHistory from 'react-router/lib/browserHistory'
 import useScroll from 'scroll-behavior/lib/useStandardScroll'
 
-const history = useScroll(createHistory)()
+const history = useScroll(browserHistory)()
 ```
 
 ## Guide
