@@ -14,7 +14,7 @@
     "build-es6": "rimraf es6 && babel ./modules -d es6 --blacklist=es6.modules --ignore '__tests__'",
     "lint": "eslint modules *.js",
     "prepublish": "npm run build",
-    "test": "npm run lint && karma start",
+    "test": "npm run lint && karma start"
   },
   "repository": {
     "type": "git",
