@@ -13,7 +13,7 @@ import setScrollRestoration from './utils/setScrollRestoration'
  * recording updates to the window scroll position, then restoring the previous
  * scroll position upon a `POP` transition.
  */
-export default function useStandardScroll(createHistory) {
+export default function useStandardScroll(browserHistory) {
   let currentKey
 
   function getScrollPosition() {
@@ -89,5 +89,5 @@ export default function useStandardScroll(createHistory) {
     unlistenBefore()
   }
 
-  return createUseScroll(updateScroll, start, stop)(createHistory)
+  return createUseScroll(updateScroll, start, stop)(browserHistory)
 }
