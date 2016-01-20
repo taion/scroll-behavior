@@ -13,7 +13,7 @@ import createUseScroll from './utils/createUseScroll'
  * using asynchronous transitions or with browsers like Firefox that update
  * the scroll position before emitting the location change.
  */
-export default function useSimpleScroll(createHistory) {
+export default function useSimpleScroll(browserHistory) {
   // Don't override the browser's scroll behavior here - we actively want the
   // the browser to take care of scrolling on `POP` transitions.
 
@@ -25,5 +25,5 @@ export default function useSimpleScroll(createHistory) {
     window.scrollTo(0, 0)
   }
 
-  return createUseScroll(updateScroll)(createHistory)
+  return createUseScroll(updateScroll)(browserHistory)
 }
