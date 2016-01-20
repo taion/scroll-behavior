@@ -1,7 +1,5 @@
-import createBrowserHistory from 'history/lib/createBrowserHistory'
-import createHashHistory from 'history/lib/createHashHistory'
+import browserHistory from 'react-router/lib/browserHistory'
 
 export const HISTORIES = [
-  createBrowserHistory,
-  createHashHistory
+  browserHistory
 ]
