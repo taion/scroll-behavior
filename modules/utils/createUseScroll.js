@@ -1,6 +1,6 @@
 export default function createUseScroll(updateScroll, start, stop) {
   return function (browserHistory) {
-    return function (options) {
+    return function () {
 
       let numListeners = 0
 
