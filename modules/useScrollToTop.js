@@ -8,7 +8,7 @@ import setScrollRestoration from './utils/setScrollRestoration'
  *
  * This is not fully reliable for `POP` transitions.
  */
-export default function useScrollToTop(createHistory) {
+export default function useScrollToTop(browserHistory) {
   let unsetScrollRestoration
 
   function updateScroll({ action }) {
@@ -37,5 +37,5 @@ export default function useScrollToTop(createHistory) {
     }
   }
 
-  return createUseScroll(updateScroll, start, stop)(createHistory)
+  return createUseScroll(updateScroll, start, stop)(browserHistory)
 }
