@@ -4,7 +4,8 @@
   "description": "Scroll behaviors for use with history",
   "files": [
     "es6",
-    "lib"
+    "lib",
+    "modules"
   ],
   "main": "lib/index.js",
   "jsnext:main": "es6/index",
