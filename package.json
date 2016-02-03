@@ -56,7 +56,7 @@
     "webpack": "^1.12.3"
   },
   "peerDependencies": {
-    "history": "^1.12.1"
+    "history": "^1.12.1 || ^2.0.0-rc2"
   },
   "dependencies": {
     "dom-helpers": "^2.4.0"
