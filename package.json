@@ -1,6 +1,6 @@
 {
   "name": "scroll-behavior",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Scroll behaviors for use with history",
   "files": [
     "es6",
