@@ -27,7 +27,7 @@ export default function createUseScroll(updateScroll, start, stop) {
         }
       }
 
-      const { shouldUpdateScroll } = options
+      const { shouldUpdateScroll = () => true } = options
       let oldLocation
       let listeners = [], currentLocation, unlisten
 
@@ -36,7 +36,7 @@ export default function createUseScroll(updateScroll, start, stop) {
         currentLocation = location
 
         listeners.forEach(listener => listener(location))
-        if (!shouldUpdateScroll || shouldUpdateScroll(oldLocation, currentLocation)) {
+        if (shouldUpdateScroll(oldLocation, currentLocation)) {
           updateScroll(location)
         }
       }
