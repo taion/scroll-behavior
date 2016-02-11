@@ -1,7 +1,16 @@
+function defaultShouldUpdateScroll() {
+  return true
+}
+
 export default function createUseScroll(updateScroll, start, stop) {
   return function (createHistory) {
     return function (options = {}) {
-      const history = createHistory(options)
+      const {
+        shouldUpdateScroll = defaultShouldUpdateScroll,
+        ...historyOptions
+      } = options
+
+      const history = createHistory(historyOptions)
 
       let numListeners = 0
 
@@ -27,7 +36,6 @@ export default function createUseScroll(updateScroll, start, stop) {
         }
       }
 
-      const { shouldUpdateScroll = () => true } = options
       let oldLocation
       let listeners = [], currentLocation, unlisten
 

@@ -4,6 +4,7 @@ import scrollTop from 'dom-helpers/query/scrollTop'
 import useScrollToTop from '../useScrollToTop'
 
 import { HISTORIES } from './config'
+import describeShouldUpdateScroll from './describeShouldUpdateScroll'
 import { useRoutes } from './fixtures'
 import run from './run'
 
@@ -51,29 +52,7 @@ describe('useScrollToTop', () => {
         ])
       })
 
-      it('should allow scroll suppression', done => {
-        history = useRoutes(useScrollToTop(createHistory))({
-          shouldUpdateScroll: (oldLoc, newLoc) =>
-            !oldLoc || oldLoc.pathname !== newLoc.pathname
-        })
-        unlisten = run(history, [
-          () => {
-            history.push('/oldpath')
-          },
-          () => {
-            scrollTop(window, 5000)
-            history.push({ pathname: '/oldpath', query: { key: 'value' } })
-          },
-          () => {
-            expect(scrollTop(window)).toBe(5000)
-            history.push('/newpath')
-          },
-          () => {
-            expect(scrollTop(window)).toBe(0)
-            done()
-          }
-        ])
-      })
+      describeShouldUpdateScroll(useScrollToTop, createHistory)
     })
   })
 })
