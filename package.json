@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rackt/scroll-behavior.git"
+    "url": "git+https://github.com/taion/scroll-behavior.git"
   },
   "keywords": [
     "history",
@@ -28,9 +28,9 @@
   "author": "Jimmy Jia",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rackt/scroll-behavior/issues"
+    "url": "https://github.com/taion/scroll-behavior/issues"
   },
-  "homepage": "https://github.com/rackt/scroll-behavior#readme",
+  "homepage": "https://github.com/taion/scroll-behavior#readme",
   "devDependencies": {
     "babel": "5.x",
     "babel-core": "5.x",
