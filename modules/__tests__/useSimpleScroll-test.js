@@ -50,6 +50,30 @@ describe('useSimpleScroll', () => {
           }
         ])
       })
+
+      it('should allow scroll suppression', done => {
+        history = useRoutes(useSimpleScroll(createHistory))({
+          shouldUpdateScroll: (oldLoc, newLoc) =>
+            !oldLoc || oldLoc.pathname !== newLoc.pathname
+        })
+        unlisten = run(history, [
+          () => {
+            history.push('/oldpath')
+          },
+          () => {
+            scrollTop(window, 5000)
+            history.push({ pathname: '/oldpath', query: { key: 'value' } })
+          },
+          () => {
+            expect(scrollTop(window)).toBe(5000)
+            history.push('/newpath')
+          },
+          () => {
+            expect(scrollTop(window)).toBe(0)
+            done()
+          }
+        ])
+      })
     })
   })
 })
