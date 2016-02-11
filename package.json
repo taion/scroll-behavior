@@ -32,16 +32,16 @@
   },
   "homepage": "https://github.com/rackt/scroll-behavior#readme",
   "devDependencies": {
-    "babel": "^5.8.29",
-    "babel-core": "^5.8.33",
-    "babel-eslint": "^4.1.4",
-    "babel-loader": "^5.3.3",
+    "babel": "5.x",
+    "babel-core": "5.x",
+    "babel-eslint": "4.x",
+    "babel-loader": "5.x",
     "chai": "^3.4.0",
     "eslint": "^1.8.0",
     "eslint-config-rackt": "^1.1.1",
     "expect": "^1.12.2",
-    "history": "^1.13.0",
-    "isparta-loader": "^1.0.0",
+    "history": "^2.0.0",
+    "isparta-loader": "1.x",
     "karma": "^0.13.15",
     "karma-chrome-launcher": "^0.2.1",
     "karma-coverage": "^0.5.3",
@@ -53,10 +53,10 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.3",
     "rimraf": "^2.4.3",
-    "webpack": "^1.12.3"
+    "webpack": "^1.12.13"
   },
   "peerDependencies": {
-    "history": "^1.12.1 || ^2.0.0-rc2"
+    "history": "^1.12.1 || ^2.0.0"
   },
   "dependencies": {
     "dom-helpers": "^2.4.0"
