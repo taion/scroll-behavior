@@ -1,6 +1,6 @@
 # scroll-behavior [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
-Scroll behaviors for use with [`history`](https://github.com/rackt/history).
+Scroll behaviors for use with [`history`](https://github.com/reactjs/history).
 
 [![Coveralls][coveralls-badge]][coveralls]
 [![Discord][discord-badge]][discord]
@@ -24,7 +24,7 @@ const history = useScroll(createHistory)()
 $ npm install history scroll-behavior
 ```
 
-You may also want to install [React Router](https://github.com/rackt/react-router) to obtain a complete routing solution for React that works with `history`. 
+You may also want to install [React Router](https://github.com/reactjs/react-router) to obtain a complete routing solution for React that works with `history`. 
 
 ### Scroll behaviors
 
@@ -48,14 +48,14 @@ This can give pretty good results with synchronous transitions on browsers like 
 
 - Support for async transitions is currently very poor. Fixing this will require major breaking API changes in the future.
 
-[build-badge]: https://img.shields.io/travis/rackt/scroll-behavior/master.svg?style=flat-square
-[build]: https://travis-ci.org/rackt/scroll-behavior
+[build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg?style=flat-square
+[build]: https://travis-ci.org/taion/scroll-behavior
 
 [npm-badge]: https://img.shields.io/npm/v/scroll-behavior.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/scroll-behavior
 
-[coveralls-badge]: https://img.shields.io/coveralls/rackt/scroll-behavior/master.svg?style=flat-square
-[coveralls]: https://coveralls.io/github/rackt/scroll-behavior
+[coveralls-badge]: https://img.shields.io/coveralls/taion/scroll-behavior/master.svg?style=flat-square
+[coveralls]: https://coveralls.io/github/taion/scroll-behavior
 
 [discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg?style=flat-square
 [discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
