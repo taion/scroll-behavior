@@ -27,9 +27,17 @@ export default function useStandardScroll(createHistory) {
 
   // `history` will invoke this listener synchronously, so `currentKey` will
   // always be defined.
-  function updateScroll({ key }) {
+  function updateScroll({ key, hash }) {
     currentKey = key
-
+    if (hash) {
+      // node may not yet be in DOM
+      requestAnimationFrame(() => {
+        const node = document.getElementById(hash.substr(1))
+        if (node) {
+          node.scrollIntoView()
+        }
+      })
+    }
     const [ x, y ] = getScrollPosition() || [ 0, 0 ]
     window.scrollTo(x, y)
   }
