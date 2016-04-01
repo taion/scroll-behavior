@@ -33,7 +33,7 @@ describe('useStandardScroll', () => {
         unlisten = run(history, [
           () => {
             scrollTop(window, 15000)
-            history.pushState(null, '/detail')
+            history.push('/detail')
           },
           () => {
             expect(listenBeforeSpy.calls.length).toBe(1)
@@ -50,7 +50,7 @@ describe('useStandardScroll', () => {
 
             // Delay this to let the scroll position actually save.
             requestAnimationFrame(() => setTimeout(() => {
-              history.pushState(null, '/detail')
+              history.push('/detail')
             }))
           },
           () => {

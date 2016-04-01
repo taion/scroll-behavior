@@ -1,14 +1,9 @@
-function defaultShouldUpdateScroll() {
-  return true
-}
-
-export default function createUseScroll(updateScroll, start, stop) {
+export default function createUseScroll(
+  updateScroll, start, stop, updateLocation
+) {
   return function (createHistory) {
     return function (options = {}) {
-      const {
-        shouldUpdateScroll = defaultShouldUpdateScroll,
-        ...historyOptions
-      } = options
+      const { shouldUpdateScroll, ...historyOptions } = options
 
       const history = createHistory(historyOptions)
 
@@ -44,7 +39,17 @@ export default function createUseScroll(updateScroll, start, stop) {
         currentLocation = location
 
         listeners.forEach(listener => listener(location))
-        if (shouldUpdateScroll(oldLocation, currentLocation)) {
+
+        // useStandardScroll needs the new location even when not updating the
+        // scroll position, to update the current key.
+        if (updateLocation) {
+          updateLocation(location)
+        }
+
+        if (
+          !shouldUpdateScroll ||
+          shouldUpdateScroll(oldLocation, currentLocation)
+        ) {
           updateScroll(location)
         }
       }

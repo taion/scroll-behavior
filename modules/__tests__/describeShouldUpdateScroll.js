@@ -10,7 +10,8 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
 
     beforeEach(() => {
       // We intentially invert the order of history enhancers here so the
-      // actual useScroll enhancer can consume shouldUpdateScroll.
+      // actual useScroll enhancer can consume shouldUpdateScroll, instead of
+      // the fake one in our useRoutes.
       history = useScroll(useRoutes(createHistory))({
         shouldUpdateScroll: (oldLoc, newLoc) => (
           !oldLoc || oldLoc.pathname !== newLoc.pathname
