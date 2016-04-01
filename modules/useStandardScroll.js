@@ -27,9 +27,11 @@ export default function useStandardScroll(createHistory) {
 
   // `history` will invoke this listener synchronously, so `currentKey` will
   // always be defined.
-  function updateScroll({ key }) {
+  function updateLocation({ key }) {
     currentKey = key
+  }
 
+  function updateScroll() {
     const [ x, y ] = getScrollPosition() || [ 0, 0 ]
     window.scrollTo(x, y)
   }
@@ -89,5 +91,7 @@ export default function useStandardScroll(createHistory) {
     unlistenBefore()
   }
 
-  return createUseScroll(updateScroll, start, stop)(createHistory)
+  return createUseScroll(
+    updateScroll, start, stop, updateLocation
+  )(createHistory)
 }
