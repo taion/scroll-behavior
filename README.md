@@ -24,7 +24,7 @@ const history = useScroll(createHistory)()
 $ npm install history scroll-behavior
 ```
 
-You may also want to install [React Router](https://github.com/reactjs/react-router) to obtain a complete routing solution for React that works with `history`. 
+You may also want to install [React Router](https://github.com/reactjs/react-router) to obtain a complete routing solution for React that works with history.
 
 ### Scroll behaviors
 
@@ -43,6 +43,18 @@ This can give pretty good results with synchronous transitions on browsers like 
 #### `useStandardScroll`
 
 `useStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
+
+### Suppressing scroll updates
+
+You can further customize scroll behavior by providing a `shouldUpdateScroll` callback to the enhanced history. Return a falsy value from this callback to prevent the update of the scroll position. This callback is called with both the old location and the new location.
+
+```js
+const history = useScroll(createHistory)({
+  shouldUpdateScroll: (oldLocation, newLocation) => (
+    newLocation.pathname !== oldLocation.pathname
+  )
+})
+```
 
 ### Notes
 
