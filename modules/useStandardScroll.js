@@ -2,7 +2,7 @@ import off from 'dom-helpers/events/off'
 import on from 'dom-helpers/events/on'
 import scrollLeft from 'dom-helpers/query/scrollLeft'
 import scrollTop from 'dom-helpers/query/scrollTop'
-import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
+import scrollTo from './utils/scrollTo'
 import { readState, saveState } from 'history/lib/DOMStateStorage'
 
 import createUseScroll from './utils/createUseScroll'
@@ -14,26 +14,39 @@ import setScrollRestoration from './utils/setScrollRestoration'
  * scroll position upon a `POP` transition.
  */
 export default function useStandardScroll(createHistory) {
+  const positionByPath = {}
   let currentKey
+  let previousPath
+  let currentPath
 
   function getScrollPosition() {
     const state = readState(currentKey)
-    if (!state) {
-      return null
+    const positionFromPath = state && state.restoreScroll && positionByPath[currentPath]
+    const positionFromState = state && state.scrollPosition
+    const defaultPosition = [0, 0]
+    if (previousPath === currentPath) {
+      // Scroll to top if you navigate to the route you are already on
+      return defaultPosition
+    } else {
+      return positionFromPath || positionFromState || defaultPosition
     }
-
-    return state.scrollPosition
   }
 
   // `history` will invoke this listener synchronously, so `currentKey` will
   // always be defined.
-  function updateLocation({ key }) {
-    currentKey = key
+  function updateLocation(location) {
+    previousPath = currentPath
+    currentPath = location.pathname
+    currentKey = location.key
   }
 
   function updateScroll() {
-    const [ x, y ] = getScrollPosition() || [ 0, 0 ]
-    window.scrollTo(x, y)
+    const scrollPosition = getScrollPosition()
+    if (scrollPosition) {
+      positionByPath[currentPath] = scrollPosition
+      const [ x, y ] = scrollPosition
+      scrollTo(x, y)
+    }
   }
 
   let unsetScrollRestoration, unlistenScroll, unlistenBefore
@@ -67,6 +80,7 @@ export default function useStandardScroll(createHistory) {
         // updating the location could cause e.g. React Router to re-render the
         // entire page, which would lead to observably bad scroll performance.
         saveState(currentKey, { ...state, scrollPosition })
+        positionByPath[currentPath] = scrollPosition
       })
     }
 

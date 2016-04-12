@@ -1,6 +1,7 @@
 import { POP } from 'history/lib/Actions'
 
 import createUseScroll from './utils/createUseScroll'
+import scrollTo from './utils/scrollTo'
 
 /**
  * `useSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE`
@@ -22,7 +23,7 @@ export default function useSimpleScroll(createHistory) {
       return
     }
 
-    window.scrollTo(0, 0)
+    scrollTo(0, 0)
   }
 
   return createUseScroll(updateScroll)(createHistory)
