@@ -14,26 +14,45 @@ import setScrollRestoration from './utils/setScrollRestoration'
  * scroll position upon a `POP` transition.
  */
 export default function useStandardScroll(createHistory) {
+  const positionByPath = {}
   let currentKey
+  let previousPath
+  let currentPath
 
-  function getScrollPosition() {
+  function getScrollPosition(location) {
     const state = readState(currentKey)
-    if (!state) {
-      return null
+    const positionFromState = state && state.scrollPosition
+    const { state: locationState } = location
+    const positionFromPath = locationState && locationState.restoreScroll && positionByPath[currentPath]
+    const ignoreScroll = locationState && locationState.ignoreScroll
+    const defaultPosition = [0, 0]
+    if (ignoreScroll) {
+      return
+    } else if (previousPath === currentPath) {
+      // Scroll to top if you navigate to the route you are already on
+      return defaultPosition
+    } else {
+      return positionFromPath || positionFromState || defaultPosition
     }
-
-    return state.scrollPosition
   }
 
   // `history` will invoke this listener synchronously, so `currentKey` will
   // always be defined.
-  function updateLocation({ key }) {
-    currentKey = key
+  function updateLocation(location) {
+    previousPath = currentPath
+    currentPath = location.pathname
+    currentKey = location.key
   }
 
-  function updateScroll() {
-    const [ x, y ] = getScrollPosition() || [ 0, 0 ]
-    window.scrollTo(x, y)
+  function updateScroll(location) {
+    const scrollPosition = getScrollPosition(location)
+    if (scrollPosition) {
+      requestAnimationFrame(() => {
+        positionByPath[currentPath] = scrollPosition
+        const [ x, y ] = scrollPosition
+        window.scrollTo(x, y)
+      }, 0)
+    }
   }
 
   let unsetScrollRestoration, unlistenScroll, unlistenBefore
@@ -67,6 +86,7 @@ export default function useStandardScroll(createHistory) {
         // updating the location could cause e.g. React Router to re-render the
         // entire page, which would lead to observably bad scroll performance.
         saveState(currentKey, { ...state, scrollPosition })
+        positionByPath[currentPath] = scrollPosition
       })
     }
 
