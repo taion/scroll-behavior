@@ -1,6 +1,7 @@
 import { POP } from 'history/lib/Actions'
 
 import createUseScroll from './utils/createUseScroll'
+import scrollTo from './utils/scrollTo'
 import setScrollRestoration from './utils/setScrollRestoration'
 
 /**
@@ -11,17 +12,8 @@ import setScrollRestoration from './utils/setScrollRestoration'
 export default function useScrollToTop(createHistory) {
   let unsetScrollRestoration
 
-  function updateScroll({ action }) {
-    // If we didn't manage to disable the default scroll restoration, and it's
-    // a pop transition for which the browser might restore scroll position,
-    // then let the browser update to its remembered scroll position first,
-    // before we set the actual correct scroll position.
-    if (action === POP && !unsetScrollRestoration) {
-      setTimeout(() => window.scrollTo(0, 0))
-      return
-    }
-
-    window.scrollTo(0, 0)
+  function updateScroll() {
+    scrollTo(0, 0)
   }
 
   function start() {

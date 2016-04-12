@@ -2,7 +2,7 @@ import off from 'dom-helpers/events/off'
 import on from 'dom-helpers/events/on'
 import scrollLeft from 'dom-helpers/query/scrollLeft'
 import scrollTop from 'dom-helpers/query/scrollTop'
-import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
+import scrollTo from './utils/scrollTo'
 import { readState, saveState } from 'history/lib/DOMStateStorage'
 
 import createUseScroll from './utils/createUseScroll'
@@ -19,16 +19,12 @@ export default function useStandardScroll(createHistory) {
   let previousPath
   let currentPath
 
-  function getScrollPosition(location) {
+  function getScrollPosition() {
     const state = readState(currentKey)
+    const positionFromPath = state && state.restoreScroll && positionByPath[currentPath]
     const positionFromState = state && state.scrollPosition
-    const { state: locationState } = location
-    const positionFromPath = locationState && locationState.restoreScroll && positionByPath[currentPath]
-    const ignoreScroll = locationState && locationState.ignoreScroll
     const defaultPosition = [0, 0]
-    if (ignoreScroll) {
-      return
-    } else if (previousPath === currentPath) {
+    if (previousPath === currentPath) {
       // Scroll to top if you navigate to the route you are already on
       return defaultPosition
     } else {
@@ -44,14 +40,12 @@ export default function useStandardScroll(createHistory) {
     currentKey = location.key
   }
 
-  function updateScroll(location) {
-    const scrollPosition = getScrollPosition(location)
+  function updateScroll() {
+    const scrollPosition = getScrollPosition()
     if (scrollPosition) {
-      requestAnimationFrame(() => {
-        positionByPath[currentPath] = scrollPosition
-        const [ x, y ] = scrollPosition
-        window.scrollTo(x, y)
-      }, 0)
+      positionByPath[currentPath] = scrollPosition
+      const [ x, y ] = scrollPosition
+      scrollTo(x, y)
     }
   }
 
