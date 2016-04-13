@@ -44,14 +44,31 @@ This can give pretty good results with synchronous transitions on browsers like 
 
 `useStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
 
-### Suppressing scroll updates
+### Custom behavior
 
-You can further customize scroll behavior by providing a `shouldUpdateScroll` callback to the enhanced history. Return a falsy value from this callback to prevent the update of the scroll position. This callback is called with both the old location and the new location.
+You can further customize scroll behavior by providing a `shouldUpdateScroll` callback to the enhanced history. This callback is called with both the old location and the new location.
+
+You can:
+
+- return a falsy value to suppress normal scroll behavior
+- return a position array such as [ 0, 100 ] to scroll to that position
+- return an otherwise truthy value to get normal scroll behavior
 
 ```js
 const history = useScroll(createHistory)({
   shouldUpdateScroll: (oldLocation, newLocation) => (
+    // Don't scroll if the pathname is the same 
     newLocation.pathname !== oldLocation.pathname
+  )
+})
+```
+
+```js
+const history = useScroll(createHistory)({
+  shouldUpdateScroll: (oldLocation, newLocation) => (
+  	// scroll to top when attempting to vist the current path
+	newLocation.pathname === oldLocation.pathname ? 
+	[ 0, 0 ] : true;
   )
 })
 ```

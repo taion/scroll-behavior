@@ -46,11 +46,11 @@ export default function createUseScroll(
           updateLocation(location)
         }
 
-        if (
-          !shouldUpdateScroll ||
-          shouldUpdateScroll(oldLocation, currentLocation)
-        ) {
-          updateScroll(location)
+        const updateDecision = shouldUpdateScroll && shouldUpdateScroll(oldLocation, currentLocation)
+
+        if (!shouldUpdateScroll || updateDecision) {
+          const customPosition = Array.isArray(updateDecision) ? updateDecision : null
+          updateScroll(location, customPosition)
         }
       }
 

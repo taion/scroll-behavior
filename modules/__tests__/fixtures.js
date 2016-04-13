@@ -6,8 +6,10 @@ export function useRoutes(createHistory) {
   function updateScroll({ pathname }) {
     if (pathname === '/') {
       element.style.height = '20000px'
+      element.style.width = '20000px'
     } else {
       element.style.height = '10000px'
+      element.style.width = '10000px'
     }
 
     // Force reflow.

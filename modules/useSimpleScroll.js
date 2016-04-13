@@ -17,12 +17,13 @@ export default function useSimpleScroll(createHistory) {
   // Don't override the browser's scroll behavior here - we actively want the
   // the browser to take care of scrolling on `POP` transitions.
 
-  function updateScroll({ action }) {
+  function updateScroll({ action }, customPosition) {
     if (action === POP) {
       return
     }
 
-    window.scrollTo(0, 0)
+    const [ x, y ] = customPosition || [ 0, 0 ]
+    window.scrollTo(x, y)
   }
 
   return createUseScroll(updateScroll)(createHistory)
