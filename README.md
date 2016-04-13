@@ -48,11 +48,11 @@ This can give pretty good results with synchronous transitions on browsers like 
 
 You can further customize scroll behavior by providing a `shouldUpdateScroll` callback to the enhanced history. This callback is called with both the old location and the new location.
 
-You can:
+You can return:
 
-- return a falsy value to suppress normal scroll behavior
-- return a position array such as [ 0, 100 ] to scroll to that position
-- return an otherwise truthy value to get normal scroll behavior
+- a falsy value to suppress the scroll update
+- a position array such as `[ 0, 100 ]` to scroll to that position
+- a truthy value to get normal scroll behavior
 
 ```js
 const history = useScroll(createHistory)({
@@ -67,8 +67,7 @@ const history = useScroll(createHistory)({
 const history = useScroll(createHistory)({
   shouldUpdateScroll: (oldLocation, newLocation) => (
   	// scroll to top when attempting to vist the current path
-	newLocation.pathname === oldLocation.pathname ? 
-	[ 0, 0 ] : true;
+	newLocation.pathname === oldLocation.pathname ? [ 0, 0 ] : true
   )
 })
 ```
