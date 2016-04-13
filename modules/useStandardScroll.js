@@ -31,8 +31,8 @@ export default function useStandardScroll(createHistory) {
     currentKey = key
   }
 
-  function updateScroll() {
-    const [ x, y ] = getScrollPosition() || [ 0, 0 ]
+  function updateScroll(location, customPosition) {
+    const [ x, y ] = customPosition || getScrollPosition() || [ 0, 0 ]
     window.scrollTo(x, y)
   }
 
