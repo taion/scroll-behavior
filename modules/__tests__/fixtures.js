@@ -3,7 +3,7 @@ import createUseScroll from '../utils/createUseScroll'
 export function useRoutes(createHistory) {
   let element
 
-  function updateScroll({ pathname }) {
+  function getScrollPosition({ pathname }) {
     if (pathname === '/') {
       element.style.height = '20000px'
       element.style.width = '20000px'
@@ -25,5 +25,5 @@ export function useRoutes(createHistory) {
     document.body.removeChild(element)
   }
 
-  return createUseScroll(updateScroll, start, stop)(createHistory)
+  return createUseScroll(getScrollPosition, start, stop)(createHistory)
 }

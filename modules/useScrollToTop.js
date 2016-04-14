@@ -1,7 +1,6 @@
 import { POP } from 'history/lib/Actions'
 
 import createUseScroll from './utils/createUseScroll'
-import scrollTo from './utils/scrollTo'
 import setScrollRestoration from './utils/setScrollRestoration'
 
 /**
@@ -18,7 +17,7 @@ export default function useScrollToTop(createHistory) {
     // then let the browser update to its remembered scroll position first,
     // before we set the actual correct scroll position.
     if (action === POP && !unsetScrollRestoration) {
-      setTimeout(() => scrollTo([ 0, 0 ]))
+      setTimeout(() => window.scrollTo(0, 0))
       return null
     }
 

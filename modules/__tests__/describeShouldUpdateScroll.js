@@ -2,6 +2,7 @@ import expect from 'expect'
 import scrollLeft from 'dom-helpers/query/scrollLeft'
 import scrollTop from 'dom-helpers/query/scrollTop'
 
+import delay from './delay'
 import { useRoutes } from './fixtures'
 import run from './run'
 
@@ -9,10 +10,12 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
   describe('shouldUpdateScroll', () => {
     let unlisten
 
-    afterEach(() => {
+    afterEach(done => {
       if (unlisten) {
         unlisten()
       }
+
+      delay(done)
     })
 
     it('should allow scroll suppression', done => {
@@ -24,13 +27,16 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
           !oldLoc || oldLoc.pathname !== newLoc.pathname
         )
       })
+
       unlisten = run(history, [
         () => {
           history.push('/oldpath')
         },
         () => {
           scrollTop(window, 5000)
-          history.push({ pathname: '/oldpath', query: { key: 'value' } })
+          delay(() => history.push({
+            pathname: '/oldpath', query: { key: 'value' }
+          }))
         },
         () => {
           expect(scrollTop(window)).toBe(5000)
@@ -49,6 +55,7 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
           [ 10 , 20 ]
         )
       })
+
       unlisten = run(history, [
         () => {
           history.push('/oldpath')

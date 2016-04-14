@@ -4,6 +4,7 @@ import scrollTop from 'dom-helpers/query/scrollTop'
 import useSimpleScroll from '../useSimpleScroll'
 
 import { HISTORIES } from './config'
+import delay from './delay'
 import describeShouldUpdateScroll from './describeShouldUpdateScroll'
 import { useRoutes } from './fixtures'
 import run from './run'
@@ -17,17 +18,19 @@ describe('useSimpleScroll', () => {
         history = useRoutes(useSimpleScroll(createHistory))()
       })
 
-      afterEach(() => {
+      afterEach(done => {
         if (unlisten) {
           unlisten()
         }
+
+        delay(done)
       })
 
       it('should scroll to top on PUSH', done => {
         unlisten = run(history, [
           () => {
             scrollTop(window, 15000)
-            history.push('/detail')
+            delay(() => history.push('/detail'))
           },
           () => {
             expect(scrollTop(window)).toBe(0)
@@ -40,7 +43,7 @@ describe('useSimpleScroll', () => {
         unlisten = run(history, [
           () => {
             scrollTop(window, 15000)
-            history.push('/detail')
+            delay(() => history.push('/detail'))
           },
           () => {
             history.goBack()
