@@ -1,5 +1,7 @@
+import scrollTo from './scrollTo'
+
 export default function createUseScroll(
-  updateScroll, start, stop, updateLocation
+  getScrollPosition, start, stop, updateLocation
 ) {
   return function (createHistory) {
     return function (options = {}) {
@@ -46,11 +48,19 @@ export default function createUseScroll(
           updateLocation(location)
         }
 
-        const updateDecision = shouldUpdateScroll && shouldUpdateScroll(oldLocation, currentLocation)
+        let scrollPosition
+        if (shouldUpdateScroll) {
+          scrollPosition = shouldUpdateScroll(oldLocation, currentLocation)
+        } else {
+          scrollPosition = true
+        }
 
-        if (!shouldUpdateScroll || updateDecision) {
-          const customPosition = Array.isArray(updateDecision) ? updateDecision : null
-          updateScroll(location, customPosition)
+        if (scrollPosition && !Array.isArray(scrollPosition)) {
+          scrollPosition = getScrollPosition(currentLocation)
+        }
+
+        if (scrollPosition) {
+          scrollTo(scrollPosition)
         }
       }
 

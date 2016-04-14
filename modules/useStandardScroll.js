@@ -18,8 +18,9 @@ export default function useStandardScroll(createHistory) {
 
   function getScrollPosition() {
     const state = readState(currentKey)
-    if (!state) {
-      return null
+
+    if (!state || !state.scrollPosition) {
+      return [ 0, 0 ]
     }
 
     return state.scrollPosition
@@ -29,11 +30,6 @@ export default function useStandardScroll(createHistory) {
   // always be defined.
   function updateLocation({ key }) {
     currentKey = key
-  }
-
-  function updateScroll(location, customPosition) {
-    const [ x, y ] = customPosition || getScrollPosition() || [ 0, 0 ]
-    window.scrollTo(x, y)
   }
 
   let unsetScrollRestoration, unlistenScroll, unlistenBefore
@@ -92,6 +88,6 @@ export default function useStandardScroll(createHistory) {
   }
 
   return createUseScroll(
-    updateScroll, start, stop, updateLocation
+    getScrollPosition, start, stop, updateLocation
   )(createHistory)
 }
