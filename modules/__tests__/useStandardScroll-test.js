@@ -4,6 +4,7 @@ import scrollTop from 'dom-helpers/query/scrollTop'
 import useStandardScroll from '../useStandardScroll'
 
 import { HISTORIES } from './config'
+import delay from './delay'
 import describeShouldUpdateScroll from './describeShouldUpdateScroll'
 import { useRoutes } from './fixtures'
 import run from './run'
@@ -20,20 +21,22 @@ describe('useStandardScroll', () => {
         unlistenBefore = history.listenBefore(listenBeforeSpy)
       })
 
-      afterEach(() => {
+      afterEach(done => {
         if (unlisten) {
           unlisten()
         }
         if (unlistenBefore) {
           unlistenBefore()
         }
+
+        delay(done)
       })
 
       it('should scroll to top on PUSH', done => {
         unlisten = run(history, [
           () => {
             scrollTop(window, 15000)
-            history.push('/detail')
+            delay(() => history.push('/detail'))
           },
           () => {
             expect(listenBeforeSpy.calls.length).toBe(1)
@@ -46,12 +49,13 @@ describe('useStandardScroll', () => {
       it('should restore scroll on POP', done => {
         unlisten = run(history, [
           () => {
-            scrollTop(window, 15000)
+            // This will be ignored, but will exercise the throttle logic.
+            scrollTop(window, 10000)
 
-            // Delay this to let the scroll position actually save.
-            requestAnimationFrame(() => setTimeout(() => {
-              history.push('/detail')
-            }))
+            setTimeout(() => {
+              scrollTop(window, 15000)
+              delay(() => history.push('/detail'))
+            })
           },
           () => {
             expect(listenBeforeSpy.calls.length).toBe(1)
