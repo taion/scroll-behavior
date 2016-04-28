@@ -112,6 +112,7 @@ export default function createUseScroll(
 
       let oldLocation
       let listeners = [], currentLocation, unlisten
+      let invokeShouldUpdateHandle = null
 
       function onChange(location) {
         oldLocation = currentLocation
@@ -128,27 +129,45 @@ export default function createUseScroll(
           updateLocation(location)
         }
 
-        let scrollPosition
-        if (shouldUpdateScroll) {
-          scrollPosition = shouldUpdateScroll(oldLocation, currentLocation)
-        } else {
-          scrollPosition = true
+        function updateScroll(scrollPosition) {
+          if (scrollPosition && !Array.isArray(scrollPosition)) {
+            scrollPosition = getScrollPosition(currentLocation)
+          }
+
+          scrollTarget = scrollPosition
+
+          // Check the scroll position to see if we even need to scroll.
+          onScroll()
+          if (!scrollTarget) {
+            return
+          }
+
+          numScrollAttempts = 0
+          checkScrollPosition()
         }
 
-        if (scrollPosition && !Array.isArray(scrollPosition)) {
-          scrollPosition = getScrollPosition(currentLocation)
+        function invokeShouldUpdate() {
+          if (!shouldUpdateScroll) {
+            updateScroll(true)
+            return null
+          }
+
+          if (shouldUpdateScroll.length <= 2) {
+            updateScroll(shouldUpdateScroll(oldLocation, currentLocation))
+            return null
+          }
+
+          const handle = {}
+          shouldUpdateScroll(oldLocation, currentLocation, scrollPosition => {
+            if (invokeShouldUpdateHandle === handle) {
+              invokeShouldUpdateHandle = null
+              updateScroll(scrollPosition)
+            }
+          })
+          return handle
         }
 
-        scrollTarget = scrollPosition
-
-        // Check the scroll position to see if we even need to scroll.
-        onScroll()
-        if (!scrollTarget) {
-          return
-        }
-
-        numScrollAttempts = 0
-        checkScrollPosition()
+        invokeShouldUpdateHandle = invokeShouldUpdate()
       }
 
       function listen(listener) {

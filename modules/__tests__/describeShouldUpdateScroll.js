@@ -70,5 +70,33 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
         }
       ])
     })
+
+    it('should allow async transition', done => {
+      let shouldUpdateCb = null
+      const history = useScroll(useRoutes(createHistory))({
+        shouldUpdateScroll: (old, current, cb) => {
+          shouldUpdateCb = cb
+        }
+      })
+
+      unlisten = run(history, [
+        () => {
+          history.push('/oldpath')
+        },
+        () => {
+          history.push('/newpath')
+        },
+        () => {
+          expect(scrollLeft(window)).toBe(0)
+          expect(scrollTop(window)).toBe(0)
+          shouldUpdateCb([ 10, 20 ])
+          delay(() => {
+            expect(scrollLeft(window)).toBe(10)
+            expect(scrollTop(window)).toBe(20)
+            done()
+          })
+        }
+      ])
+    })
   })
 }
