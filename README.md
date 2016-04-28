@@ -57,7 +57,7 @@ You can return:
 ```js
 const history = useScroll(createHistory)({
   shouldUpdateScroll: (oldLocation, newLocation) => (
-    // Don't scroll if the pathname is the same 
+    // Don't scroll if the pathname is the same.
     newLocation.pathname !== oldLocation.pathname
   )
 })
@@ -66,18 +66,19 @@ const history = useScroll(createHistory)({
 ```js
 const history = useScroll(createHistory)({
   shouldUpdateScroll: (oldLocation, newLocation) => (
-  	// scroll to top when attempting to vist the current path
+  	// Scroll to top when attempting to vist the current path.
 	newLocation.pathname === oldLocation.pathname ? [ 0, 0 ] : true
   )
 })
 ```
 
-#### Async transitions
+### Async transitions
 
-You can defer scroll position update for async transitions (eg. async data loads) by adding a callback to `shouldUpdateScroll`.
+If you are using async routes or async data loading, you may need to defer the update of the scroll position until the async transition is complete. You can do this by passing in a callback as the third argument to `shouldUpdateScroll`:
 
 ```js
-let updateScroll = null
+let updateScroll
+
 const history = useScroll(createHistory)({
   shouldUpdateScroll: (oldLocation, newLocation, cb) => (
     updateScroll = cb
@@ -85,7 +86,7 @@ const history = useScroll(createHistory)({
 })
 ```
 
-After transition is finished, You can notify to update a scroll position by calling the callback with a value same as the return value of `shouldUpdateScroll` explained previously.
+After transition is finished, you can trigger the update of the scroll position by invoking the callback with the same value you would have returned from a synchronous `shouldUpdateScroll` function:
 
 ```js
 updateScroll(true)

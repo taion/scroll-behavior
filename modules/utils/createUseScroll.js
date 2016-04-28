@@ -16,9 +16,9 @@ export default function createUseScroll(
 
       const history = createHistory(historyOptions)
 
+      let checkScrollHandle
       let scrollTarget
       let numScrollAttempts
-      let checkScrollHandle
 
       function cancelCheckScroll() {
         if (checkScrollHandle !== null) {
@@ -40,6 +40,31 @@ export default function createUseScroll(
           scrollTarget = null
           cancelCheckScroll()
         }
+      }
+
+      function checkScrollPosition() {
+        checkScrollHandle = null
+
+        // We can only get here if scrollTarget is set. Every code path that
+        // unsets scroll target also cancels the handle to avoid calling this
+        // handler. Still, check anyway just in case.
+        /* istanbul ignore if: paranoid guard */
+        if (!scrollTarget) {
+          return
+        }
+
+        const [ x, y ] = scrollTarget
+        window.scrollTo(x, y)
+
+        ++numScrollAttempts
+
+        /* istanbul ignore if: paranoid guard */
+        if (numScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
+          scrollTarget = null
+          return
+        }
+
+        checkScrollHandle = requestAnimationFrame(checkScrollPosition)
       }
 
       // FIXME: This is not the right way to track whether there are listeners.
@@ -85,37 +110,28 @@ export default function createUseScroll(
         }
       }
 
-      function checkScrollPosition() {
-        checkScrollHandle = null
+      let currentLocation
+      let currentUpdateHandle = null
 
-        // We can only get here if scrollTarget is set. Every code path that
-        // unsets scroll target also cancels the handle to avoid calling this
-        // handler. Still, check anyway just in case.
-        /* istanbul ignore if: paranoid guard */
+      function updateScrollPosition(scrollPosition) {
+        if (scrollPosition && !Array.isArray(scrollPosition)) {
+          scrollPosition = getScrollPosition(currentLocation)
+        }
+
+        scrollTarget = scrollPosition
+
+        // Check the scroll position to see if we even need to scroll.
+        onScroll()
         if (!scrollTarget) {
           return
         }
 
-        const [ x, y ] = scrollTarget
-        window.scrollTo(x, y)
-
-        ++numScrollAttempts
-
-        /* istanbul ignore if: paranoid guard */
-        if (numScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
-          scrollTarget = null
-          return
-        }
-
-        checkScrollHandle = requestAnimationFrame(checkScrollPosition)
+        numScrollAttempts = 0
+        checkScrollPosition()
       }
 
-      let oldLocation
-      let listeners = [], currentLocation, unlisten
-      let invokeShouldUpdateHandle = null
-
       function onChange(location) {
-        oldLocation = currentLocation
+        const oldLocation = currentLocation
         currentLocation = location
 
         listeners.forEach(listener => listener(location))
@@ -129,46 +145,30 @@ export default function createUseScroll(
           updateLocation(location)
         }
 
-        function updateScroll(scrollPosition) {
-          if (scrollPosition && !Array.isArray(scrollPosition)) {
-            scrollPosition = getScrollPosition(currentLocation)
-          }
-
-          scrollTarget = scrollPosition
-
-          // Check the scroll position to see if we even need to scroll.
-          onScroll()
-          if (!scrollTarget) {
-            return
-          }
-
-          numScrollAttempts = 0
-          checkScrollPosition()
+        // We don't need to update the handle here, because it will never be
+        // checked, since shouldUpdateScroll cannot change on us.
+        if (!shouldUpdateScroll) {
+          updateScrollPosition(true)
+          return
+        }
+        if (shouldUpdateScroll.length <= 2) {
+          updateScrollPosition(shouldUpdateScroll(oldLocation, location))
+          return
         }
 
-        function invokeShouldUpdate() {
-          if (!shouldUpdateScroll) {
-            updateScroll(true)
-            return null
+        const updateHandle = {}
+        currentUpdateHandle = updateHandle
+
+        shouldUpdateScroll(oldLocation, location, scrollPosition => {
+          if (updateHandle === currentUpdateHandle) {
+            currentUpdateHandle = null
+            updateScrollPosition(scrollPosition)
           }
-
-          if (shouldUpdateScroll.length <= 2) {
-            updateScroll(shouldUpdateScroll(oldLocation, currentLocation))
-            return null
-          }
-
-          const handle = {}
-          shouldUpdateScroll(oldLocation, currentLocation, scrollPosition => {
-            if (invokeShouldUpdateHandle === handle) {
-              invokeShouldUpdateHandle = null
-              updateScroll(scrollPosition)
-            }
-          })
-          return handle
-        }
-
-        invokeShouldUpdateHandle = invokeShouldUpdate()
+        })
       }
+
+      let listeners = []
+      let unlisten
 
       function listen(listener) {
         checkStart()
