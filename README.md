@@ -72,9 +72,24 @@ const history = useScroll(createHistory)({
 })
 ```
 
-### Notes
+#### Async transitions
 
-- Support for async transitions is currently very poor. Fixing this will require major breaking API changes in the future.
+You can defer scroll position update for async transitions (eg. async data loads) by adding a callback to `shouldUpdateScroll`.
+
+```js
+let updateScroll = null
+const history = useScroll(createHistory)({
+  shouldUpdateScroll: (oldLocation, newLocation, cb) => (
+    updateScroll = cb
+  )
+})
+```
+
+After transition is finished, You can notify to update a scroll position by calling the callback with a value same as the return value of `shouldUpdateScroll` explained previously.
+
+```js
+updateScroll(true)
+```
 
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg?style=flat-square
 [build]: https://travis-ci.org/taion/scroll-behavior
