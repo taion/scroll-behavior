@@ -1,21 +1,21 @@
 import expect from 'expect'
 import scrollTop from 'dom-helpers/query/scrollTop'
 
-import useScrollToTop from '../useScrollToTop'
+import withSimpleScroll from '../withSimpleScroll'
 
 import { HISTORIES } from './config'
 import delay from './delay'
 import describeShouldUpdateScroll from './describeShouldUpdateScroll'
-import { useRoutes } from './fixtures'
+import { withRoutes } from './fixtures'
 import run from './run'
 
-describe('useScrollToTop', () => {
+describe('withSimpleScroll', () => {
   HISTORIES.forEach(createHistory => {
     describe(createHistory.name, () => {
       let history, unlisten
 
       beforeEach(() => {
-        history = useRoutes(useScrollToTop(createHistory))()
+        history = withRoutes(withSimpleScroll(createHistory()))
       })
 
       afterEach(done => {
@@ -39,7 +39,7 @@ describe('useScrollToTop', () => {
         ])
       })
 
-      it('should scroll to top on POP', done => {
+      it('should not scroll to top on POP', done => {
         unlisten = run(history, [
           () => {
             scrollTop(window, 15000)
@@ -49,13 +49,13 @@ describe('useScrollToTop', () => {
             history.goBack()
           },
           () => {
-            expect(scrollTop(window)).toBe(0)
+            expect(scrollTop(window)).toNotBe(0)
             done()
           }
         ])
       })
 
-      describeShouldUpdateScroll(useScrollToTop, createHistory)
+      describeShouldUpdateScroll(withSimpleScroll, createHistory)
     })
   })
 })

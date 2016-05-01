@@ -1,14 +1,14 @@
 import { POP } from 'history/lib/Actions'
 
-import createUseScroll from './utils/createUseScroll'
 import setScrollRestoration from './utils/setScrollRestoration'
+import withScroll from './utils/withScroll'
 
 /**
- * `useScrollToTop` scrolls to the top of the page after any transition.
+ * `withScrollToTop` scrolls to the top of the page after any transition.
  *
  * This is not fully reliable for `POP` transitions.
  */
-export default function useScrollToTop(createHistory) {
+export default function withScrollToTop(history, shouldUpdateScroll) {
   let unsetScrollRestoration
 
   function getScrollPosition({ action }) {
@@ -37,5 +37,9 @@ export default function useScrollToTop(createHistory) {
     }
   }
 
-  return createUseScroll(getScrollPosition, start, stop)(createHistory)
+  return withScroll(
+    history,
+    shouldUpdateScroll,
+    { getScrollPosition, start, stop }
+  )
 }

@@ -1,9 +1,9 @@
 import { POP } from 'history/lib/Actions'
 
-import createUseScroll from './utils/createUseScroll'
+import withScroll from './utils/withScroll'
 
 /**
- * `useSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE`
+ * `withSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE`
  * transitions, while allowing the browser to manage scroll position for `POP`
  * transitions.
  *
@@ -13,7 +13,7 @@ import createUseScroll from './utils/createUseScroll'
  * using asynchronous transitions or with browsers like Firefox that update
  * the scroll position before emitting the location change.
  */
-export default function useSimpleScroll(createHistory) {
+export default function withSimpleScroll(history, shouldUpdateScroll) {
   // Don't override the browser's scroll behavior here - we actively want the
   // the browser to take care of scrolling on `POP` transitions.
 
@@ -25,5 +25,5 @@ export default function useSimpleScroll(createHistory) {
     return [ 0, 0 ]
   }
 
-  return createUseScroll(getScrollPosition)(createHistory)
+  return withScroll(history, shouldUpdateScroll, { getScrollPosition })
 }

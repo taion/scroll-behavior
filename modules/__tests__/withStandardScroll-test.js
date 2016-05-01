@@ -1,21 +1,21 @@
 import expect from 'expect'
 import scrollTop from 'dom-helpers/query/scrollTop'
 
-import useStandardScroll from '../useStandardScroll'
+import withStandardScroll from '../withStandardScroll'
 
 import { HISTORIES } from './config'
 import delay from './delay'
 import describeShouldUpdateScroll from './describeShouldUpdateScroll'
-import { useRoutes } from './fixtures'
+import { withRoutes } from './fixtures'
 import run from './run'
 
-describe('useStandardScroll', () => {
+describe('withStandardScroll', () => {
   HISTORIES.forEach(createHistory => {
     describe(createHistory.name, () => {
       let history, listenBeforeSpy, unlistenBefore, unlisten
 
       beforeEach(() => {
-        history = useRoutes(useStandardScroll(createHistory))()
+        history = withRoutes(withStandardScroll(createHistory()))
 
         listenBeforeSpy = expect.createSpy()
         unlistenBefore = history.listenBefore(listenBeforeSpy)
@@ -69,7 +69,7 @@ describe('useStandardScroll', () => {
         ])
       })
 
-      describeShouldUpdateScroll(useStandardScroll, createHistory)
+      describeShouldUpdateScroll(withStandardScroll, createHistory)
     })
   })
 })
