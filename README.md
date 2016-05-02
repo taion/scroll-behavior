@@ -7,13 +7,13 @@ Scroll behaviors for use with [`history`](https://github.com/reactjs/history).
 
 ## Usage
 
-Enhance your history object with one of the scroll behaviors in this library to get the desired scroll behavior after transitions.
+Extend your history object with one of the scroll behaviors in this library to get the desired scroll behavior after transitions.
 
 ```js
 import createHistory from 'history/lib/createBrowserHistory'
-import useScroll from 'scroll-behavior/lib/useStandardScroll'
+import withScroll from 'scroll-behavior/lib/withStandardScroll'
 
-const history = useScroll(createHistory)()
+const history = withScroll(createHistory())
 ```
 
 ## Guide
@@ -28,25 +28,25 @@ You may also want to install [React Router](https://github.com/reactjs/react-rou
 
 ### Scroll behaviors
 
-#### `useScrollToTop`
+#### `withScrollToTop`
 
-`useScrollToTop` scrolls to the top of the page after any transition.
+`withScrollToTop` scrolls to the top of the page after any transition.
 
 This is not fully reliable for `POP` transitions.
 
-#### `useSimpleScroll`
+#### `withSimpleScroll`
 
-`useSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE` transitions, while allowing the browser to manage scroll position for `POP` transitions.
+`withSimpleScroll` scrolls to the top of the page on `PUSH` and `REPLACE` transitions, while allowing the browser to manage scroll position for `POP` transitions.
 
 This can give pretty good results with synchronous transitions on browsers like Chrome that don't update the scroll position until after they've notified `history` of the location change. It will not work as well when using asynchronous transitions or with browsers like Firefox that update the scroll position before emitting the location change.
 
-#### `useStandardScroll`
+#### `withStandardScroll`
 
-`useStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
+`withStandardScroll` attempts to imitate native browser scroll behavior by recording updates to the window scroll position, then restoring the previous scroll position upon a `POP` transition.
 
 ### Custom behavior
 
-You can further customize scroll behavior by providing a `shouldUpdateScroll` callback to the enhanced history. This callback is called with both the old location and the new location.
+You can further customize scroll behavior by providing a `shouldUpdateScroll` callback when extending the history object. This callback is called with both the previous location and the current location.
 
 You can return:
 
@@ -55,21 +55,17 @@ You can return:
 - a truthy value to get normal scroll behavior
 
 ```js
-const history = useScroll(createHistory)({
-  shouldUpdateScroll: (oldLocation, newLocation) => (
-    // Don't scroll if the pathname is the same.
-    newLocation.pathname !== oldLocation.pathname
-  )
-})
+const history = withScroll(createHistory(), (prevLocation, location) => (
+  // Don't scroll if the pathname is the same.
+  location.pathname !== prevLocation.pathname
+))
 ```
 
 ```js
-const history = useScroll(createHistory)({
-  shouldUpdateScroll: (oldLocation, newLocation) => (
-  	// Scroll to top when attempting to vist the current path.
-	newLocation.pathname === oldLocation.pathname ? [ 0, 0 ] : true
-  )
-})
+const history = withScroll(createHistory(), (prevLocation, location) => (
+  // Scroll to top when attempting to vist the current path.
+  location.pathname === prevLocation.pathname ? [ 0, 0 ] : true
+))
 ```
 
 ### Async transitions
@@ -79,10 +75,8 @@ If you are using async routes or async data loading, you may need to defer the u
 ```js
 let updateScroll
 
-const history = useScroll(createHistory)({
-  shouldUpdateScroll: (oldLocation, newLocation, cb) => (
-    updateScroll = cb
-  )
+const history = withScroll(createHistory(), (prevLocation, location, cb) => {
+  updateScroll = cb
 })
 ```
 

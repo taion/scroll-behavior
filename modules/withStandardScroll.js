@@ -5,15 +5,15 @@ import scrollTop from 'dom-helpers/query/scrollTop'
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
 import { readState, saveState } from 'history/lib/DOMStateStorage'
 
-import createUseScroll from './utils/createUseScroll'
 import setScrollRestoration from './utils/setScrollRestoration'
+import withScroll from './utils/withScroll'
 
 /**
- * `useStandardScroll` attempts to imitate native browser scroll behavior by
+ * `withStandardScroll` attempts to imitate native browser scroll behavior by
  * recording updates to the window scroll position, then restoring the previous
  * scroll position upon a `POP` transition.
  */
-export default function useStandardScroll(createHistory) {
+export default function withStandardScroll(history, shouldUpdateScroll) {
   let currentKey
 
   function getScrollPosition() {
@@ -87,7 +87,9 @@ export default function useStandardScroll(createHistory) {
     unlistenBefore()
   }
 
-  return createUseScroll(
-    getScrollPosition, start, stop, updateLocation
-  )(createHistory)
+  return withScroll(
+    history,
+    shouldUpdateScroll,
+    { getScrollPosition, start, stop, updateLocation }
+  )
 }

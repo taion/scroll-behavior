@@ -3,10 +3,10 @@ import scrollLeft from 'dom-helpers/query/scrollLeft'
 import scrollTop from 'dom-helpers/query/scrollTop'
 
 import delay from './delay'
-import { useRoutes } from './fixtures'
+import { withRoutes } from './fixtures'
 import run from './run'
 
-export default function describeShouldUpdateScroll(useScroll, createHistory) {
+export default function describeShouldUpdateScroll(withScroll, createHistory) {
   describe('shouldUpdateScroll', () => {
     let unlisten
 
@@ -19,14 +19,12 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
     })
 
     it('should allow scroll suppression', done => {
-      // We intentially invert the order of history enhancers here so the
-      // actual useScroll enhancer can consume shouldUpdateScroll, instead of
-      // the fake one in our useRoutes.
-      const history = useScroll(useRoutes(createHistory))({
-        shouldUpdateScroll: (oldLoc, newLoc) => (
-          !oldLoc || oldLoc.pathname !== newLoc.pathname
+      const history = withRoutes(withScroll(
+        createHistory(),
+        (prevLocation, location) => (
+          !prevLocation || prevLocation.pathname !== location.pathname
         )
-      })
+      ))
 
       unlisten = run(history, [
         () => {
@@ -50,11 +48,9 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
     })
 
     it('should allow custom position', done => {
-      const history = useScroll(useRoutes(createHistory))({
-        shouldUpdateScroll: () => (
-          [ 10 , 20 ]
-        )
-      })
+      const history = withRoutes(withScroll(
+        createHistory(), () => [ 10 , 20 ]
+      ))
 
       unlisten = run(history, [
         () => {
@@ -73,11 +69,10 @@ export default function describeShouldUpdateScroll(useScroll, createHistory) {
 
     it('should allow async transition', done => {
       let shouldUpdateCb = null
-      const history = useScroll(useRoutes(createHistory))({
-        shouldUpdateScroll: (old, current, cb) => {
-          shouldUpdateCb = cb
-        }
-      })
+      const history = withRoutes(withScroll(
+        createHistory(),
+        (old, current, cb) => { shouldUpdateCb = cb }
+      ))
 
       unlisten = run(history, [
         () => {

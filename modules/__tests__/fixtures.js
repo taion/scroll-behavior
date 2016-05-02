@@ -1,6 +1,6 @@
-import createUseScroll from '../utils/createUseScroll'
+import withScroll from '../utils/withScroll'
 
-export function useRoutes(createHistory) {
+export function withRoutes(history) {
   let element
 
   function getScrollPosition({ pathname }) {
@@ -25,5 +25,5 @@ export function useRoutes(createHistory) {
     document.body.removeChild(element)
   }
 
-  return createUseScroll(getScrollPosition, start, stop)(createHistory)
+  return withScroll(history, null, { getScrollPosition, start, stop })
 }
