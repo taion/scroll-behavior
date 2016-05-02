@@ -106,7 +106,7 @@ export default function withScroll(
     }
   }
 
-  let currentLocation
+  let currentLocation = null
   let currentUpdateHandle = null
 
   function updateScrollPosition(scrollPosition) {
