@@ -1,4 +1,4 @@
-# scroll-behavior [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
+# scroll-behavior [![Travis][build-badge]][build] [![npm][npm-badge]][npm]
 
 Scroll behaviors for use with [`history`](https://github.com/reactjs/history).
 
