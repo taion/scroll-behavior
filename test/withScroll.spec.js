@@ -9,7 +9,7 @@ import withScroll from '../src';
 import { withRoutes } from './fixtures';
 import run, { delay } from './run';
 
-describe('withStandardScroll', () => {
+describe('withScroll', () => {
   [
     createBrowserHistory,
     createHashHistory,
@@ -17,12 +17,10 @@ describe('withStandardScroll', () => {
     describe(createHistory.name, () => {
       let unlisten;
 
-      afterEach(done => {
+      afterEach(() => {
         if (unlisten) {
           unlisten();
         }
-
-        delay(done);
       });
 
       describe('default behavior', () => {
