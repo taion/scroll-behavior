@@ -11,12 +11,9 @@ export default config => {
   const coverageReporters = [];
 
   if (runCoverage) {
-    coverageLoaders.push({
-      test: /\.js$/,
-      include: path.resolve('modules/'),
-      exclude: /__tests__/,
-      loader: 'isparta',
-    });
+    coverageLoaders.push(
+      { test: /\.js$/, include: path.resolve('src'), loader: 'isparta' }
+    );
 
     coverageReporters.push('coverage');
 
