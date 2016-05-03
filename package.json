@@ -55,6 +55,7 @@
     "eslint-config-airbnb-base": "^2.0.0",
     "eslint-plugin-import": "^1.6.1",
     "history": "^2.1.1",
+    "isparta-loader": "^2.0.0",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^0.5.5",
