@@ -1,6 +1,8 @@
 # scroll-behavior [![Travis][build-badge]][build] [![npm][npm-badge]][npm]
 
-Scroll management for [`history`](https://github.com/reactjs/history).
+Scroll management for [`history`](https://github.com/mjackson/history).
+
+**If you are using [React Router](https://github.com/reactjs/react-router), check out [react-router-scroll](https://github.com/taion/react-router-scroll), which wraps up the scroll management logic here into a router middleware.**
 
 [![Coveralls][coveralls-badge]][coveralls]
 [![Discord][discord-badge]][discord]
@@ -29,7 +31,7 @@ $ npm i -S scroll-behavior
 
 Extend your history object using `withScroll`. The extended history object will manage the scroll position for transitions.
 
-### Custom behavior
+### Custom scroll behavior
 
 You can customize the scroll behavior by providing a `shouldUpdateScroll` callback when extending the history object. This callback is called with both the previous location and the current location.
 
@@ -42,14 +44,14 @@ You can return:
 ```js
 const history = withScroll(createHistory(), (prevLocation, location) => (
   // Don't scroll if the pathname is the same.
-  location.pathname !== prevLocation.pathname
+  !prevLocation || location.pathname !== prevLocation.pathname
 ));
 ```
 
 ```js
 const history = withScroll(createHistory(), (prevLocation, location) => (
   // Scroll to top when attempting to vist the current path.
-  location.pathname === prevLocation.pathname ? [0, 0] : true
+  prevLocation && location.pathname === prevLocation.pathname ? [0, 0] : true
 ));
 ```
 
