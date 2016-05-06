@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import off from 'dom-helpers/events/off';
 import on from 'dom-helpers/events/on';
 import scrollLeft from 'dom-helpers/query/scrollLeft';
@@ -10,94 +12,94 @@ const MAX_SCROLL_ATTEMPTS = 2;
 
 export default class ScrollBehavior {
   constructor(history, getCurrentKey) {
-    this.getCurrentKey = getCurrentKey;
+    this._getCurrentKey = getCurrentKey;
 
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
     /* istanbul ignore if: not supported by any browsers on Travis */
     if ('scrollRestoration' in window.history) {
-      this.oldScrollRestoration = window.history.scrollRestoration;
+      this._oldScrollRestoration = window.history.scrollRestoration;
       window.history.scrollRestoration = 'manual';
     } else {
-      this.oldScrollRestoration = null;
+      this._oldScrollRestoration = null;
     }
 
-    this.savePositionHandle = null;
-    this.checkScrollHandle = null;
-    this.scrollTarget = null;
-    this.numScrollAttempts = 0;
+    this._savePositionHandle = null;
+    this._checkScrollHandle = null;
+    this._scrollTarget = null;
+    this._numScrollAttempts = 0;
 
     // We have to listen to each scroll update rather than to just location
     // updates, because some browsers will update scroll position before
     // emitting the location change.
-    on(window, 'scroll', this.onScroll);
+    on(window, 'scroll', this._onScroll);
 
-    this.unlistenBefore = history.listenBefore(() => {
-      if (this.savePositionHandle !== null) {
-        requestAnimationFrame.cancel(this.savePositionHandle);
-        this.savePositionHandle = null;
+    this._unlistenBefore = history.listenBefore(() => {
+      if (this._savePositionHandle !== null) {
+        requestAnimationFrame.cancel(this._savePositionHandle);
+        this._savePositionHandle = null;
       }
     });
   }
 
   stop() {
     /* istanbul ignore if: not supported by any browsers on Travis */
-    if (this.oldScrollRestoration) {
-      window.history.scrollRestoration = this.oldScrollRestoration;
+    if (this._oldScrollRestoration) {
+      window.history.scrollRestoration = this._oldScrollRestoration;
     }
 
-    off(window, 'scroll', this.onScroll);
-    this.cancelCheckScroll();
+    off(window, 'scroll', this._onScroll);
+    this._cancelCheckScroll();
 
-    this.unlistenBefore();
+    this._unlistenBefore();
   }
 
   updateScroll(scrollPosition) {
     // Whatever we were doing before isn't relevant any more.
-    this.cancelCheckScroll();
+    this._cancelCheckScroll();
 
     if (scrollPosition && !Array.isArray(scrollPosition)) {
-      this.scrollTarget = this.getScrollPosition();
+      this._scrollTarget = this._getScrollPosition();
     } else {
-      this.scrollTarget = scrollPosition;
+      this._scrollTarget = scrollPosition;
     }
 
     // Check the scroll position to see if we even need to scroll.
-    this.onScroll();
+    this._onScroll();
 
-    if (!this.scrollTarget) {
+    if (!this._scrollTarget) {
       return;
     }
 
-    this.numScrollAttempts = 0;
-    this.checkScrollPosition();
+    this._numScrollAttempts = 0;
+    this._checkScrollPosition();
   }
 
-  onScroll = () => {
+  _onScroll = () => {
     // It's possible that this scroll operation was triggered by what will be a
     // `POP` transition. Instead of updating the saved location immediately, we
     // have to enqueue the update, then potentially cancel it if we observe a
     // location update.
-    if (this.savePositionHandle === null) {
-      this.savePositionHandle = requestAnimationFrame(this.savePosition);
+    if (this._savePositionHandle === null) {
+      this._savePositionHandle = requestAnimationFrame(this._savePosition);
     }
 
-    if (this.scrollTarget) {
-      const [xTarget, yTarget] = this.scrollTarget;
+    if (this._scrollTarget) {
+      const [xTarget, yTarget] = this._scrollTarget;
       const x = scrollLeft(window);
       const y = scrollTop(window);
 
       if (x === xTarget && y === yTarget) {
-        this.scrollTarget = null;
-        this.cancelCheckScroll();
+        this._scrollTarget = null;
+        this._cancelCheckScroll();
       }
     }
   };
 
-  savePosition = () => {
-    this.savePositionHandle = null;
+  _savePosition = () => {
+    this._savePositionHandle = null;
 
-    const currentKey = this.getCurrentKey();
+    const currentKey = this._getCurrentKey();
     const scrollPosition = [scrollLeft(window), scrollTop(window)];
 
     // We have to directly update `DOMStateStorage`, because actually updating
@@ -107,15 +109,15 @@ export default class ScrollBehavior {
     saveState(currentKey, { ...state, scrollPosition });
   };
 
-  cancelCheckScroll() {
-    if (this.checkScrollHandle !== null) {
-      requestAnimationFrame.cancel(this.checkScrollHandle);
-      this.checkScrollHandle = null;
+  _cancelCheckScroll() {
+    if (this._checkScrollHandle !== null) {
+      requestAnimationFrame.cancel(this._checkScrollHandle);
+      this._checkScrollHandle = null;
     }
   }
 
-  getScrollPosition() {
-    const state = readState(this.getCurrentKey());
+  _getScrollPosition() {
+    const state = readState(this._getCurrentKey());
     if (!state || !state.scrollPosition) {
       return [0, 0];
     }
@@ -123,28 +125,28 @@ export default class ScrollBehavior {
     return state.scrollPosition;
   }
 
-  checkScrollPosition = () => {
-    this.checkScrollHandle = null;
+  _checkScrollPosition = () => {
+    this._checkScrollHandle = null;
 
     // We can only get here if scrollTarget is set. Every code path that unsets
     // scroll target also cancels the handle to avoid calling this handler.
     // Still, check anyway just in case.
     /* istanbul ignore if: paranoid guard */
-    if (!this.scrollTarget) {
+    if (!this._scrollTarget) {
       return;
     }
 
-    const [x, y] = this.scrollTarget;
+    const [x, y] = this._scrollTarget;
     window.scrollTo(x, y);
 
-    ++this.numScrollAttempts;
+    ++this._numScrollAttempts;
 
     /* istanbul ignore if: paranoid guard */
-    if (this.numScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
-      this.scrollTarget = null;
+    if (this._numScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
+      this._scrollTarget = null;
       return;
     }
 
-    this.checkScrollHandle = requestAnimationFrame(this.checkScrollPosition);
+    this._checkScrollHandle = requestAnimationFrame(this._checkScrollPosition);
   };
 }
