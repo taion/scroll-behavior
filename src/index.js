@@ -5,8 +5,8 @@ export default function withScroll(history, shouldUpdateScroll) {
   // currentLocation will always be defined when needed.
   let currentLocation = null;
 
-  function getCurrentKey() {
-    return currentLocation.key;
+  function getCurrentLocation() {
+    return currentLocation;
   }
 
   let listeners = [];
@@ -32,7 +32,7 @@ export default function withScroll(history, shouldUpdateScroll) {
 
   function listen(listener) {
     if (listeners.length === 0) {
-      scrollBehavior = new ScrollBehavior(history, getCurrentKey);
+      scrollBehavior = new ScrollBehavior(history, getCurrentLocation);
       unlisten = history.listen(onChange);
     }
 
