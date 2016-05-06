@@ -8,19 +8,19 @@ export default function run(history, steps) {
 
   let i = 0;
 
-  return history.listen(() => {
+  return history.listen(location => {
     if (i === steps.length) {
       return;
     }
 
     // Give the first tick a bit longer to run, to allow for initialization.
     if (i === 0) {
-      delay(() => delay(steps[i++]));
+      delay(() => delay(() => steps[i++](location)));
       return;
     }
 
     // Wait a extra tick for all the scroll callbacks to fire before checking
     // position.
-    delay(steps[i++]);
+    delay(() => steps[i++](location));
   });
 }

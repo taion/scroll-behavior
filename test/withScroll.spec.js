@@ -57,7 +57,8 @@ describe('withScroll', () => {
             () => {
               history.goBack();
             },
-            () => {
+            location => {
+              expect(location.state).to.not.exist;
               expect(scrollTop(window)).to.equal(15000);
               done();
             },
@@ -108,6 +109,42 @@ describe('withScroll', () => {
             () => {
               expect(scrollLeft(window)).to.equal(10);
               expect(scrollTop(window)).to.equal(20);
+              done();
+            },
+          ]);
+        });
+
+        it('should allow reading position', done => {
+          let prevPosition;
+          let position;
+
+          function shouldUpdateScroll(prevLocation, location) {
+            if (prevLocation) {
+              prevPosition = this.readPosition(prevLocation);
+            }
+
+            position = this.readPosition(location);
+
+            return true;
+          }
+
+          const history = withRoutes(withScroll(
+            createHistory(), shouldUpdateScroll
+          ));
+
+          unlisten = run(history, [
+            () => {
+              scrollTop(window, 15000);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              expect(prevPosition).to.eql([0, 15000]);
+              expect(position).to.not.exist;
+              history.goBack();
+            },
+            () => {
+              expect(prevPosition).to.eql([0, 0]);
+              expect(position).to.eql([0, 15000]);
               done();
             },
           ]);
