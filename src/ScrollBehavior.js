@@ -11,8 +11,8 @@ import { readState, saveState } from 'history/lib/DOMStateStorage';
 const MAX_SCROLL_ATTEMPTS = 2;
 
 export default class ScrollBehavior {
-  constructor(history, getCurrentKey) {
-    this._getCurrentKey = getCurrentKey;
+  constructor(history, getCurrentLocation) {
+    this._getCurrentLocation = getCurrentLocation;
 
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
@@ -108,6 +108,10 @@ export default class ScrollBehavior {
     const state = readState(currentKey);
     saveState(currentKey, { ...state, scrollPosition });
   };
+
+  _getCurrentKey() {
+    return this._getCurrentLocation().key;
+  }
 
   _cancelCheckScroll() {
     if (this._checkScrollHandle !== null) {
