@@ -5,6 +5,7 @@ import on from 'dom-helpers/events/on';
 import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
+import { PUSH } from 'history/lib/Actions';
 import { readState, saveState } from 'history/lib/DOMStateStorage';
 
 // FIXME: Stop using this gross hack. This won't collide with any actual
@@ -16,6 +17,7 @@ const MAX_SCROLL_ATTEMPTS = 2;
 
 export default class ScrollBehavior {
   constructor(history, getCurrentLocation) {
+    this._history = history;
     this._getCurrentLocation = getCurrentLocation;
 
     // This helps avoid some jankiness in fighting against the browser's
@@ -116,8 +118,11 @@ export default class ScrollBehavior {
     );
   };
 
-  _getKey(location = this._getCurrentLocation()) {
-    return `${KEY_PREFIX}${location.key}`;
+  _getKey(location) {
+    // Use fallback key when actual key is unavailable.
+    const key = location.key || this._history.createPath(location);
+
+    return `${KEY_PREFIX}${key}`;
   }
 
   _cancelCheckScroll() {
@@ -128,7 +133,12 @@ export default class ScrollBehavior {
   }
 
   _getDefaultScrollTarget() {
-    return this.readPosition(this._getCurrentLocation()) || [0, 0];
+    const location = this._getCurrentLocation();
+    if (location.action === PUSH) {
+      return [0, 0];
+    }
+
+    return this.readPosition(location) || [0, 0];
   }
 
   _checkScrollPosition = () => {
