@@ -7,6 +7,10 @@ import scrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import { readState, saveState } from 'history/lib/DOMStateStorage';
 
+// FIXME: Stop using this gross hack. This won't collide with any actual
+// history location keys, but it's dirty to sneakily use the same storage here.
+const KEY_PREFIX = 's/';
+
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
 
@@ -59,7 +63,7 @@ export default class ScrollBehavior {
     this._cancelCheckScroll();
 
     if (scrollPosition && !Array.isArray(scrollPosition)) {
-      this._scrollTarget = this._getScrollPosition();
+      this._scrollTarget = this._getDefaultScrollTarget();
     } else {
       this._scrollTarget = scrollPosition;
     }
@@ -73,6 +77,10 @@ export default class ScrollBehavior {
 
     this._numScrollAttempts = 0;
     this._checkScrollPosition();
+  }
+
+  readPosition(location) {
+    return readState(this._getKey(location));
   }
 
   _onScroll = () => {
@@ -99,18 +107,17 @@ export default class ScrollBehavior {
   _savePosition = () => {
     this._savePositionHandle = null;
 
-    const currentKey = this._getCurrentKey();
-    const scrollPosition = [scrollLeft(window), scrollTop(window)];
-
     // We have to directly update `DOMStateStorage`, because actually updating
     // the location could cause e.g. React Router to re-render the entire page,
     // which would lead to observably bad scroll performance.
-    const state = readState(currentKey);
-    saveState(currentKey, { ...state, scrollPosition });
+    saveState(
+      this._getKey(this._getCurrentLocation()),
+      [scrollLeft(window), scrollTop(window)]
+    );
   };
 
-  _getCurrentKey() {
-    return this._getCurrentLocation().key;
+  _getKey(location = this._getCurrentLocation()) {
+    return `${KEY_PREFIX}${location.key}`;
   }
 
   _cancelCheckScroll() {
@@ -120,13 +127,8 @@ export default class ScrollBehavior {
     }
   }
 
-  _getScrollPosition() {
-    const state = readState(this._getCurrentKey());
-    if (!state || !state.scrollPosition) {
-      return [0, 0];
-    }
-
-    return state.scrollPosition;
+  _getDefaultScrollTarget() {
+    return this.readPosition(this._getCurrentLocation()) || [0, 0];
   }
 
   _checkScrollPosition = () => {

@@ -22,7 +22,9 @@ export default function withScroll(history, shouldUpdateScroll) {
     if (!shouldUpdateScroll) {
       scrollPosition = true;
     } else {
-      scrollPosition = shouldUpdateScroll(prevLocation, location);
+      scrollPosition = shouldUpdateScroll.call(
+        scrollBehavior, prevLocation, location
+      );
     }
 
     scrollBehavior.updateScroll(scrollPosition);
