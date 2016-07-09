@@ -43,17 +43,14 @@ export default config => {
           'process.env.NODE_ENV': JSON.stringify('test'),
         }),
       ],
-      devtool: 'inline-source-map',
+      devtool: 'cheap-module-inline-source-map',
     },
 
     webpackMiddleware: {
       noInfo: true,
     },
 
-    reporters: [
-      'mocha',
-      ...coverageReporters,
-    ],
+    reporters: ['mocha', ...coverageReporters],
 
     coverageReporter: {
       type: 'lcov',
@@ -67,7 +64,7 @@ export default config => {
       },
     },
 
-    browsers: isCi ? [env.BROWSER] : ['Chrome', 'Firefox'],
+    browsers: env.BROWSER ? [env.BROWSER] : ['Chrome', 'Firefox'],
 
     singleRun: isCi,
   });
