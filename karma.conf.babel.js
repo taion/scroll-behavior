@@ -43,7 +43,8 @@ export default config => {
           'process.env.NODE_ENV': JSON.stringify('test'),
         }),
       ],
-      devtool: 'cheap-module-inline-source-map',
+      devtool: runCoverage ?
+        'inline-source-map' : 'cheap-module-inline-source-map',
     },
 
     webpackMiddleware: {
