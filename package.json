@@ -35,7 +35,7 @@
     "dom-helpers": "^2.4.0"
   },
   "peerDependencies": {
-    "history": "^1.12.1 || ^2.0.0"
+    "history": "^1.12.1 || ^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.7.7",
