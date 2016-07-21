@@ -18,16 +18,18 @@ export default function withScroll(history, shouldUpdateScroll) {
 
     listeners.forEach(listener => listener(location));
 
-    let scrollPosition;
-    if (!shouldUpdateScroll) {
-      scrollPosition = true;
-    } else {
-      scrollPosition = shouldUpdateScroll.call(
-        scrollBehavior, prevLocation, location
-      );
-    }
+    scrollBehavior.getContainerKeys().forEach(containerKey => {
+      let scrollPosition;
+      if (!shouldUpdateScroll) {
+        scrollPosition = true;
+      } else {
+        scrollPosition = shouldUpdateScroll.call(
+          scrollBehavior, prevLocation, location, containerKey
+        );
+      }
 
-    scrollBehavior.updateScroll(scrollPosition);
+      scrollBehavior.updateScroll(containerKey, scrollPosition);
+    });
   }
 
   let unlisten = null;
