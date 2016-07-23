@@ -56,5 +56,11 @@ export default function withScroll(history, shouldUpdateScroll) {
   return {
     ...history,
     listen,
+    registerScrollContainer(...params) {
+      scrollBehavior.registerContainer(...params);
+    },
+    unregisterScrollContainer(...params) {
+      scrollBehavior.unregisterContainer(...params);
+    },
   };
 }
