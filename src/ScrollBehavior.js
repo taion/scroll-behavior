@@ -51,4 +51,14 @@ export default class ScrollBehavior {
   updateScroll(key, scrollPosition) {
     this._containers[key].updateScroll(scrollPosition);
   }
+
+  readPosition(key, location) {
+    return (typeof location === 'undefined')
+      ? this._readPosition('window', key)
+      : this._readPosition(key, location);
+  }
+
+  _readPosition(key, location) {
+    return this._containers[key].readPosition(location);
+  }
 }
