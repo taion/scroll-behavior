@@ -4,24 +4,6 @@ const webpack = require('webpack');
 module.exports = config => {
   const { env } = process;
 
-  const isCi = env.CONTINUOUS_INTEGRATION === 'true';
-  const runCoverage = env.COVERAGE === 'true' || isCi;
-
-  const coverageLoaders = [];
-  const coverageReporters = [];
-
-  if (runCoverage) {
-    coverageLoaders.push(
-      { test: /\.js$/, include: path.resolve('src'), loader: 'isparta' }
-    );
-
-    coverageReporters.push('coverage');
-
-    if (isCi) {
-      coverageReporters.push('coveralls');
-    }
-  }
-
   config.set({
     frameworks: ['mocha'],
 
@@ -35,7 +17,7 @@ module.exports = config => {
       module: {
         loaders: [
           { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
-          ...coverageLoaders,
+          { test: /\.js$/, include: path.resolve('src'), loader: 'isparta' },
         ],
       },
       plugins: [
@@ -50,7 +32,7 @@ module.exports = config => {
       noInfo: true,
     },
 
-    reporters: ['mocha', ...coverageReporters],
+    reporters: ['mocha', 'coverage'],
 
     mochaReporter: {
       output: 'autowatch',
@@ -70,6 +52,6 @@ module.exports = config => {
 
     browsers: env.BROWSER ? env.BROWSER.split(',') : ['Chrome', 'Firefox'],
 
-    singleRun: isCi,
+    singleRun: env.CONTINUOUS_INTEGRATION === 'true',
   });
 };

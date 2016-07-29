@@ -1,10 +1,10 @@
 # scroll-behavior [![Travis][build-badge]][build] [![npm][npm-badge]][npm]
 
-Scroll management for [`history`](https://github.com/mjackson/history).
+Scroll management for [`history`](https://github.com/ReactTraining/history).
 
 **If you are using [React Router](https://github.com/reactjs/react-router), check out [react-router-scroll](https://github.com/taion/react-router-scroll), which wraps up the scroll management logic here into a router middleware.**
 
-[![Coveralls][coveralls-badge]][coveralls]
+[![Codecov][codecov-badge]][codecov]
 [![Discord][discord-badge]][discord]
 
 ## Usage
@@ -61,8 +61,8 @@ const history = withScroll(createHistory(), (prevLocation, location) => (
 [npm-badge]: https://img.shields.io/npm/v/scroll-behavior.svg
 [npm]: https://www.npmjs.org/package/scroll-behavior
 
-[coveralls-badge]: https://img.shields.io/coveralls/taion/scroll-behavior/master.svg
-[coveralls]: https://coveralls.io/github/taion/scroll-behavior
+[codecov-badge]: https://img.shields.io/codecov/c/github/taion/scroll-behavior/master.svg
+[codecov]: https://codecov.io/gh/taion/scroll-behavior
 
 [discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg
 [discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
