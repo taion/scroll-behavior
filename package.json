@@ -8,6 +8,7 @@
   ],
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
+  "module": "es/index.js",
   "scripts": {
     "build": "npm run build-cjs && npm run build-es",
     "build-cjs": "rimraf lib && cross-env BABEL_ENV=cjs babel ./src -d lib",
