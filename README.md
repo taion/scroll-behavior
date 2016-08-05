@@ -55,6 +55,21 @@ const history = withScroll(createHistory(), (prevLocation, location) => (
 ));
 ```
 
+### Scrolling elements other than `window`
+
+The `withScroll`-extended history object has a `registerScrollElement` method. This method registers an element other than `window` to have managed scroll behavior on transitions. Each of these elements needs to be given a unique key at registration time.
+
+```js
+const history = withScroll(createHistory(), () => false);
+history.listen(listener);
+
+history.registerScrollElement(
+  key, element, shouldUpdateScroll
+);
+```
+
+The `registerScrollElement` method returns an `unregister` function that you can use to explicitly unregister the scroll behavior on the element, if necessary. In general, you will not need to do this, as `withScroll` will perform all necessary cleanup on removal of the last history listener.
+
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
 [build]: https://travis-ci.org/taion/scroll-behavior
 
