@@ -1,4 +1,3 @@
-const path = require('path');
 const webpack = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
 
 module.exports = config => {
@@ -17,12 +16,12 @@ module.exports = config => {
       module: {
         loaders: [
           { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
-          { test: /\.js$/, include: path.resolve('src'), loader: 'isparta' },
         ],
       },
       plugins: [
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('test'),
+          __DEV__: true,
         }),
       ],
       devtool: 'cheap-module-inline-source-map',

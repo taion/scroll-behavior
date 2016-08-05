@@ -16,7 +16,7 @@
     "lint": "eslint src test tools *.js",
     "prepublish": "npm run build",
     "test": "npm run lint && npm run testonly",
-    "testonly": "karma start"
+    "testonly": "cross-env NODE_ENV=test karma start"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-istanbul": "^1.0.3",
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-1": "^6.13.0",
@@ -57,7 +58,6 @@
     "eslint-config-airbnb-base": "^5.0.1",
     "eslint-plugin-import": "^1.12.0",
     "history": "^2.1.2",
-    "isparta-loader": "^2.0.0",
     "karma": "^1.1.2",
     "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^1.1.1",
