@@ -7,12 +7,12 @@
     "lib"
   ],
   "main": "lib/index.js",
-  "jsnext:main": "es/index.js",
   "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "scripts": {
     "build": "npm run build-cjs && npm run build-es",
-    "build-cjs": "rimraf lib && babel ./src -d lib",
-    "build-es": "rimraf es && cross-env BABEL_ENV=es babel ./src -d es",
+    "build-cjs": "rimraf lib && babel src -d lib",
+    "build-es": "rimraf es && cross-env BABEL_ENV=es babel src -d es",
     "lint": "eslint src test tools *.js",
     "prepublish": "npm run build",
     "test": "npm run lint && npm run testonly",
