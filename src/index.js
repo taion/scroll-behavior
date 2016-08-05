@@ -44,19 +44,19 @@ export default function withScroll(history, shouldUpdateScroll) {
     };
   }
 
-  function registerScrollNode(key, node, shouldUpdateNodeScroll) {
-    scrollBehavior.registerNode(
-      key, node, shouldUpdateNodeScroll, currentLocation
+  function registerScrollElement(key, element, shouldUpdateElementScroll) {
+    scrollBehavior.registerElement(
+      key, element, shouldUpdateElementScroll, currentLocation
     );
 
     return () => {
-      scrollBehavior.unregisterNode(key);
+      scrollBehavior.unregisterElement(key);
     };
   }
 
   return {
     ...history,
     listen,
-    registerScrollNode,
+    registerScrollElement,
   };
 }

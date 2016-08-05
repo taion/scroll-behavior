@@ -37,24 +37,24 @@ export function withRoutes(history) {
   };
 }
 
-export function withScrollNode(history) {
+export function withScrollElement(history) {
   const container = document.createElement('div');
   container.style.height = '100px';
   container.style.width = '100px';
   container.style.overflow = 'hidden';
 
-  const node = document.createElement('div');
-  node.style.height = '20000px';
-  node.style.width = '20000px';
+  const element = document.createElement('div');
+  element.style.height = '20000px';
+  element.style.width = '20000px';
 
-  container.appendChild(node);
+  container.appendChild(element);
   document.body.appendChild(container);
 
   // This will only be called once, so no need to guard.
   function listen(listener) {
     const unlisten = history.listen(listener);
 
-    history.registerScrollNode('container', container);
+    history.registerScrollElement('container', container);
 
     return () => {
       unlisten();
@@ -69,14 +69,14 @@ export function withScrollNode(history) {
   };
 }
 
-export function withScrollNodeRoutes(history) {
+export function withScrollElementRoutes(history) {
   const container = document.createElement('div');
   container.style.height = '100px';
   container.style.width = '100px';
   container.style.overflow = 'hidden';
   document.body.appendChild(container);
 
-  let node;
+  let element;
   let unregister;
 
   // This will only be called once, so no need to guard.
@@ -95,16 +95,16 @@ export function withScrollNodeRoutes(history) {
       listener(location);
 
       if (location.pathname === '/') {
-        node = document.createElement('div');
-        node.style.height = '20000px';
-        node.style.width = '20000px';
-        container.appendChild(node);
+        element = document.createElement('div');
+        element.style.height = '20000px';
+        element.style.width = '20000px';
+        container.appendChild(element);
 
-        unregister = history.registerScrollNode(
+        unregister = history.registerScrollElement(
           'container', container, shouldUpdateScroll
         );
       } else {
-        container.removeChild(node);
+        container.removeChild(element);
         unregister();
       }
     });

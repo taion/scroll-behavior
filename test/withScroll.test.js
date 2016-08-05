@@ -9,8 +9,8 @@ import withScroll from '../src';
 import {
   createHashHistoryWithoutKey,
   withRoutes,
-  withScrollNode,
-  withScrollNodeRoutes,
+  withScrollElement,
+  withScrollElementRoutes,
 } from './fixtures';
 import run, { delay } from './run';
 
@@ -148,9 +148,9 @@ describe('withScroll', () => {
         });
       });
 
-      describe('scroll node', () => {
+      describe('scroll element', () => {
         it('should follow browser scroll behavior', done => {
-          const { container, ...history } = withScrollNode(
+          const { container, ...history } = withScrollElement(
             withScroll(createHistory(), () => false)
           );
 
@@ -176,7 +176,7 @@ describe('withScroll', () => {
         });
 
         it('should restore scroll on remount', done => {
-          const { container, ...history } = withScrollNodeRoutes(
+          const { container, ...history } = withScrollElementRoutes(
             withScroll(createHistory(), () => false)
           );
 

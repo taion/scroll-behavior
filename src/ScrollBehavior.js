@@ -37,7 +37,7 @@ export default class ScrollBehavior {
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
 
-    this._scrollNodes = {};
+    this._scrollElements = {};
 
     // We have to listen to each window scroll update rather than to just
     // location updates, because some browsers will update scroll position
@@ -50,10 +50,10 @@ export default class ScrollBehavior {
         this._saveWindowPositionHandle = null;
       }
 
-      // It's fine to save node scroll positions here, though; the browser
+      // It's fine to save element scroll positions here, though; the browser
       // won't modify them.
-      Object.keys(this._scrollNodes).forEach(key => {
-        this._saveNodePosition(key);
+      Object.keys(this._scrollElements).forEach(key => {
+        this._saveElementPosition(key);
       });
     });
   }
@@ -70,32 +70,32 @@ export default class ScrollBehavior {
     this._unlistenBefore();
   }
 
-  registerNode(key, node, shouldUpdateScroll, context) {
+  registerElement(key, element, shouldUpdateScroll, context) {
     invariant(
-      !this._scrollNodes[key],
-      'ScrollBehavior: There is already a node registered for the key `%s`.',
+      !this._scrollElements[key],
+      'ScrollBehavior: There is already an element registered for `%s`.',
       key
     );
 
-    this._scrollNodes[key] = { node, shouldUpdateScroll };
-    this._updateNodeScroll(key, null, context);
+    this._scrollElements[key] = { element, shouldUpdateScroll };
+    this._updateElementScroll(key, null, context);
   }
 
-  unregisterNode(key) {
+  unregisterElement(key) {
     invariant(
-      this._scrollNodes[key],
-      'ScrollBehavior: There is no node registered for the key `%s`.',
+      this._scrollElements[key],
+      'ScrollBehavior: There is no element registered for `%s`.',
       key
     );
 
-    delete this._scrollNodes[key];
+    delete this._scrollElements[key];
   }
 
   updateScroll(prevContext, context) {
     this._updateWindowScroll(prevContext, context);
 
-    Object.keys(this._scrollNodes).forEach(key => {
-      this._updateNodeScroll(key, prevContext, context);
+    Object.keys(this._scrollElements).forEach(key => {
+      this._updateElementScroll(key, prevContext, context);
     });
   }
 
@@ -138,19 +138,19 @@ export default class ScrollBehavior {
     }
   }
 
-  _saveNodePosition(key) {
-    const { node } = this._scrollNodes[key];
+  _saveElementPosition(key) {
+    const { element } = this._scrollElements[key];
 
-    this._savePosition(key, node);
+    this._savePosition(key, element);
   }
 
-  _savePosition(key, node) {
+  _savePosition(key, element) {
     // We have to directly update `DOMStateStorage`, because actually updating
     // the location could cause e.g. React Router to re-render the entire page,
     // which would lead to observably bad scroll performance.
     saveState(
       this._getKey(this._getCurrentLocation(), key),
-      [scrollLeft(node), scrollTop(node)]
+      [scrollLeft(element), scrollTop(element)]
     );
   }
 
@@ -187,8 +187,8 @@ export default class ScrollBehavior {
     this._checkWindowScrollPosition();
   }
 
-  _updateNodeScroll(key, prevContext, context) {
-    const { node, shouldUpdateScroll } = this._scrollNodes[key];
+  _updateElementScroll(key, prevContext, context) {
+    const { element, shouldUpdateScroll } = this._scrollElements[key];
 
     const scrollTarget = this._getScrollTarget(
       key, shouldUpdateScroll, prevContext, context
@@ -200,8 +200,8 @@ export default class ScrollBehavior {
     // Unlike with the window, there shouldn't be any flakiness to deal with
     // here.
     const [x, y] = scrollTarget;
-    scrollLeft(node, x);
-    scrollTop(node, y);
+    scrollLeft(element, x);
+    scrollTop(element, y);
   }
 
   _getScrollTarget(key, shouldUpdateScroll, prevContext, context) {
