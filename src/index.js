@@ -18,25 +18,16 @@ export default function withScroll(history, shouldUpdateScroll) {
 
     listeners.forEach(listener => listener(location));
 
-    scrollBehavior.getContainerKeys().forEach(containerKey => {
-      let scrollPosition;
-      if (!shouldUpdateScroll) {
-        scrollPosition = true;
-      } else {
-        scrollPosition = shouldUpdateScroll.call(
-          scrollBehavior, prevLocation, location, containerKey
-        );
-      }
-
-      scrollBehavior.updateScroll(containerKey, scrollPosition);
-    });
+    scrollBehavior.updateScroll(prevLocation, location);
   }
 
   let unlisten = null;
 
   function listen(listener) {
     if (listeners.length === 0) {
-      scrollBehavior = new ScrollBehavior(history, getCurrentLocation);
+      scrollBehavior = new ScrollBehavior(
+        history, getCurrentLocation, shouldUpdateScroll
+      );
       unlisten = history.listen(onChange);
     }
 
@@ -53,14 +44,19 @@ export default function withScroll(history, shouldUpdateScroll) {
     };
   }
 
+  function registerScrollNode(key, node, shouldUpdateNodeScroll) {
+    scrollBehavior.registerNode(
+      key, node, shouldUpdateNodeScroll, currentLocation
+    );
+
+    return () => {
+      scrollBehavior.unregisterNode(key);
+    };
+  }
+
   return {
     ...history,
     listen,
-    registerScrollContainer(...params) {
-      scrollBehavior.registerContainer(...params);
-    },
-    unregisterScrollContainer(...params) {
-      scrollBehavior.unregisterContainer(...params);
-    },
+    registerScrollNode,
   };
 }

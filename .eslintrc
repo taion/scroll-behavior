@@ -2,7 +2,6 @@
   "extends": "airbnb-base",
   "parser": "babel-eslint",
   "rules": {
-    "max-len": [2, 79],
-    "no-underscore-dangle": [0]
+    "max-len": [2, 79]
   }
 }

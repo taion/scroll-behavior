@@ -6,15 +6,13 @@ import createHashHistory from 'history/lib/createHashHistory';
 
 import withScroll from '../src';
 
-import { withRoutes } from './fixtures';
+import {
+  createHashHistoryWithoutKey,
+  withRoutes,
+  withScrollNode,
+  withScrollNodeRoutes,
+} from './fixtures';
 import run, { delay } from './run';
-
-function createHashHistoryWithoutKey() {
-  // Avoid persistence of stored data from previous tests.
-  window.sessionStorage.clear();
-
-  return createHashHistory({ queryKey: false });
-}
 
 describe('withScroll', () => {
   [
@@ -65,12 +63,14 @@ describe('withScroll', () => {
 
       describe('custom behavior', () => {
         it('should allow scroll suppression', done => {
-          const history = withRoutes(withScroll(
-            createHistory(),
-            (prevLocation, location) => (
-              !prevLocation || prevLocation.pathname !== location.pathname
+          const history = withRoutes(
+            withScroll(
+              createHistory(),
+              (prevLocation, location) => (
+                !prevLocation || prevLocation.pathname !== location.pathname
+              )
             )
-          ));
+          );
 
           unlisten = run(history, [
             () => {
@@ -142,6 +142,58 @@ describe('withScroll', () => {
             () => {
               expect(prevPosition).to.eql([0, 0]);
               expect(position).to.eql([0, 15000]);
+              done();
+            },
+          ]);
+        });
+      });
+
+      describe('scroll node', () => {
+        it('should follow browser scroll behavior', done => {
+          const { container, ...history } = withScrollNode(
+            withScroll(createHistory(), () => false)
+          );
+
+          unlisten = run(history, [
+            () => {
+              scrollTop(container, 10000);
+              history.push('/other');
+            },
+            () => {
+              expect(scrollTop(container)).to.equal(0);
+              scrollTop(container, 5000);
+              history.goBack();
+            },
+            () => {
+              expect(scrollTop(container)).to.equal(10000);
+              history.push('/other');
+            },
+            () => {
+              expect(scrollTop(container)).to.equal(0);
+              done();
+            },
+          ]);
+        });
+
+        it('should restore scroll on remount', done => {
+          const { container, ...history } = withScrollNodeRoutes(
+            withScroll(createHistory(), () => false)
+          );
+
+          unlisten = run(history, [
+            () => {
+              scrollTop(container, 10000);
+              history.push('/other');
+            },
+            () => {
+              expect(container.scrollHeight).to.equal(100);
+              expect(scrollTop(container)).to.equal(0);
+              scrollTop(container, 5000);
+              history.goBack();
+            },
+            () => {
+              expect(container.scrollHeight).to.equal(20000);
+              expect(scrollTop(container)).to.equal(10000);
               done();
             },
           ]);
