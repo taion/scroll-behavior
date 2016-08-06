@@ -50,7 +50,5 @@ module.exports = config => {
     },
 
     browsers: env.BROWSER ? env.BROWSER.split(',') : ['Chrome', 'Firefox'],
-
-    singleRun: env.CONTINUOUS_INTEGRATION === 'true',
   });
 };
