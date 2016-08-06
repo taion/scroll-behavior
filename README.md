@@ -57,7 +57,7 @@ const history = withScroll(createHistory(), (prevLocation, location) => (
 
 ### Scrolling elements other than `window`
 
-The `withScroll`-extended history object has a `registerScrollElement` method. This method registers an element other than `window` to have managed scroll behavior on transitions. Each of these elements needs to be given a unique key at registration time.
+The `withScroll`-extended history object has a `registerScrollElement` method. This method registers an element other than `window` to have managed scroll behavior on transitions. Each of these elements needs to be given a unique key at registration time, and can be given an optional `shouldUpdateScroll` callback that behaves as above.
 
 ```js
 const history = withScroll(createHistory(), () => false);
