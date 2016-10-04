@@ -156,7 +156,7 @@ export default class ScrollBehavior {
 
   _getKey(location, key) {
     // Use fallback location key when actual location key is unavailable.
-    const locationKey = location.key || this._history.createPath(location);
+    const locationKey = location.key || this._history.createHref(location);
 
     return key == null ?
       `${KEY_PREFIX}${locationKey}` :
