@@ -5,6 +5,11 @@ export default function withScroll(history, shouldUpdateScroll) {
   // currentLocation will always be defined when needed.
   let currentLocation = null;
 
+  // Unless using react-router v3, that is, so we try and make it work
+  if ({}.hasOwnProperty.call(history, 'getCurrentLocation')) {
+    currentLocation = history.getCurrentLocation();
+  }
+
   function getCurrentLocation() {
     return currentLocation;
   }
