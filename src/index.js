@@ -29,6 +29,12 @@ export default function withScroll(history, shouldUpdateScroll) {
         history, getCurrentLocation, shouldUpdateScroll
       );
       unlisten = history.listen(onChange);
+
+      // On react-router/history v3, onChange will not be called on first run
+      let historyV3 = {}.hasOwnProperty.call(history, 'getCurrentLocation');
+      if (historyV3 && !currentLocation) {
+        currentLocation = history.getCurrentLocation();
+      }
     }
 
     listeners.push(listener);
