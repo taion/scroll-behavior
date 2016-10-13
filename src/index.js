@@ -1,4 +1,4 @@
-import ScrollBehavior from './scroll-behavior';
+import ScrollBehavior from './ScrollBehavior';
 
 export default function withScroll(history, shouldUpdateScroll) {
   // history will invoke the onChange callback synchronously, so
