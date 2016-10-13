@@ -1,14 +1,9 @@
-import ScrollBehavior from './ScrollBehavior';
+import ScrollBehavior from './scroll-behavior';
 
 export default function withScroll(history, shouldUpdateScroll) {
   // history will invoke the onChange callback synchronously, so
   // currentLocation will always be defined when needed.
   let currentLocation = null;
-
-  // Unless using react-router v3, that is, so we try and make it work
-  if ({}.hasOwnProperty.call(history, 'getCurrentLocation')) {
-    currentLocation = history.getCurrentLocation();
-  }
 
   function getCurrentLocation() {
     return currentLocation;
@@ -34,6 +29,12 @@ export default function withScroll(history, shouldUpdateScroll) {
         history, getCurrentLocation, shouldUpdateScroll
       );
       unlisten = history.listen(onChange);
+
+      // On react-router/history v3, onChange will not be called on first run
+      let historyV3 = {}.hasOwnProperty.call(history, 'getCurrentLocation');
+      if (historyV3 && !currentLocation) {
+        currentLocation = history.getCurrentLocation();
+      }
     }
 
     listeners.push(listener);
