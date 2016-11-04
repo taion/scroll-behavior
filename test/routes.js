@@ -1,19 +1,10 @@
-import createHashHistory from 'history/lib/createHashHistory';
-
-export function createHashHistoryWithoutKey() {
-  // Avoid persistence of stored data from previous tests.
-  window.sessionStorage.clear();
-
-  return createHashHistory({ queryKey: false });
-}
-
 export function withRoutes(history) {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
   // This will only be called once, so no need to guard.
   function listen(listener) {
-    const unlisten = history.listen(location => {
+    const unlisten = history.listen((location) => {
       listener(location);
 
       if (location.pathname === '/') {
@@ -91,7 +82,7 @@ export function withScrollElementRoutes(history) {
       return true;
     }
 
-    const unlisten = history.listen(location => {
+    const unlisten = history.listen((location) => {
       listener(location);
 
       if (location.pathname === '/') {

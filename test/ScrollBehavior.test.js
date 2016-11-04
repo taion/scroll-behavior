@@ -1,25 +1,20 @@
-import { expect } from 'chai';
 import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 
-import withScroll from '../src';
-
-import {
-  createHashHistoryWithoutKey,
-  withRoutes,
-  withScrollElement,
-  withScrollElementRoutes,
-} from './fixtures';
+import { createHashHistoryWithoutKey } from './histories';
+import { withRoutes, withScrollElement, withScrollElementRoutes }
+  from './routes';
 import run, { delay } from './run';
+import withScroll from './withScroll';
 
-describe('withScroll', () => {
+describe('ScrollBehavior', () => {
   [
     createBrowserHistory,
     createHashHistory,
     createHashHistoryWithoutKey,
-  ].forEach(createHistory => {
+  ].forEach((createHistory) => {
     describe(createHistory.name, () => {
       let unlisten;
 
@@ -30,7 +25,7 @@ describe('withScroll', () => {
       });
 
       describe('default behavior', () => {
-        it('should emulate browser scroll behavior', done => {
+        it('should emulate browser scroll behavior', (done) => {
           const history = withRoutes(withScroll(createHistory()));
 
           unlisten = run(history, [
@@ -48,8 +43,8 @@ describe('withScroll', () => {
               scrollTop(window, 5000);
               delay(history.goBack);
             },
-            location => {
-              expect(location.state).to.not.exist;
+            (location) => {
+              expect(location.state).to.not.exist();
               expect(scrollTop(window)).to.equal(15000);
               history.push('/detail');
             },
@@ -62,7 +57,7 @@ describe('withScroll', () => {
       });
 
       describe('custom behavior', () => {
-        it('should allow scroll suppression', done => {
+        it('should allow scroll suppression', (done) => {
           const history = withRoutes(
             withScroll(
               createHistory(),
@@ -91,7 +86,7 @@ describe('withScroll', () => {
           ]);
         });
 
-        it('should allow custom position', done => {
+        it('should allow custom position', (done) => {
           const history = withRoutes(withScroll(
             createHistory(), () => [10, 20]
           ));
@@ -110,46 +105,10 @@ describe('withScroll', () => {
             },
           ]);
         });
-
-        it('should allow reading position', done => {
-          let prevPosition;
-          let position;
-
-          function shouldUpdateScroll(prevLocation, location) {
-            if (prevLocation) {
-              prevPosition = this.readPosition(prevLocation);
-            }
-
-            position = this.readPosition(location);
-
-            return true;
-          }
-
-          const history = withRoutes(withScroll(
-            createHistory(), shouldUpdateScroll
-          ));
-
-          unlisten = run(history, [
-            () => {
-              scrollTop(window, 15000);
-              delay(() => history.push('/detail'));
-            },
-            () => {
-              expect(prevPosition).to.eql([0, 15000]);
-              expect(position).to.not.exist;
-              history.goBack();
-            },
-            () => {
-              expect(prevPosition).to.eql([0, 0]);
-              expect(position).to.eql([0, 15000]);
-              done();
-            },
-          ]);
-        });
       });
 
       describe('scroll element', () => {
-        it('should follow browser scroll behavior', done => {
+        it('should follow browser scroll behavior', (done) => {
           const { container, ...history } = withScrollElement(
             withScroll(createHistory(), () => false)
           );
@@ -175,7 +134,7 @@ describe('withScroll', () => {
           ]);
         });
 
-        it('should restore scroll on remount', done => {
+        it('should restore scroll on remount', (done) => {
           const { container, ...history } = withScrollElementRoutes(
             withScroll(createHistory(), () => false)
           );
