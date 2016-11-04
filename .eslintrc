@@ -1,12 +1,6 @@
 {
-  "extends": "airbnb-base",
-  "parser": "babel-eslint",
+  "extends": "4catalyzer",
   "env": {
     "browser": true
-  },
-  "rules": {
-    "max-len": [2, 79, {
-      "ignorePattern": " // eslint-disable-line "
-    }]
   }
 }

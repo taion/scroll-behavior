@@ -1,7 +1,7 @@
 {
   "presets": [
-    "./tools/es2015Preset",
-    "stage-1"
+    "./tools/latestPreset",
+    "stage-2"
   ],
   "plugins": ["dev-expression"],
 
