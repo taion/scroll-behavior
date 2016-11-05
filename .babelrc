@@ -1,14 +1,13 @@
 {
   "presets": [
-    "./tools/latestPreset",
+    ["latest", {
+      "es2015": { "loose": true }
+    }],
     "stage-2"
   ],
-  "plugins": ["dev-expression"],
+  "plugins": ["dev-expression", "add-module-exports"],
 
   "env": {
-    "cjs": {
-      "plugins": ["add-module-exports"]
-    },
     "test": {
       "plugins": ["istanbul"]
     }
