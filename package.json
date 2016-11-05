@@ -3,17 +3,12 @@
   "version": "0.9.0",
   "description": "Pluggable browser scroll management",
   "files": [
-    "es",
     "lib"
   ],
   "main": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
   "scripts": {
-    "build": "npm run build-cjs && npm run build-es",
-    "build-cjs": "rimraf lib && cross-env BABEL_ENV=cjs babel src -d lib",
-    "build-es": "rimraf es && cross-env BABEL_ENV=es babel src -d es",
-    "lint": "eslint src test tools *.js",
+    "build": "rimraf lib && babel src -d lib",
+    "lint": "eslint src test *.js",
     "prepublish": "npm run build",
     "tdd": "cross-env NODE_ENV=test karma start",
     "test": "npm run lint && npm run testonly",
