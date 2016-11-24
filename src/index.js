@@ -168,7 +168,7 @@ export default class ScrollBehavior {
     // scroll it isn't enough. Instead, try to scroll a few times until it
     // works.
     this._numWindowScrollAttempts = 0;
-    requestAnimationFrame(this._checkWindowScrollPosition());
+    requestAnimationFrame(this._checkWindowScrollPosition);
   }
 
   _updateElementScroll(key, prevContext, context) {
