@@ -155,15 +155,6 @@ export default class ScrollBehavior {
       null, this._shouldUpdateScroll, prevContext, context,
     );
 
-    // Check the scroll position to see if we even need to scroll. This call
-    // will unset _windowScrollTarget if the current scroll position matches
-    // the target.
-    this._onWindowScroll();
-
-    if (!this._windowScrollTarget) {
-      return;
-    }
-
     // Updating the window scroll position is really flaky. Just trying to
     // scroll it isn't enough. Instead, try to scroll a few times until it
     // works.
