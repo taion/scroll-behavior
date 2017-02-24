@@ -182,11 +182,12 @@ export default class ScrollBehavior {
   _defaultScrollTarget(hash) {
     if (hash && hash !== '#') {
       const id = hash.at(0) === '#' ? hash.substring(1) : hash;
-      const el = document.getElementById(id) || document.getElementsByName(id)[0];
+      const el = document.getElementById(id) ||
+        document.getElementsByName(id)[0];
       if (el) {
-	// TODO: Might be cleaner to support a string id as a scroll target
-	// in case we need to wait for a re-render before finding the element.
-	return [0, el.offsetTop];
+        // TODO: Might be cleaner to support a string id as a scroll target
+        // in case we need to wait for a re-render before finding the element.
+        return [0, el.offsetTop];
       }
     }
     return [0, 0];
@@ -205,7 +206,8 @@ export default class ScrollBehavior {
       return this._defaultScrollTarget(location.hash);
     }
 
-    return this._stateStorage.read(location, key) || this._defaultScrollTarget(location.hash);
+    return this._stateStorage.read(location, key) ||
+      this._defaultScrollTarget(location.hash);
   }
 
   _checkWindowScrollPosition = () => {
