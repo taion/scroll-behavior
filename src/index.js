@@ -179,9 +179,10 @@ export default class ScrollBehavior {
     scrollTop(element, y);
   }
 
-  _defaultScrollTarget(hash) {
+  _getDefaultScrollTarget(location) {
+    const hash = location.hash;
     if (hash && hash !== '#') {
-      const id = hash.at(0) === '#' ? hash.substring(1) : hash;
+      const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
       const el = document.getElementById(id) ||
         document.getElementsByName(id)[0];
       if (el) {
@@ -203,11 +204,11 @@ export default class ScrollBehavior {
 
     const location = this._getCurrentLocation();
     if (location.action === 'PUSH') {
-      return this._defaultScrollTarget(location.hash);
+      return this._getDefaultScrollTarget(location);
     }
 
     return this._stateStorage.read(location, key) ||
-      this._defaultScrollTarget(location.hash);
+      this._getDefaultScrollTarget(location);
   }
 
   _checkWindowScrollPosition = () => {
