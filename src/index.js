@@ -174,22 +174,13 @@ export default class ScrollBehavior {
 
     // Unlike with the window, there shouldn't be any flakiness to deal with
     // here.
-    const [x, y] = scrollTarget;
-    scrollLeft(element, x);
-    scrollTop(element, y);
+    this._scrollToTarget(element, scrollTarget);
   }
 
   _getDefaultScrollTarget(location) {
     const hash = location.hash;
     if (hash && hash !== '#') {
-      const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
-      const el = document.getElementById(id) ||
-        document.getElementsByName(id)[0];
-      if (el) {
-        // TODO: Might be cleaner to support a string id as a scroll target
-        // in case we need to wait for a re-render before finding the element.
-        return [0, el.offsetTop];
-      }
+      return hash.charAt(0) === '#' ? hash.slice(1) : hash;
     }
     return [0, 0];
   }
@@ -198,7 +189,10 @@ export default class ScrollBehavior {
     const scrollTarget = shouldUpdateScroll ?
       shouldUpdateScroll.call(this, prevContext, context) : true;
 
-    if (!scrollTarget || Array.isArray(scrollTarget)) {
+    if (!scrollTarget
+        || Array.isArray(scrollTarget)
+        || typeof scrollTarget === 'string'
+       ) {
       return scrollTarget;
     }
 
@@ -222,8 +216,7 @@ export default class ScrollBehavior {
       return;
     }
 
-    const [x, y] = this._windowScrollTarget;
-    window.scrollTo(x, y);
+    this._scrollToTarget(window, this._windowScrollTarget);
 
     ++this._numWindowScrollAttempts;
 
@@ -236,4 +229,21 @@ export default class ScrollBehavior {
     this._checkWindowScrollHandle =
       requestAnimationFrame(this._checkWindowScrollPosition);
   };
+
+  _scrollToTarget = (element, target) => {
+    let scrollTarget = target;
+    if (typeof scrollTarget === 'string') {
+      const el = document.getElementById(target) ||
+        document.getElementsByName(target)[0];
+      if (el) {
+        el.scrollIntoView();
+        return;
+      }
+      // Fallback to scrolling to top when target fragment doesn't exist.
+      scrollTarget = [0, 0];
+    }
+    const [x, y] = scrollTarget;
+    scrollLeft(element, x);
+    scrollTop(element, y);
+  }
 }
