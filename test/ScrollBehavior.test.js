@@ -1,3 +1,4 @@
+import offset from 'dom-helpers/query/offset';
 import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
@@ -51,11 +52,11 @@ describe('ScrollBehavior', () => {
               history.push('/detail#child2');
             },
             () => {
-              expect(child2().scrollTop).to.equal(0);
+              expect(scrollTop(window)).to.equal(offset(child2()).top);
               history.push('/detail#child1');
             },
             () => {
-              expect(child1().scrollTop).to.equal(0);
+              expect(scrollTop(window)).to.equal(offset(child1()).top);
               history.push('/detail#unknownfragment');
             },
             () => {

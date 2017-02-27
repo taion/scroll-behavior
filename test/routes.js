@@ -15,7 +15,7 @@ export function withRoutes(history) {
         container.style.width = '10000px';
       }
       const child1 = document.createElement('div');
-      const child2 = document.createElement('div');
+      const child2 = document.createElement('a');
       container.appendChild(child1);
       container.appendChild(child2);
       child1.id = 'child1';
