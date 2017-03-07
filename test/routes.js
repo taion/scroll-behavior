@@ -2,6 +2,18 @@ export function withRoutes(history) {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
+  const child1 = document.createElement('div');
+  child1.id = 'child1';
+  child1.style.height = '100px';
+  container.appendChild(child1);
+
+  const child2 = document.createElement('a');
+  child2.id = 'child2-id';
+  child2.name = 'child2';
+  child2.style.height = '100px';
+  child2.appendChild(document.createTextNode('link'));
+  container.appendChild(child2);
+
   // This will only be called once, so no need to guard.
   function listen(listener) {
     const unlisten = history.listen((location) => {
@@ -14,15 +26,6 @@ export function withRoutes(history) {
         container.style.height = '10000px';
         container.style.width = '10000px';
       }
-      const child1 = document.createElement('div');
-      const child2 = document.createElement('a');
-      container.appendChild(child1);
-      container.appendChild(child2);
-      child1.id = 'child1';
-      child2.name = 'child2';
-      child2.id = 'child2id';
-      child1.style.height = '10%';
-      child2.style.height = '10%';
     });
 
     return () => {

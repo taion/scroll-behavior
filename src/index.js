@@ -189,10 +189,11 @@ export default class ScrollBehavior {
     const scrollTarget = shouldUpdateScroll ?
       shouldUpdateScroll.call(this, prevContext, context) : true;
 
-    if (!scrollTarget
-        || Array.isArray(scrollTarget)
-        || typeof scrollTarget === 'string'
-       ) {
+    if (
+      !scrollTarget
+      || Array.isArray(scrollTarget)
+      || typeof scrollTarget === 'string'
+     ) {
       return scrollTarget;
     }
 
@@ -231,18 +232,21 @@ export default class ScrollBehavior {
   };
 
   _scrollToTarget = (element, target) => {
-    let scrollTarget = target;
-    if (typeof scrollTarget === 'string') {
-      const el = document.getElementById(target) ||
-        document.getElementsByName(target)[0];
+    if (typeof target === 'string') {
+      const el = (
+        document.getElementById(target) ||
+        document.getElementsByName(target)[0]
+      );
       if (el) {
         el.scrollIntoView();
         return;
       }
+
       // Fallback to scrolling to top when target fragment doesn't exist.
-      scrollTarget = [0, 0];
+      target = [0, 0]; // eslint-disable-line no-param-reassign
     }
-    const [x, y] = scrollTarget;
+
+    const [x, y] = target;
     scrollLeft(element, x);
     scrollTop(element, y);
   }
