@@ -28,8 +28,8 @@ describe('ScrollBehavior', () => {
       describe('default behavior', () => {
         it('should emulate browser scroll behavior', (done) => {
           const history = withRoutes(withScroll(createHistory()));
-          const child1 = () => document.getElementById('child1');
-          const child2 = () => document.getElementById('child2id');
+          const child1 = document.getElementById('child1');
+          const child2 = document.getElementById('child2-id');
 
           unlisten = run(history, [
             () => {
@@ -52,12 +52,12 @@ describe('ScrollBehavior', () => {
               history.push('/detail#child2');
             },
             () => {
-              expect(scrollTop(window)).to.equal(offset(child2()).top);
+              expect(scrollTop(window)).to.be.closeTo(offset(child2).top, 2);
               history.push('/detail#child1');
             },
             () => {
-              expect(scrollTop(window)).to.equal(offset(child1()).top);
-              history.push('/detail#unknownfragment');
+              expect(scrollTop(window)).to.equal(offset(child1).top);
+              history.push('/detail#unknown-fragment');
             },
             () => {
               expect(scrollTop(window)).to.equal(0);
