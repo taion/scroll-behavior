@@ -1,3 +1,4 @@
+import offset from 'dom-helpers/query/offset';
 import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
@@ -27,6 +28,8 @@ describe('ScrollBehavior', () => {
       describe('default behavior', () => {
         it('should emulate browser scroll behavior', (done) => {
           const history = withRoutes(withScroll(createHistory()));
+          const child1 = () => document.getElementById('child1');
+          const child2 = () => document.getElementById('child2id');
 
           unlisten = run(history, [
             () => {
@@ -46,7 +49,15 @@ describe('ScrollBehavior', () => {
             (location) => {
               expect(location.state).to.not.exist();
               expect(scrollTop(window)).to.equal(15000);
-              history.push('/detail');
+              history.push('/detail#child2');
+            },
+            () => {
+              expect(scrollTop(window)).to.equal(offset(child2()).top);
+              history.push('/detail#child1');
+            },
+            () => {
+              expect(scrollTop(window)).to.equal(offset(child1()).top);
+              history.push('/detail#unknownfragment');
             },
             () => {
               expect(scrollTop(window)).to.equal(0);

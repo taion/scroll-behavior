@@ -14,6 +14,15 @@ export function withRoutes(history) {
         container.style.height = '10000px';
         container.style.width = '10000px';
       }
+      const child1 = document.createElement('div');
+      const child2 = document.createElement('a');
+      container.appendChild(child1);
+      container.appendChild(child2);
+      child1.id = 'child1';
+      child2.name = 'child2';
+      child2.id = 'child2id';
+      child1.style.height = '10%';
+      child2.style.height = '10%';
     });
 
     return () => {
