@@ -91,6 +91,8 @@ scrollBehavior.registerScrollElement(
 );
 ```
 
+To unregister an element, call the `unregisterElement` method with the key used to register that element.
+
 
 ### Complete Example
 
@@ -193,8 +195,6 @@ export default class SessionStorage {
   }
 }
 ```
-
-To unregister an element, call the `unregisterElement` method with the key used to register that element.
 
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
 [build]: https://travis-ci.org/taion/scroll-behavior
