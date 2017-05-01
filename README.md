@@ -91,6 +91,109 @@ scrollBehavior.registerScrollElement(
 );
 ```
 
+
+### Complete Example
+
+*src/index.js:*
+
+```js
+import createBrowserHistory from 'history/createBrowserHistory'
+import createScrollBehavior from './createScrollBehavior'
+import renderApp from './renderApp'
+
+const history = createBrowserHistory()
+const scrollBehavior = createScrollBehavior(history)
+
+renderApp(history, scrollBehavior)
+// at this point scrollBehavior won't in fact be needed again if your goal is
+// just to handle window scroll restoration. But if you want other elements
+// throughout your app to have their scroll restored, you will likely want to 
+// pass `scrollBehavior` down your render tree, so you can call:
+//
+// `scrollBehavior.registerScrollElement(key, element, shouldUpdateScroll, context)`
+```
+*For an example, look into https://github.com/ytase/react-router-scroll to see how 
+you can create components that use React `context` to pass `scrollBehavior` down 
+your component tree. A similar technique can likely be used for environments other
+than React.*
+
+
+*src/createScrollBehavior.js:*
+```js
+import SessionStorage from './SessionStorage'
+
+let prevContext = null
+let alreadyHandledPathname = null
+
+export default history => {
+  const scrollBehavior = new ScrollBehavior({
+    addTransitionHook: history.listen,
+    stateStorage: new SessionStorage,
+    getCurrentLocation: () => {
+      return {
+        ...history.location,
+        action: history.action // create expected `location` object
+      }
+    },
+    shouldUpdateScroll: (prev, location) => {
+      // perhaps do some custom scroll positioning: 
+      if (location.pathname === 'foo' && prev.pathname === 'bar') {
+        return [0, 300]
+      }
+
+      return true
+    }
+  })
+
+  history.listen(location => {
+    const path = location.pathname
+
+    // usually in systems that listen to address bar changes, the address bar
+    // also changes in response to actions which already handle rendering (e.g.
+    // you manually call `history.push(newPath)`), and as a result shouldn't 
+    // trigger rendering again. Therefore the following rendering is only
+    // triggered in response to pop state events, i.e. where the browser
+    // back/forward buttons were pressed:
+    if (path !== alreadyHandledPathname) {
+      alreadyHandledPathname = path // prevents manual rendering mechanism
+      // do some rendering
+      // e.g: store.dispatch({ type: 'POP_STATE', payload: { path }})
+    }
+
+    scrollBehavior.updateScroll(prevContext, location)
+    prevContext = location
+  })
+
+  return scrollBehavior
+}
+```
+
+
+*src/SessionStorage.js:*
+```js
+const STATE_KEY_PREFIX = '@@scroll|';
+
+export default class SessionStorage {
+  read(location, key) {
+    const stateKey = this.getStateKey(location, key);
+    const value = sessionStorage.getItem(stateKey);
+    return JSON.parse(value);
+  }
+
+  save(location, key, value) {
+    const stateKey = this.getStateKey(location, key);
+    const storedValue = JSON.stringify(value);
+    sessionStorage.setItem(stateKey, storedValue);
+  }
+
+  getStateKey(location, key) {
+    const locationKey = location.key || location.hash;
+    const stateKeyBase = `${STATE_KEY_PREFIX}${locationKey}`;
+    return key == null ? stateKeyBase : `${stateKeyBase}|${key}`;
+  }
+}
+```
+
 To unregister an element, call the `unregisterElement` method with the key used to register that element.
 
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
