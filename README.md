@@ -112,10 +112,10 @@ renderApp(history, scrollBehavior)
 //
 // `scrollBehavior.registerScrollElement(key, element, shouldUpdateScroll, context)`
 ```
-*For an example, look into https://github.com/ytase/react-router-scroll to see how 
+> For an example, look into https://github.com/ytase/react-router-scroll to see how 
 you can create components that use React `context` to pass `scrollBehavior` down 
 your component tree. A similar technique can likely be used for environments other
-than React.*
+than React.
 
 
 *src/createScrollBehavior.js:*
