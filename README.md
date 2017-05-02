@@ -4,7 +4,7 @@ Pluggable browser scroll management.
 
 **If you use [React Router](https://github.com/reactjs/react-router), use [react-router-scroll](https://github.com/taion/react-router-scroll), which wraps up the scroll management logic here into a React Router middleware.** 
 
-**If you're using the latest React Router (v4), feel free to try out its fork: https://github.com/taion/react-router-scroll. There is one potential issue when using redirects, which may or may not be a problem for you. See ongoing discussion in [#52](https://github.com/taion/react-router-scroll/issues/52).**
+**If you're using the latest React Router (v4), feel free to try out its fork: https://github.com/ytase/react-router-scroll. There is one potential issue when using redirects, which may or may not be a problem for you. See ongoing discussion in [#52](https://github.com/taion/react-router-scroll/issues/52).**
 
 **For a redux-first routing solution that makes use of `scroll-behavior`, checkout: [redux-first-router](https://github.com/faceyspacey/redux-first-router).**
 
@@ -113,7 +113,7 @@ The key element of most the above packages is how `updateScroll` is called in a 
 
 In addition, if your routing library handles data fetching, you likely want to call `updateScroll` again after the data has been fetched and the page re-rendered. This allows `scroll-behavior` to scroll to a portion of the page that might not have loaded before. The same also applies if you're using code-splitting and loading additional chunks. In that case you'll also want to call `updateScroll` after components from the new chunk have rendered.
 
-If your routing library does not handle data fetching, you may want to expose an `updateScroll` function of your own so developers can call it at the appropriate time in userland. Perhaps your users don't want a `<Context />` component constantly re-rendering (even if just in the virtual DOM), and would rather call `updateScroll` in `componentDidUpdate` callbacks that already exist in code. This has the benefit of reducing the amount of rendering work to be done *(cycles add up!)*, which can be key to providing the best experience in large animation-heavy applications.
+If your routing library does not handle data fetching, you may want to expose an `updateScroll` function of your own so developers can call it at the appropriate time in userland. Perhaps your users don't want a `<Context />` component constantly re-rendering (even if just in the virtual DOM), and would rather call `updateScroll` in `componentDidUpdate` callbacks that already exist. This has the benefit of reducing the amount of rendering work to be done *(cycles add up!)*, which can be key to providing the best experience in large animation-heavy applications.
 
 
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
