@@ -2,7 +2,10 @@
 
 Pluggable browser scroll management.
 
-**If you use [React Router](https://github.com/reactjs/react-router), use [react-router-scroll](https://github.com/taion/react-router-scroll), which wraps up the scroll management logic here into a React Router middleware.**
+**This library is not generally meant to be used directly by applications. Instead, it's meant to be used in integrations for routing libraries or frameworks. For examples of such integrations, see:**
+
+- [Found Scroll](https://github.com/4Catalyzer/found-scroll): Integration for [Found](https://github.com/4Catalyzer/found)
+- [react-router-scroll](https://github.com/taion/react-router-scroll): Integration for [React Router](https://github.com/reactjs/react-router) v2 and v3
 
 [![Codecov][codecov-badge]][codecov]
 [![Discord][discord-badge]][discord]
