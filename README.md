@@ -6,7 +6,7 @@ Pluggable browser scroll management.
 
 **If you're using the latest React Router (v4), feel free to try out its fork: https://github.com/ytase/react-router-scroll. There is one potential issue when using redirects, which may or may not be a problem for you. See ongoing discussion in [#52](https://github.com/taion/react-router-scroll/issues/52).**
 
-**For a redux-first routing solution that makes use of `scroll-behavior`, checkout: [redux-first-router](https://github.com/faceyspacey/redux-first-router).**
+**For a** ***redux-first*** **routing solution that makes use of `scroll-behavior`, checkout: [redux-first-router](https://github.com/faceyspacey/redux-first-router).**
 
 [![Codecov][codecov-badge]][codecov]
 [![Discord][discord-badge]][discord]
