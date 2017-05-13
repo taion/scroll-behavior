@@ -78,7 +78,7 @@ const scrollBehavior = new ScrollBehavior({
 const scrollBehavior = new ScrollBehavior({
   ...options,
   shouldUpdateScroll: (prevLocation, location) => (
-    // Scroll to top when attempting to vist the current path.
+    // Scroll to top when attempting to visit the current path.
     prevLocation && location.pathname === prevLocation.pathname ? [0, 0] : true
   ),
 });
