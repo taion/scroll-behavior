@@ -23,7 +23,7 @@ export default class ScrollBehavior {
 
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
-    /* istanbul ignore if: not supported by any browsers on Travis */
+    /* istanbul ignore else: Travis browsers all support this */
     if ('scrollRestoration' in window.history) {
       this._oldScrollRestoration = window.history.scrollRestoration;
       window.history.scrollRestoration = 'manual';
@@ -61,7 +61,7 @@ export default class ScrollBehavior {
     invariant(
       !this._scrollElements[key],
       'ScrollBehavior: There is already an element registered for `%s`.',
-      key
+      key,
     );
 
     this._scrollElements[key] = { element, shouldUpdateScroll };
@@ -72,7 +72,7 @@ export default class ScrollBehavior {
     invariant(
       this._scrollElements[key],
       'ScrollBehavior: There is no element registered for `%s`.',
-      key
+      key,
     );
 
     delete this._scrollElements[key];
@@ -104,8 +104,9 @@ export default class ScrollBehavior {
     // have to enqueue the update, then potentially cancel it if we observe a
     // location update.
     if (this._saveWindowPositionHandle === null) {
-      this._saveWindowPositionHandle =
-        requestAnimationFrame(this._saveWindowPosition);
+      this._saveWindowPositionHandle = requestAnimationFrame(
+        this._saveWindowPosition,
+      );
     }
 
     if (this._windowScrollTarget) {
@@ -190,10 +191,10 @@ export default class ScrollBehavior {
       shouldUpdateScroll.call(this, prevContext, context) : true;
 
     if (
-      !scrollTarget
-      || Array.isArray(scrollTarget)
-      || typeof scrollTarget === 'string'
-     ) {
+      !scrollTarget ||
+      Array.isArray(scrollTarget) ||
+      typeof scrollTarget === 'string'
+    ) {
       return scrollTarget;
     }
 
@@ -227,8 +228,9 @@ export default class ScrollBehavior {
       return;
     }
 
-    this._checkWindowScrollHandle =
-      requestAnimationFrame(this._checkWindowScrollPosition);
+    this._checkWindowScrollHandle = requestAnimationFrame(
+      this._checkWindowScrollPosition,
+    );
   };
 
   _scrollToTarget = (element, target) => {

@@ -74,8 +74,8 @@ describe('ScrollBehavior', () => {
               createHistory(),
               (prevLocation, location) => (
                 !prevLocation || prevLocation.pathname !== location.pathname
-              )
-            )
+              ),
+            ),
           );
 
           unlisten = run(history, [
@@ -99,7 +99,7 @@ describe('ScrollBehavior', () => {
 
         it('should allow custom position', (done) => {
           const history = withRoutes(withScroll(
-            createHistory(), () => [10, 20]
+            createHistory(), () => [10, 20],
           ));
 
           unlisten = run(history, [
@@ -121,7 +121,7 @@ describe('ScrollBehavior', () => {
       describe('scroll element', () => {
         it('should follow browser scroll behavior', (done) => {
           const { container, ...history } = withScrollElement(
-            withScroll(createHistory(), () => false)
+            withScroll(createHistory(), () => false),
           );
 
           unlisten = run(history, [
@@ -147,7 +147,7 @@ describe('ScrollBehavior', () => {
 
         it('should restore scroll on remount', (done) => {
           const { container, ...history } = withScrollElementRoutes(
-            withScroll(createHistory(), () => false)
+            withScroll(createHistory(), () => false),
           );
 
           unlisten = run(history, [
