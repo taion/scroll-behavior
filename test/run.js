@@ -1,6 +1,6 @@
 export function delay(cb) {
   // Give throttled scroll listeners time to settle down.
-  requestAnimationFrame(() => setTimeout(cb));
+  setTimeout(cb, 50);
 }
 
 export default function run(history, steps) {
@@ -10,12 +10,6 @@ export default function run(history, steps) {
 
   return history.listen((location) => {
     if (i === steps.length) {
-      return;
-    }
-
-    // Give the first tick a bit longer to run, to allow for initialization.
-    if (i === 0) {
-      delay(() => delay(() => steps[i++](location)));
       return;
     }
 

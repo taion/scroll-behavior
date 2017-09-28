@@ -73,7 +73,7 @@ export default function withScroll(history, shouldUpdateScroll) {
 
   function registerScrollElement(key, element, shouldUpdateElementScroll) {
     scrollBehavior.registerElement(
-      key, element, shouldUpdateElementScroll, currentLocation
+      key, element, shouldUpdateElementScroll, currentLocation,
     );
 
     return () => {

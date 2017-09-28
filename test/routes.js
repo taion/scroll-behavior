@@ -104,7 +104,7 @@ export function withScrollElementRoutes(history) {
         container.appendChild(element);
 
         unregister = history.registerScrollElement(
-          'container', container, shouldUpdateScroll
+          'container', container, shouldUpdateScroll,
         );
       } else {
         container.removeChild(element);
