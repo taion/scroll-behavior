@@ -81,9 +81,14 @@ export default function withScroll(history, shouldUpdateScroll) {
     };
   }
 
+  function getSavedScrollTarget(key) {
+    return scrollBehavior.getSavedScrollTarget(key);
+  }
+
   return {
     ...history,
     listen,
     registerScrollElement,
+    getSavedScrollTarget,
   };
 }

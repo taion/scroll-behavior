@@ -57,6 +57,14 @@ export default class ScrollBehavior {
     });
   }
 
+  getSavedScrollTarget(key) {
+    const location = this._getCurrentLocation();
+    if (location.action === 'PUSH') {
+      return null;
+    }
+    return this._stateStorage.read(location, key);
+  }
+
   registerElement(key, element, shouldUpdateScroll, context) {
     invariant(
       !this._scrollElements[key],
@@ -64,7 +72,15 @@ export default class ScrollBehavior {
       key,
     );
 
-    this._scrollElements[key] = { element, shouldUpdateScroll };
+    const onElementScroll = () => {
+      this._saveElementPosition(key);
+    };
+    this._scrollElements[key] = {
+      element,
+      shouldUpdateScroll,
+      onElementScroll,
+    };
+    on(element, 'scroll', onElementScroll);
     this._updateElementScroll(key, null, context);
   }
 
@@ -75,6 +91,8 @@ export default class ScrollBehavior {
       key,
     );
 
+    const { element, onElementScroll } = this._scrollElements[key];
+    off(element, 'scroll', onElementScroll);
     delete this._scrollElements[key];
   }
 

@@ -168,6 +168,23 @@ describe('ScrollBehavior', () => {
             },
           ]);
         });
+
+        it('should save element scroll immediately', (done) => {
+          const { container, ...history } = withScrollElement(
+            withScroll(createHistory(), () => false),
+          );
+
+          unlisten = run(history, [
+            () => {
+              scrollTop(container, 3000);
+              delay(() => {
+                const scrollTarget = history.getSavedScrollTarget('container');
+                expect(scrollTarget && scrollTarget[1]).to.equal(3000);
+                done();
+              });
+            },
+          ]);
+        });
       });
     });
   });
