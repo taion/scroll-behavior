@@ -139,6 +139,9 @@ describe('ScrollBehavior', () => {
               history.push('/other');
             },
             () => {
+              // no restore of prior state on push
+              const scrollTarget = history.getSavedScrollTarget('container');
+              expect(scrollTarget).to.equal(null);
               expect(scrollTop(container)).to.equal(0);
               done();
             },
