@@ -73,12 +73,18 @@ export default class ScrollBehavior {
     );
 
     const onElementScroll = () => {
-      this._saveElementPosition(key);
+      if (this._scrollElements[key].saveElementPositionHandle === null) {
+        this._scrollElements[key].saveElementPositionHandle =
+          requestAnimationFrame(
+            () => { this._saveElementPosition(key); },
+          );
+      }
     };
     this._scrollElements[key] = {
       element,
       shouldUpdateScroll,
       onElementScroll,
+      saveElementPositionHandle: null,
     };
     on(element, 'scroll', onElementScroll);
     this._updateElementScroll(key, null, context);
@@ -91,8 +97,11 @@ export default class ScrollBehavior {
       key,
     );
 
-    const { element, onElementScroll } = this._scrollElements[key];
+    const { element, onElementScroll, saveElementPositionHandle } =
+      this._scrollElements[key];
     off(element, 'scroll', onElementScroll);
+    // ok if undefined/null:
+    requestAnimationFrame.cancel(saveElementPositionHandle);
     delete this._scrollElements[key];
   }
 
@@ -154,7 +163,7 @@ export default class ScrollBehavior {
 
   _saveElementPosition(key) {
     const { element } = this._scrollElements[key];
-
+    this._scrollElements[key].saveElementPositionHandle = null;
     this._savePosition(key, element);
   }
 
