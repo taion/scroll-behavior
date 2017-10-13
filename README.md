@@ -84,8 +84,6 @@ const scrollBehavior = new ScrollBehavior({
 });
 ```
 
-It can sometimes be convenient to know in the `shouldUpdateScroll` function whether there is a saved scroll state that will be restored. You can obtain it by calling `this.getSavedScrollTarget()` for `window` or pass it a key for a specific element (see below).
-
 ### Scrolling elements other than `window`
 
 Call the `registerElement` method to register an element other than `window` to have managed scroll behavior. Each of these elements needs to be given a unique key at registration time, and can be given an optional `shouldUpdateScroll` callback that behaves as above. This method should also be called with the current context per `updateScroll` above, if applicable, to set up the element's initial scroll position.

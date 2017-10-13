@@ -44,25 +44,19 @@ export default class ScrollBehavior {
     on(window, 'scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
-      if (this._saveWindowPositionHandle !== null) {
-        requestAnimationFrame.cancel(this._saveWindowPositionHandle);
-        this._saveWindowPositionHandle = null;
-      }
+      requestAnimationFrame.cancel(this._saveWindowPositionHandle);
+      this._saveWindowPositionHandle = null;
 
-      // It's fine to save element scroll positions here, though; the browser
-      // won't modify them.
       Object.keys(this._scrollElements).forEach((key) => {
+        const scrollElement = this._scrollElements[key];
+        requestAnimationFrame.cancel(scrollElement.savePositionHandle);
+        scrollElement.savePositionHandle = null;
+
+        // It's fine to save element scroll positions here, though; the browser
+        // won't modify them.
         this._saveElementPosition(key);
       });
     });
-  }
-
-  getSavedScrollTarget(key) {
-    const location = this._getCurrentLocation();
-    if (location.action === 'PUSH') {
-      return null;
-    }
-    return this._stateStorage.read(location, key);
   }
 
   registerElement(key, element, shouldUpdateScroll, context) {
@@ -72,21 +66,27 @@ export default class ScrollBehavior {
       key,
     );
 
-    const onElementScroll = () => {
-      if (this._scrollElements[key].saveElementPositionHandle === null) {
-        this._scrollElements[key].saveElementPositionHandle =
-          requestAnimationFrame(
-            () => { this._saveElementPosition(key); },
-          );
-      }
+    const saveElementPosition = () => {
+      this._saveElementPosition(key);
     };
-    this._scrollElements[key] = {
+
+    const scrollElement = {
       element,
       shouldUpdateScroll,
-      onElementScroll,
-      saveElementPositionHandle: null,
+      savePositionHandle: null,
+
+      onScroll() {
+        if (!scrollElement.savePositionHandle) {
+          scrollElement.savePositionHandle = requestAnimationFrame(
+            saveElementPosition,
+          );
+        }
+      },
     };
-    on(element, 'scroll', onElementScroll);
+
+    this._scrollElements[key] = scrollElement;
+    on(element, 'scroll', scrollElement.onScroll);
+
     this._updateElementScroll(key, null, context);
   }
 
@@ -97,11 +97,12 @@ export default class ScrollBehavior {
       key,
     );
 
-    const { element, onElementScroll, saveElementPositionHandle } =
+    const { element, onScroll, savePositionHandle } =
       this._scrollElements[key];
-    off(element, 'scroll', onElementScroll);
-    // ok if undefined/null:
-    requestAnimationFrame.cancel(saveElementPositionHandle);
+
+    off(element, 'scroll', onScroll);
+    requestAnimationFrame.cancel(savePositionHandle);
+
     delete this._scrollElements[key];
   }
 
@@ -130,7 +131,7 @@ export default class ScrollBehavior {
     // `POP` transition. Instead of updating the saved location immediately, we
     // have to enqueue the update, then potentially cancel it if we observe a
     // location update.
-    if (this._saveWindowPositionHandle === null) {
+    if (!this._saveWindowPositionHandle) {
       this._saveWindowPositionHandle = requestAnimationFrame(
         this._saveWindowPosition,
       );
@@ -155,16 +156,15 @@ export default class ScrollBehavior {
   };
 
   _cancelCheckWindowScroll() {
-    if (this._checkWindowScrollHandle !== null) {
-      requestAnimationFrame.cancel(this._checkWindowScrollHandle);
-      this._checkWindowScrollHandle = null;
-    }
+    requestAnimationFrame.cancel(this._checkWindowScrollHandle);
+    this._checkWindowScrollHandle = null;
   }
 
   _saveElementPosition(key) {
-    const { element } = this._scrollElements[key];
-    this._scrollElements[key].saveElementPositionHandle = null;
-    this._savePosition(key, element);
+    const scrollElement = this._scrollElements[key];
+    scrollElement.savePositionHandle = null;
+
+    this._savePosition(key, scrollElement.element);
   }
 
   _savePosition(key, element) {

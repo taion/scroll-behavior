@@ -139,9 +139,6 @@ describe('ScrollBehavior', () => {
               history.push('/other');
             },
             () => {
-              // no restore of prior state on push
-              const scrollTarget = history.getSavedScrollTarget('container');
-              expect(scrollTarget).to.equal(null);
               expect(scrollTop(container)).to.equal(0);
               done();
             },
@@ -173,17 +170,31 @@ describe('ScrollBehavior', () => {
         });
 
         it('should save element scroll immediately', (done) => {
-          const { container, ...history } = withScrollElement(
+          const history1 = withScrollElement(
             withScroll(createHistory(), () => false),
           );
 
-          unlisten = run(history, [
+          const unlisten1 = run(history1, [
             () => {
-              scrollTop(container, 3000);
+              expect(scrollTop(history1.container)).to.equal(0);
+              scrollTop(history1.container, 5000);
+
               delay(() => {
-                const scrollTarget = history.getSavedScrollTarget('container');
-                expect(scrollTarget && scrollTarget[1]).to.equal(3000);
-                done();
+                unlisten1();
+
+                const history2 = withScrollElement(
+                  withScroll(
+                    createHistory({ resetState: false }),
+                    () => false,
+                  ),
+                );
+
+                unlisten = history2.listen(() => {
+                  delay(() => {
+                    expect(scrollTop(history2.container)).to.equal(5000);
+                    done();
+                  });
+                });
               });
             },
           ]);
