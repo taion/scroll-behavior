@@ -169,7 +169,7 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
-        it('should save element scroll immediately', (done) => {
+        it('should save element scroll position immediately', (done) => {
           const history1 = withScrollElement(
             withScroll(createHistory(), () => false),
           );
