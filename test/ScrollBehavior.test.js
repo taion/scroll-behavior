@@ -49,6 +49,13 @@ describe('ScrollBehavior', () => {
             (location) => {
               expect(location.state).to.not.exist();
               expect(scrollTop(window)).to.equal(15000);
+              history.push('/detail');
+            },
+            () => {
+              // no restore of prior state on push
+              const scrollTarget = history.getSavedWindowScrollTarget();
+              expect(scrollTarget).to.equal(null);
+              expect(scrollTop(window)).to.equal(0);
               history.push('/detail#child2');
             },
             () => {
