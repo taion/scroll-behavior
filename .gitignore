@@ -27,4 +27,4 @@ build/Release
 node_modules
 
 # Transpiled code
-/lib
+# /lib
