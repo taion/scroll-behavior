@@ -226,12 +226,19 @@ export default class ScrollBehavior {
     }
 
     const location = this._getCurrentLocation();
+
+    return (
+      this._getSavedScrollTarget(key, location) ||
+      this._getDefaultScrollTarget(location)
+    );
+  }
+
+  _getSavedScrollTarget(key, location) {
     if (location.action === 'PUSH') {
-      return this._getDefaultScrollTarget(location);
+      return null;
     }
 
-    return this._stateStorage.read(location, key) ||
-      this._getDefaultScrollTarget(location);
+    return this._stateStorage.read(location, key);
   }
 
   _checkWindowScrollPosition = () => {

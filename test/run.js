@@ -1,6 +1,6 @@
 export function delay(cb) {
   // Give throttled scroll listeners time to settle down.
-  setTimeout(cb, 80);
+  setTimeout(cb, 60);
 }
 
 export default function run(history, steps) {
