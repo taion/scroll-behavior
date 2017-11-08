@@ -1,6 +1,6 @@
 {
   "name": "scroll-behavior",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Pluggable browser scroll management",
   "files": [
     "lib"
