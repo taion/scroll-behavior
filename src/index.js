@@ -59,6 +59,18 @@ export default class ScrollBehavior {
     });
   }
 
+  getSavedWindowScrollTarget() {
+    return this.getSavedElementScrollTarget();
+  }
+
+  getSavedElementScrollTarget(key) {
+    const location = this._getCurrentLocation();
+    if (location.action === 'PUSH') {
+      return null;
+    }
+    return this._stateStorage.read(location, key);
+  }
+
   registerElement(key, element, shouldUpdateScroll, context) {
     invariant(
       !this._scrollElements[key],
