@@ -96,6 +96,40 @@ scrollBehavior.registerScrollElement(
 
 To unregister an element, call the `unregisterElement` method with the key used to register that element.
 
+### Further scroll behavior customization
+
+If you need to further customize scrolling behavior, subclass the `ScrollBehavior` class, then override methods as needed. For example, with the appropriate polyfill, you can override `scrollToTarget` to use smooth scrolling for `window`.
+
+```js
+class SmoothScrollBehavior extends ScrollBehavior {
+  scrollToTarget(element, target) {
+    if (element !== window) {
+      super.scrollToTarget(element, target);
+      return;
+    }
+
+    if (typeof target === 'string') {
+      const targetElement = (
+        document.getElementById(target) ||
+        document.getElementsByName(target)[0]
+      );
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // Fallback to scrolling to top when target fragment doesn't exist.
+      target = [0, 0]; // eslint-disable-line no-param-reassign
+    }
+
+    const [left, top] = target;
+    window.scrollTo({ left, top, behavior: 'smooth' });
+  }
+}
+```
+
+Integrations should accept a `createScrollBehavior` callback that can create an instance of a custom scroll behavior class.
+
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
 [build]: https://travis-ci.org/taion/scroll-behavior
 

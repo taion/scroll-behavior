@@ -202,7 +202,7 @@ export default class ScrollBehavior {
 
     // Unlike with the window, there shouldn't be any flakiness to deal with
     // here.
-    this._scrollToTarget(element, scrollTarget);
+    this.scrollToTarget(element, scrollTarget);
   }
 
   _getDefaultScrollTarget(location) {
@@ -252,7 +252,7 @@ export default class ScrollBehavior {
       return;
     }
 
-    this._scrollToTarget(window, this._windowScrollTarget);
+    this.scrollToTarget(window, this._windowScrollTarget);
 
     ++this._numWindowScrollAttempts;
 
@@ -267,14 +267,14 @@ export default class ScrollBehavior {
     );
   };
 
-  _scrollToTarget = (element, target) => {
+  scrollToTarget(element, target) {
     if (typeof target === 'string') {
-      const el = (
+      const targetElement = (
         document.getElementById(target) ||
         document.getElementsByName(target)[0]
       );
-      if (el) {
-        el.scrollIntoView();
+      if (targetElement) {
+        targetElement.scrollIntoView();
         return;
       }
 
@@ -282,8 +282,8 @@ export default class ScrollBehavior {
       target = [0, 0]; // eslint-disable-line no-param-reassign
     }
 
-    const [x, y] = target;
-    scrollLeft(element, x);
-    scrollTop(element, y);
+    const [left, top] = target;
+    scrollLeft(element, left);
+    scrollTop(element, top);
   }
 }
