@@ -65,6 +65,29 @@ describe('ScrollBehavior', () => {
             },
           ]);
         });
+
+        it('should not crash when history is not available', (done) => {
+          Object.defineProperty(window.history, 'scrollRestoration', {
+            value: 'auto',
+            // See https://github.com/taion/scroll-behavior/issues/126
+            writable: false,
+            enumerable: true,
+            configurable: true,
+          });
+
+          const history = withRoutes(withScroll(createHistory()));
+
+          unlisten = run(history, [
+            () => {
+              expect(scrollTop(window)).to.equal(0);
+
+              delete window.history.scrollRestoration;
+              window.history.scrollRestoration = 'auto';
+
+              done();
+            },
+          ]);
+        });
       });
 
       describe('custom behavior', () => {
