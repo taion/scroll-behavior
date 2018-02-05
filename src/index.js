@@ -35,7 +35,11 @@ export default class ScrollBehavior {
       !isMobileSafari()
     ) {
       this._oldScrollRestoration = window.history.scrollRestoration;
-      window.history.scrollRestoration = 'manual';
+      try {
+        window.history.scrollRestoration = 'manual';
+      } catch (e) {
+        this._oldScrollRestoration = null;
+      }
     } else {
       this._oldScrollRestoration = null;
     }
@@ -126,7 +130,11 @@ export default class ScrollBehavior {
   stop() {
     /* istanbul ignore if: not supported by any browsers on Travis */
     if (this._oldScrollRestoration) {
-      window.history.scrollRestoration = this._oldScrollRestoration;
+      try {
+        window.history.scrollRestoration = this._oldScrollRestoration;
+      } catch (e) {
+        /* silence */
+      }
     }
 
     off(window, 'scroll', this._onWindowScroll);
