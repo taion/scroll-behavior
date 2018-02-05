@@ -7,6 +7,8 @@ import scrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import invariant from 'invariant';
 
+import { isMobileSafari } from './utils';
+
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
 
@@ -24,7 +26,14 @@ export default class ScrollBehavior {
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
     /* istanbul ignore else: Travis browsers all support this */
-    if ('scrollRestoration' in window.history) {
+    if (
+      'scrollRestoration' in window.history &&
+      // Unfortunately, Safari on iOS freezes for 2-6s after the user swipes to
+      // navigate through history with scrollRestoration being 'manual', so we
+      // need to detect this browser and exclude it from the following code
+      // until this bug is fixed by Apple.
+      !isMobileSafari()
+    ) {
       this._oldScrollRestoration = window.history.scrollRestoration;
       window.history.scrollRestoration = 'manual';
     } else {
