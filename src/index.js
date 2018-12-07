@@ -54,7 +54,7 @@ export default class ScrollBehavior {
     // We have to listen to each window scroll update rather than to just
     // location updates, because some browsers will update scroll position
     // before emitting the location change.
-    on(window, 'scroll', this._onWindowScroll);
+    on(window, 'scroll', this._onWindowScroll, { passive: true });
 
     this._removeTransitionHook = addTransitionHook(() => {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
@@ -98,7 +98,7 @@ export default class ScrollBehavior {
     };
 
     this._scrollElements[key] = scrollElement;
-    on(element, 'scroll', scrollElement.onScroll);
+    on(element, 'scroll', scrollElement.onScroll, { passive: true });
 
     this._updateElementScroll(key, null, context);
   }
@@ -113,7 +113,7 @@ export default class ScrollBehavior {
     const { element, onScroll, savePositionHandle } =
       this._scrollElements[key];
 
-    off(element, 'scroll', onScroll);
+    off(element, 'scroll', onScroll, { passive: true });
     requestAnimationFrame.cancel(savePositionHandle);
 
     delete this._scrollElements[key];
@@ -137,7 +137,7 @@ export default class ScrollBehavior {
       }
     }
 
-    off(window, 'scroll', this._onWindowScroll);
+    off(window, 'scroll', this._onWindowScroll, { passive: true });
     this._cancelCheckWindowScroll();
 
     this._removeTransitionHook();
