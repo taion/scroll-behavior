@@ -49,12 +49,8 @@ export default class ScrollBehavior {
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
 
+    this._installed = false;
     this._scrollElements = {};
-
-    // We have to listen to each window scroll update rather than to just
-    // location updates, because some browsers will update scroll position
-    // before emitting the location change.
-    on(window, 'scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
@@ -120,6 +116,18 @@ export default class ScrollBehavior {
   }
 
   updateScroll(prevContext, context) {
+    // Don't install the window listener before the first attempt to update
+    // scroll position, to avoid user scrolling before the initial restore
+    // attempt overriding what's saved.
+    if (!this._installed) {
+      this._installed = true;
+
+      // We have to listen to each window scroll update rather than to just
+      // location updates, because some browsers will update scroll position
+      // before emitting the location change.
+      on(window, 'scroll', this._onWindowScroll);
+    }
+
     this._updateWindowScroll(prevContext, context);
 
     Object.keys(this._scrollElements).forEach((key) => {
