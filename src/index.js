@@ -94,7 +94,10 @@ export default class ScrollBehavior {
     };
 
     this._scrollElements[key] = scrollElement;
-    on(element, 'scroll', scrollElement.onScroll);
+
+    if (this._installed) {
+      on(element, 'scroll', scrollElement.onScroll);
+    }
 
     this._updateElementScroll(key, null, context);
   }
@@ -126,6 +129,11 @@ export default class ScrollBehavior {
       // location updates, because some browsers will update scroll position
       // before emitting the location change.
       on(window, 'scroll', this._onWindowScroll);
+
+      Object.keys(this._scrollElements).forEach((key) => {
+        const { element, onScroll } = this._scrollElements[key];
+        on(element, 'scroll', onScroll);
+      });
     }
 
     this._updateWindowScroll(prevContext, context);
