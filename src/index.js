@@ -37,6 +37,11 @@ export default class ScrollBehavior {
       this._oldScrollRestoration = window.history.scrollRestoration;
       try {
         window.history.scrollRestoration = 'manual';
+
+        // Scroll restoration persists across page reloads. We want to reset
+        // this to the original value, so that we can let the browser handle
+        // restoring the initial scroll position on server-rendered pages.
+        on(window, 'beforeunload', this._restoreScrollRestoration);
       } catch (e) {
         this._oldScrollRestoration = null;
       }
@@ -127,7 +132,7 @@ export default class ScrollBehavior {
     });
   }
 
-  stop() {
+  _restoreScrollRestoration = () => {
     /* istanbul ignore if: not supported by any browsers on Travis */
     if (this._oldScrollRestoration) {
       try {
@@ -136,6 +141,10 @@ export default class ScrollBehavior {
         /* silence */
       }
     }
+  };
+
+  stop() {
+    this._restoreScrollRestoration();
 
     off(window, 'scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
