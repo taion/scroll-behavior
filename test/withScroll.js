@@ -40,7 +40,9 @@ export default function withScroll(history, shouldUpdateScroll) {
     const prevLocation = currentLocation;
     currentLocation = location;
 
-    listeners.forEach((listener) => { listener(location); });
+    listeners.forEach(listener => {
+      listener(location);
+    });
 
     scrollBehavior.updateScroll(prevLocation, location);
   }
@@ -73,7 +75,10 @@ export default function withScroll(history, shouldUpdateScroll) {
 
   function registerScrollElement(key, element, shouldUpdateElementScroll) {
     scrollBehavior.registerElement(
-      key, element, shouldUpdateElementScroll, currentLocation,
+      key,
+      element,
+      shouldUpdateElementScroll,
+      currentLocation,
     );
 
     return () => {

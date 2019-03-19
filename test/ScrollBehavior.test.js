@@ -5,8 +5,11 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 
 import { createHashHistoryWithoutKey } from './histories';
-import { withRoutes, withScrollElement, withScrollElementRoutes }
-  from './routes';
+import {
+  withRoutes,
+  withScrollElement,
+  withScrollElementRoutes,
+} from './routes';
 import run, { delay } from './run';
 import withScroll from './withScroll';
 
@@ -15,7 +18,7 @@ describe('ScrollBehavior', () => {
     createBrowserHistory,
     createHashHistory,
     createHashHistoryWithoutKey,
-  ].forEach((createHistory) => {
+  ].forEach(createHistory => {
     describe(createHistory.name, () => {
       let unlisten;
 
@@ -26,7 +29,7 @@ describe('ScrollBehavior', () => {
       });
 
       describe('default behavior', () => {
-        it('should emulate browser scroll behavior', (done) => {
+        it('should emulate browser scroll behavior', done => {
           const history = withRoutes(withScroll(createHistory()));
           const child1 = document.getElementById('child1');
           const child2 = document.getElementById('child2-id');
@@ -46,7 +49,7 @@ describe('ScrollBehavior', () => {
               scrollTop(window, 5000);
               delay(history.goBack);
             },
-            (location) => {
+            location => {
               expect(location.state).to.not.exist();
               expect(scrollTop(window)).to.equal(15000);
               history.push('/detail#child2');
@@ -66,7 +69,7 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
-        it('should not crash when history is not available', (done) => {
+        it('should not crash when history is not available', done => {
           Object.defineProperty(window.history, 'scrollRestoration', {
             value: 'auto',
             // See https://github.com/taion/scroll-behavior/issues/126
@@ -91,13 +94,12 @@ describe('ScrollBehavior', () => {
       });
 
       describe('custom behavior', () => {
-        it('should allow scroll suppression', (done) => {
+        it('should allow scroll suppression', done => {
           const history = withRoutes(
             withScroll(
               createHistory(),
-              (prevLocation, location) => (
-                !prevLocation || prevLocation.pathname !== location.pathname
-              ),
+              (prevLocation, location) =>
+                !prevLocation || prevLocation.pathname !== location.pathname,
             ),
           );
 
@@ -120,10 +122,10 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
-        it('should allow custom position', (done) => {
-          const history = withRoutes(withScroll(
-            createHistory(), () => [10, 20],
-          ));
+        it('should allow custom position', done => {
+          const history = withRoutes(
+            withScroll(createHistory(), () => [10, 20]),
+          );
 
           unlisten = run(history, [
             () => {
@@ -142,7 +144,7 @@ describe('ScrollBehavior', () => {
       });
 
       describe('scroll element', () => {
-        it('should follow browser scroll behavior', (done) => {
+        it('should follow browser scroll behavior', done => {
           const { container, ...history } = withScrollElement(
             withScroll(createHistory(), () => false),
           );
@@ -168,7 +170,7 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
-        it('should restore scroll on remount', (done) => {
+        it('should restore scroll on remount', done => {
           const { container, ...history } = withScrollElementRoutes(
             withScroll(createHistory(), () => false),
           );
@@ -192,7 +194,7 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
-        it('should save element scroll position immediately', (done) => {
+        it('should save element scroll position immediately', done => {
           const history1 = withScrollElement(
             withScroll(createHistory(), () => false),
           );

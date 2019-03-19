@@ -16,7 +16,7 @@ export function withRoutes(history) {
 
   // This will only be called once, so no need to guard.
   function listen(listener) {
-    const unlisten = history.listen((location) => {
+    const unlisten = history.listen(location => {
       listener(location);
 
       if (location.pathname === '/') {
@@ -94,7 +94,7 @@ export function withScrollElementRoutes(history) {
       return true;
     }
 
-    const unlisten = history.listen((location) => {
+    const unlisten = history.listen(location => {
       listener(location);
 
       if (location.pathname === '/') {
@@ -104,7 +104,9 @@ export function withScrollElementRoutes(history) {
         container.appendChild(element);
 
         unregister = history.registerScrollElement(
-          'container', container, shouldUpdateScroll,
+          'container',
+          container,
+          shouldUpdateScroll,
         );
       } else {
         container.removeChild(element);
