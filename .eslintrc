@@ -1,6 +1,15 @@
 {
-  "extends": "4catalyzer",
+  "extends": [
+    "4catalyzer",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
   "env": {
     "browser": true
+  },
+  "rules": {
+    "prettier/prettier": "error"
   }
 }

@@ -65,7 +65,7 @@ export default class ScrollBehavior {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
-      Object.keys(this._scrollElements).forEach((key) => {
+      Object.keys(this._scrollElements).forEach(key => {
         const scrollElement = this._scrollElements[key];
         requestAnimationFrame.cancel(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
@@ -115,8 +115,9 @@ export default class ScrollBehavior {
       key,
     );
 
-    const { element, onScroll, savePositionHandle } =
-      this._scrollElements[key];
+    const { element, onScroll, savePositionHandle } = this._scrollElements[
+      key
+    ];
 
     off(element, 'scroll', onScroll);
     requestAnimationFrame.cancel(savePositionHandle);
@@ -127,7 +128,7 @@ export default class ScrollBehavior {
   updateScroll(prevContext, context) {
     this._updateWindowScroll(prevContext, context);
 
-    Object.keys(this._scrollElements).forEach((key) => {
+    Object.keys(this._scrollElements).forEach(key => {
       this._updateElementScroll(key, prevContext, context);
     });
   }
@@ -194,11 +195,10 @@ export default class ScrollBehavior {
   }
 
   _savePosition(key, element) {
-    this._stateStorage.save(
-      this._getCurrentLocation(),
-      key,
-      [scrollLeft(element), scrollTop(element)],
-    );
+    this._stateStorage.save(this._getCurrentLocation(), key, [
+      scrollLeft(element),
+      scrollTop(element),
+    ]);
   }
 
   _updateWindowScroll(prevContext, context) {
@@ -206,7 +206,10 @@ export default class ScrollBehavior {
     this._cancelCheckWindowScroll();
 
     this._windowScrollTarget = this._getScrollTarget(
-      null, this._shouldUpdateScroll, prevContext, context,
+      null,
+      this._shouldUpdateScroll,
+      prevContext,
+      context,
     );
 
     // Updating the window scroll position is really flaky. Just trying to
@@ -220,7 +223,10 @@ export default class ScrollBehavior {
     const { element, shouldUpdateScroll } = this._scrollElements[key];
 
     const scrollTarget = this._getScrollTarget(
-      key, shouldUpdateScroll, prevContext, context,
+      key,
+      shouldUpdateScroll,
+      prevContext,
+      context,
     );
     if (!scrollTarget) {
       return;
@@ -232,7 +238,7 @@ export default class ScrollBehavior {
   }
 
   _getDefaultScrollTarget(location) {
-    const hash = location.hash;
+    const { hash } = location;
     if (hash && hash !== '#') {
       return hash.charAt(0) === '#' ? hash.slice(1) : hash;
     }
@@ -240,8 +246,9 @@ export default class ScrollBehavior {
   }
 
   _getScrollTarget(key, shouldUpdateScroll, prevContext, context) {
-    const scrollTarget = shouldUpdateScroll ?
-      shouldUpdateScroll.call(this, prevContext, context) : true;
+    const scrollTarget = shouldUpdateScroll
+      ? shouldUpdateScroll.call(this, prevContext, context)
+      : true;
 
     if (
       !scrollTarget ||
@@ -295,10 +302,9 @@ export default class ScrollBehavior {
 
   scrollToTarget(element, target) {
     if (typeof target === 'string') {
-      const targetElement = (
+      const targetElement =
         document.getElementById(target) ||
-        document.getElementsByName(target)[0]
-      );
+        document.getElementsByName(target)[0];
       if (targetElement) {
         targetElement.scrollIntoView();
         return;

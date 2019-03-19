@@ -1,11 +1,12 @@
 {
   "presets": [
-    ["env", {
-      "loose": true
-    }],
-    "stage-2"
+    ["@4c", {
+      "targets": {}
+    }]
   ],
-  "plugins": ["dev-expression", "add-module-exports"],
+  "plugins": [
+    "add-module-exports"
+  ],
 
   "env": {
     "test": {
