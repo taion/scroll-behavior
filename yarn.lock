@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@4c/babel-preset@^4.1.5":
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-4.1.5.tgz#55e78a418cfa93d74581c8ec43479c53535a0328"
-  integrity sha512-7hkKwA+tEZ+q9lFP5eBRYB/Mqgz+rEJYQ0rMjJpU5bB/n4oc3O7Z/g5lV1jMZmZ1tgX0hqiesDp3K/d5g1lmZg==
+"@4c/babel-preset@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-5.0.1.tgz#f473ce4752ce9bff09dbfe559bcc3bdd37fb6977"
+  integrity sha512-XBAxkuU+Ndh1HUoEslOcqpuOrKG78blJDy18eDHuV7JzeBlxR3yEEuuU3qfUmptvczT5j+t3kr0D/V+yO6iEXg==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.3.4"
     "@babel/plugin-proposal-export-default-from" "^7.0.0"

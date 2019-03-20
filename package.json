@@ -48,7 +48,7 @@
     "invariant": "^2.2.4"
   },
   "devDependencies": {
-    "@4c/babel-preset": "^4.1.5",
+    "@4c/babel-preset": "^5.0.1",
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/polyfill": "^7.2.5",
