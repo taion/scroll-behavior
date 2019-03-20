@@ -2445,10 +2445,10 @@ escodegen@1.8.x:
   optionalDependencies:
     source-map "~0.2.0"
 
-eslint-config-4catalyzer@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-4catalyzer/-/eslint-config-4catalyzer-0.7.2.tgz#527b3bf6cea02b1d15cd9062b6517ed79625c81e"
-  integrity sha512-YwiQCNn08UA+eL+CS93A8fN/b7nJEKeHCmhs6lrd+hSy+QDnfPY76CxU7T3cCEM/l4hyu795WYlpkZAFogD8nA==
+eslint-config-4catalyzer@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-4catalyzer/-/eslint-config-4catalyzer-0.8.0.tgz#80291a523a69da516e6e5a174b5d90d82eb1da67"
+  integrity sha512-kF7eDI3QTvKEqAe9wvouFqfhH5D8ToDDVfCKkCIUDUmPqudBofbg31FcWiLogfVwwFvPc3YAUxmLv8liEupBuQ==
   dependencies:
     babel-eslint "^10.0.1"
     eslint-config-airbnb-base "^13.1.0"
