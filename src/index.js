@@ -7,10 +7,11 @@ import scrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import invariant from 'invariant';
 
-import { isMobileSafari } from './utils';
+import { isMobileSafari, debounce } from './utils';
 
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
+const SCROLL_HANDLER_WAIT = 300;
 
 export default class ScrollBehavior {
   constructor({
@@ -147,13 +148,14 @@ export default class ScrollBehavior {
   stop() {
     this._restoreScrollRestoration();
 
+    this._onWindowScroll.cancel();
     off(window, 'scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
 
     this._removeTransitionHook();
   }
 
-  _onWindowScroll = () => {
+  _onWindowScroll = debounce(() => {
     // It's possible that this scroll operation was triggered by what will be a
     // `POP` transition. Instead of updating the saved location immediately, we
     // have to enqueue the update, then potentially cancel it if we observe a
@@ -174,7 +176,7 @@ export default class ScrollBehavior {
         this._cancelCheckWindowScroll();
       }
     }
-  };
+  }, SCROLL_HANDLER_WAIT);
 
   _saveWindowPosition = () => {
     this._saveWindowPositionHandle = null;
