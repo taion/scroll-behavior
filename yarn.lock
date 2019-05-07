@@ -3,9 +3,9 @@
 
 
 "@4c/babel-preset@^5.0.4":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-5.1.0.tgz#ade5a097f19b985c678c6d05b5ecc8660380df56"
-  integrity sha512-a1iWM1Iik75fVfOS3wE9SrxB0F9ge4VBGJqJvZANjwYPFJJaVoaJ69cdOQI82jl8YD2QLsWpNhj1yl7NMC4g+Q==
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-5.2.0.tgz#ab36cbc930874b1acc2cf8ad44a12a0a404b1490"
+  integrity sha512-UPIdn6kpnSUDOt47dF6ftcsgVoI5Jjxjm2JBZsz0pTNiWYRQYZBtq1vR3nO/xz+FWJIpRU5jLmsJp8Hf4Jc4vQ==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.4.0"
     "@babel/plugin-proposal-export-default-from" "^7.2.0"
@@ -17,7 +17,7 @@
     "@babel/preset-react" "^7.0.0"
     babel-plugin-dev-expression "^0.2.1"
     babel-plugin-react-intl "^3.0.1"
-    browserslist "^4.5.1"
+    browserslist "^4.5.6"
     lodash "^4.17.11"
     read-pkg-up "^5.0.0"
 
@@ -1495,14 +1495,14 @@ browserify-zlib@^0.2.0:
   dependencies:
     pako "~1.0.5"
 
-browserslist@^4.4.2, browserslist@^4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.5.1.tgz#2226cada1947b33f4cfcf7b608dcb519b6128106"
-  integrity sha512-/pPw5IAUyqaQXGuD5vS8tcbudyPZ241jk1W5pQBsGDfcjNQt7p8qxZhgMNuygDShte1PibLFexecWUPgmVLfrg==
+browserslist@^4.4.2, browserslist@^4.5.1, browserslist@^4.5.6:
+  version "4.5.6"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.5.6.tgz#ea42e8581ca2513fa7f371d4dd66da763938163d"
+  integrity sha512-o/hPOtbU9oX507lIqon+UvPYqpx3mHc8cV3QemSBTXwkG8gSQSK6UKvXcE/DcleU3+A59XTUHyCvZ5qGy8xVAg==
   dependencies:
-    caniuse-lite "^1.0.30000949"
-    electron-to-chromium "^1.3.116"
-    node-releases "^1.1.11"
+    caniuse-lite "^1.0.30000963"
+    electron-to-chromium "^1.3.127"
+    node-releases "^1.1.17"
 
 buffer-alloc-unsafe@^1.1.0:
   version "1.1.0"
@@ -1633,10 +1633,10 @@ camelcase@^5.0.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.2.0.tgz#e7522abda5ed94cc0489e1b8466610e88404cf45"
   integrity sha512-IXFsBS2pC+X0j0N/GE7Dm7j3bsEBp+oTpb7F50dwEVX7rf3IgwO9XatnegTsDtniKCUtEJH4fSU6Asw7uoVLfQ==
 
-caniuse-lite@^1.0.30000949:
-  version "1.0.30000951"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000951.tgz#c7c2fd4d71080284c8677dd410368df8d83688fe"
-  integrity sha512-eRhP+nQ6YUkIcNQ6hnvdhMkdc7n3zadog0KXNRxAZTT2kHjUb1yGn71OrPhSn8MOvlX97g5CR97kGVj8fMsXWg==
+caniuse-lite@^1.0.30000963:
+  version "1.0.30000967"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000967.tgz#a5039577806fccee80a04aaafb2c0890b1ee2f73"
+  integrity sha512-rUBIbap+VJfxTzrM4akJ00lkvVb5/n5v3EGXfWzSH5zT8aJmGzjA8HWhJ4U6kCpzxozUSnB+yvAYDRPY6mRpgQ==
 
 chai@^4.2.0:
   version "4.2.0"
@@ -2269,10 +2269,10 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-electron-to-chromium@^1.3.116:
-  version "1.3.116"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.116.tgz#1dbfee6a592a0c14ade77dbdfe54fef86387d702"
-  integrity sha512-NKwKAXzur5vFCZYBHpdWjTMO8QptNLNP80nItkSIgUOapPAo9Uia+RvkCaZJtO7fhQaVElSvBPWEc2ku6cKsPA==
+electron-to-chromium@^1.3.127:
+  version "1.3.131"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.131.tgz#205a0b7a276b3f56bc056f19178909243054252a"
+  integrity sha512-NSO4jLeyGLWrT4mzzfYX8vt1MYCoMI5LxSYAjt0H9+LF/14JyiKJSyyjA6AJTxflZlEM5v3QU33F0ohbPMCAPg==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -4542,10 +4542,10 @@ node-pre-gyp@^0.10.0:
     semver "^5.3.0"
     tar "^4"
 
-node-releases@^1.1.11:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.11.tgz#9a0841a4b0d92b7d5141ed179e764f42ad22724a"
-  integrity sha512-8v1j5KfP+s5WOTa1spNUAOfreajQPN12JXbRR0oDE+YrJBQCXBnNqUDj27EKpPLOoSiU3tKi3xGPB+JaOdUEQQ==
+node-releases@^1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.17.tgz#71ea4631f0a97d5cd4f65f7d04ecf9072eac711a"
+  integrity sha512-/SCjetyta1m7YXLgtACZGDYJdCSIBAWorDWkGCGZlydP2Ll7J48l7j/JxNYZ+xsgSPbWfdulVS/aY+GdjUsQ7Q==
   dependencies:
     semver "^5.3.0"
 
