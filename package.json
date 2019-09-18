@@ -58,7 +58,7 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "codecov": "^3.5.0",
-    "cross-env": "^5.2.0",
+    "cross-env": "^6.0.0",
     "dirty-chai": "^2.0.1",
     "eslint": "^6.1.0",
     "eslint-config-4catalyzer": "^1.0.0",
