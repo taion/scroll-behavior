@@ -6,6 +6,7 @@
     "lib"
   ],
   "main": "lib/index.js",
+  "types": "ts/index.d.ts",
   "scripts": {
     "build": "babel src -d lib --delete-dir-on-start",
     "lint": "eslint src test *.js",
