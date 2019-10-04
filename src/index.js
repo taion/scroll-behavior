@@ -102,6 +102,13 @@ export default class ScrollBehavior {
       },
     };
 
+    // In case no scrolling occurs, save the initial position
+    if (!scrollElement.savePositionHandle) {
+      scrollElement.savePositionHandle = requestAnimationFrame(
+        saveElementPosition,
+      );
+    }
+
     this._scrollElements[key] = scrollElement;
     on(element, 'scroll', scrollElement.onScroll);
 
@@ -126,6 +133,13 @@ export default class ScrollBehavior {
   }
 
   updateScroll(prevContext, context) {
+    // Save the position immediately after a transition so that if no
+    // scrolling occurs, there is still a saved position
+    if (!this._saveWindowPositionHandle) {
+      this._saveWindowPositionHandle = requestAnimationFrame(
+        this._saveWindowPosition,
+      );
+    }
     this._updateWindowScroll(prevContext, context);
 
     Object.keys(this._scrollElements).forEach(key => {
