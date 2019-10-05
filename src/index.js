@@ -56,10 +56,30 @@ export default class ScrollBehavior {
 
     this._scrollElements = {};
 
+    // Test via a getter in the options object to see if the passive property is accessed
+    this._supportsPassive = false;
+    try {
+      const opts = Object.defineProperty({}, 'passive', {
+        get() {
+          this._supportsPassive = true;
+          return true;
+        },
+      });
+      window.addEventListener('testPassive', null, opts);
+      window.removeEventListener('testPassive', null, opts);
+    } catch (e) {
+      return;
+    }
+
     // We have to listen to each window scroll update rather than to just
     // location updates, because some browsers will update scroll position
     // before emitting the location change.
-    on(window, 'scroll', this._onWindowScroll);
+    on(
+      window,
+      'scroll',
+      this._onWindowScroll,
+      this._supportsPassive ? { passive: true } : false,
+    );
 
     this._removeTransitionHook = addTransitionHook(() => {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
@@ -103,7 +123,12 @@ export default class ScrollBehavior {
     };
 
     this._scrollElements[key] = scrollElement;
-    on(element, 'scroll', scrollElement.onScroll);
+    on(
+      element,
+      'scroll',
+      scrollElement.onScroll,
+      this._supportsPassive ? { passive: true } : false,
+    );
 
     this._updateElementScroll(key, null, context);
   }
