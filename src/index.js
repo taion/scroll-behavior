@@ -62,12 +62,13 @@ export default class ScrollBehavior {
       const opts = Object.defineProperty({}, 'passive', {
         get() {
           this._supportsPassive = true;
+          return true;
         },
       });
       window.addEventListener('testPassive', null, opts);
       window.removeEventListener('testPassive', null, opts);
     } catch (e) {
-      
+      return false;
     }
 
     // We have to listen to each window scroll update rather than to just
