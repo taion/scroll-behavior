@@ -68,7 +68,7 @@ export default class ScrollBehavior {
       window.addEventListener('testPassive', null, opts);
       window.removeEventListener('testPassive', null, opts);
     } catch (e) {
-      return false;
+      this._supportsPassive = false;
     }
 
     // We have to listen to each window scroll update rather than to just
