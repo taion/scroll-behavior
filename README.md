@@ -39,6 +39,7 @@ $ npm i -S scroll-behavior
 ### Basic usage
 
 Create a `ScrollBehavior` object with the following arguments:
+
 - `addTransitionHook`: this function should take a transition hook function and return an unregister function
   - The transition hook function should be called immediately before a transition updates the page
   - The unregister function should remove the transition hook when called
@@ -67,20 +68,20 @@ Assuming we call `updateScroll` with the previous and current location objects:
 ```js
 const scrollBehavior = new ScrollBehavior({
   ...options,
-  shouldUpdateScroll: (prevLocation, location) => (
+  shouldUpdateScroll: (prevLocation, location) =>
     // Don't scroll if the pathname is the same.
-    !prevLocation || location.pathname !== prevLocation.pathname
-  ),
+    !prevLocation || location.pathname !== prevLocation.pathname,
 });
 ```
 
 ```js
 const scrollBehavior = new ScrollBehavior({
   ...options,
-  shouldUpdateScroll: (prevLocation, location) => (
+  shouldUpdateScroll: (prevLocation, location) =>
     // Scroll to top when attempting to visit the current path.
-    prevLocation && location.pathname === prevLocation.pathname ? [0, 0] : true
-  ),
+    prevLocation && location.pathname === prevLocation.pathname
+      ? [0, 0]
+      : true,
 });
 ```
 
@@ -90,7 +91,10 @@ Call the `registerElement` method to register an element other than `window` to 
 
 ```js
 scrollBehavior.registerScrollElement(
-  key, element, shouldUpdateScroll, context,
+  key,
+  element,
+  shouldUpdateScroll,
+  context,
 );
 ```
 
@@ -109,10 +113,9 @@ class SmoothScrollBehavior extends ScrollBehavior {
     }
 
     if (typeof target === 'string') {
-      const targetElement = (
+      const targetElement =
         document.getElementById(target) ||
-        document.getElementsByName(target)[0]
-      );
+        document.getElementsByName(target)[0];
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
         return;
@@ -132,12 +135,9 @@ Integrations should accept a `createScrollBehavior` callback that can create an 
 
 [build-badge]: https://img.shields.io/travis/taion/scroll-behavior/master.svg
 [build]: https://travis-ci.org/taion/scroll-behavior
-
 [npm-badge]: https://img.shields.io/npm/v/scroll-behavior.svg
 [npm]: https://www.npmjs.org/package/scroll-behavior
-
 [codecov-badge]: https://img.shields.io/codecov/c/github/taion/scroll-behavior/master.svg
 [codecov]: https://codecov.io/gh/taion/scroll-behavior
-
 [discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg
 [discord]: https://discord.gg/0ZcbPKXt5bYaNQ46

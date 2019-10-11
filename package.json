@@ -6,13 +6,16 @@
     "lib"
   ],
   "main": "lib/index.js",
-  "types": "ts/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "babel src -d lib --delete-dir-on-start",
-    "lint": "eslint src test *.js",
+    "build": "babel src -d lib --delete-dir-on-start && cpy types/*.d.ts lib",
+    "format": "eslint --fix . && npm run prettier -- --write",
+    "lint": "eslint . && npm run prettier -- -l",
     "prepublish": "npm run build",
+    "prettier": "prettier --ignore-path .eslintignore '**/*.{md,ts,tsx}'",
     "tdd": "cross-env NODE_ENV=test karma start",
-    "test": "npm run lint && npm run testonly",
+    "test": "npm run lint && npm run test:ts && npm run testonly",
+    "test:ts": "dtslint types",
     "testonly": "npm run tdd -- --single-run"
   },
   "husky": {
@@ -23,6 +26,10 @@
   "lint-staged": {
     "*.js": [
       "eslint --fix",
+      "git add"
+    ],
+    "*.{md,ts,tsx}": [
+      "prettier --write",
       "git add"
     ]
   },
@@ -59,8 +66,10 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "codecov": "^3.5.0",
+    "cpy-cli": "^2.0.0",
     "cross-env": "^6.0.0",
     "dirty-chai": "^2.0.1",
+    "dtslint": "^0.9.8",
     "eslint": "^6.1.0",
     "eslint-config-4catalyzer": "^1.0.0",
     "eslint-config-prettier": "^6.0.0",
