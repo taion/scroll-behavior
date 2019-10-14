@@ -133,14 +133,15 @@ export default class ScrollBehavior {
   }
 
   updateScroll(prevContext, context) {
-    // Save the position immediately after a transition so that if no
-    // scrolling occurs, there is still a saved position
-    if (!this._saveWindowPositionHandle) {
-      this._saveWindowPositionHandle = requestAnimationFrame(
-        this._saveWindowPosition,
-      );
-    }
-    this._updateWindowScroll(prevContext, context);
+    this._updateWindowScroll(prevContext, context).then(() => {
+      // Save the position immediately after a transition so that if no
+      // scrolling occurs, there is still a saved position
+      if (!this._saveWindowPositionHandle) {
+        this._saveWindowPositionHandle = requestAnimationFrame(
+          this._saveWindowPosition,
+        );
+      }
+    });
 
     Object.keys(this._scrollElements).forEach(key => {
       this._updateElementScroll(key, prevContext, context);
@@ -230,7 +231,7 @@ export default class ScrollBehavior {
     // scroll it isn't enough. Instead, try to scroll a few times until it
     // works.
     this._numWindowScrollAttempts = 0;
-    this._checkWindowScrollPosition();
+    return this._checkWindowScrollPosition();
   }
 
   _updateElementScroll(key, prevContext, context) {
@@ -296,7 +297,7 @@ export default class ScrollBehavior {
     // Still, check anyway just in case.
     /* istanbul ignore if: paranoid guard */
     if (!this._windowScrollTarget) {
-      return;
+      return Promise.resolve();
     }
 
     this.scrollToTarget(window, this._windowScrollTarget);
@@ -305,13 +306,16 @@ export default class ScrollBehavior {
 
     /* istanbul ignore if: paranoid guard */
     if (this._numWindowScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
+      // This might happen if the scroll position was already set to the target
       this._windowScrollTarget = null;
-      return;
+      return Promise.resolve();
     }
 
-    this._checkWindowScrollHandle = requestAnimationFrame(
-      this._checkWindowScrollPosition,
-    );
+    return new Promise(resolve => {
+      this._checkWindowScrollHandle = requestAnimationFrame(() =>
+        resolve(this._checkWindowScrollPosition()),
+      );
+    });
   };
 
   scrollToTarget(element, target) {
