@@ -53,6 +53,7 @@ export default class ScrollBehavior {
     this._checkWindowScrollHandle = null;
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
+    this._isTransitioning = false;
 
     this._scrollElements = {};
 
@@ -62,6 +63,7 @@ export default class ScrollBehavior {
     on(window, 'scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
+      this.isTransitioning = true;
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
@@ -78,6 +80,7 @@ export default class ScrollBehavior {
   }
 
   registerElement(key, element, shouldUpdateScroll, context) {
+    const self = this;
     invariant(
       !this._scrollElements[key],
       'ScrollBehavior: There is already an element registered for `%s`.',
@@ -94,6 +97,9 @@ export default class ScrollBehavior {
       savePositionHandle: null,
 
       onScroll() {
+        if (self.isTransitioning) {
+          return; // Don't save the scroll position until the transition is complete
+        }
         if (!scrollElement.savePositionHandle) {
           scrollElement.savePositionHandle = requestAnimationFrame(
             saveElementPosition,
@@ -133,6 +139,8 @@ export default class ScrollBehavior {
   }
 
   updateScroll(prevContext, context) {
+    this.isTransitioning = false;
+
     this._updateWindowScroll(prevContext, context).then(() => {
       // Save the position immediately after a transition so that if no
       // scrolling occurs, there is still a saved position
@@ -169,6 +177,11 @@ export default class ScrollBehavior {
   }
 
   _onWindowScroll = () => {
+    if (this.isTransitioning) {
+      // Don't save the scroll position unil the transition is complete
+      return;
+    }
+
     // It's possible that this scroll operation was triggered by what will be a
     // `POP` transition. Instead of updating the saved location immediately, we
     // have to enqueue the update, then potentially cancel it if we observe a
