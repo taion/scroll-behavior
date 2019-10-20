@@ -19,21 +19,10 @@ export function isWindow(node) {
 export function scrollTop(node, val) {
   const win = isWindow(node);
   if (val === undefined) {
-    if (win) {
-      if ('pageYOffset' in win) {
-        return win.pageYOffset;
-      }
-      return win.document.documentElement.scrollTop;
-    }
-    return node.scrollTop;
+    return win ? win.pageYOffset : node.scrollTop;
   }
   if (win) {
-    win.scrollTo(
-      'pageXOffset' in win
-        ? win.pageXOffset
-        : win.document.documentElement.scrollLeft,
-      val,
-    );
+    win.scrollTo(win.scrollTop, val);
   } else {
     // eslint-disable-next-line no-param-reassign
     node.scrollTop = val;
