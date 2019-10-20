@@ -1,14 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 
-import off from 'dom-helpers/events/off';
-import on from 'dom-helpers/events/on';
-import scrollLeft from 'dom-helpers/query/scrollLeft';
+import {
+  removeEventListener as off,
+  addEventListener as on,
+  requestAnimationFrame,
+  cancelAnimationFrame,
+} from 'dom-helpers5';
+import scrollLeft from 'dom-helpers5/scrollLeft';
+
 import scrollTop from 'dom-helpers/query/scrollTop';
-import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
+
 import invariant from 'invariant';
 
 import { isMobileSafari } from './utils';
 
+requestAnimationFrame.cancel = cancelAnimationFrame;
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
 

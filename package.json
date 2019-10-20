@@ -53,6 +53,7 @@
   "homepage": "https://github.com/taion/scroll-behavior#readme",
   "dependencies": {
     "dom-helpers": "^3.4.0",
+    "dom-helpers5": "npm:dom-helpers",
     "invariant": "^2.2.4"
   },
   "devDependencies": {
