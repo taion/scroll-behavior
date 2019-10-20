@@ -1,7 +1,8 @@
 // import { offset } from 'dom-helpers5';
 import offset from 'dom-helpers/query/offset';
+// import offset from 'dom-helpers5/offset';
 import scrollLeft from 'dom-helpers5/scrollLeft';
-import scrollTop from 'dom-helpers/query/scrollTop';
+// import scrollTop from 'dom-helpers/query/scrollTop';
 
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
@@ -14,6 +15,7 @@ import {
 } from './routes';
 import run, { delay } from './run';
 import withScroll from './withScroll';
+import { scrollTop } from '../src/utils';
 
 describe('ScrollBehavior', () => {
   [

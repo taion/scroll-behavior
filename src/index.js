@@ -1,20 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 
+import on from 'dom-helpers5/addEventListener';
+import off from 'dom-helpers5/removeEventListener';
 import {
-  removeEventListener as off,
-  addEventListener as on,
-  requestAnimationFrame,
-  cancelAnimationFrame,
-} from 'dom-helpers5';
+  request as requestAnimationFrame,
+  cancel as cancelAnimationFrame,
+} from 'dom-helpers5/animationFrame';
 import scrollLeft from 'dom-helpers5/scrollLeft';
-
-import scrollTop from 'dom-helpers/query/scrollTop';
-
+import scrollTop from 'dom-helpers5/scrollTop';
 import invariant from 'invariant';
 
-import { isMobileSafari } from './utils';
+import {
+  isMobileSafari,
+  //  , scrollTop
+} from './utils';
 
-requestAnimationFrame.cancel = cancelAnimationFrame;
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
 
@@ -68,12 +68,12 @@ export default class ScrollBehavior {
     on(window, 'scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
-      requestAnimationFrame.cancel(this._saveWindowPositionHandle);
+      cancelAnimationFrame(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
       Object.keys(this._scrollElements).forEach(key => {
         const scrollElement = this._scrollElements[key];
-        requestAnimationFrame.cancel(scrollElement.savePositionHandle);
+        cancelAnimationFrame(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
 
         // It's fine to save element scroll positions here, though; the browser
@@ -126,7 +126,7 @@ export default class ScrollBehavior {
     ];
 
     off(element, 'scroll', onScroll);
-    requestAnimationFrame.cancel(savePositionHandle);
+    cancelAnimationFrame(savePositionHandle);
 
     delete this._scrollElements[key];
   }
@@ -189,7 +189,7 @@ export default class ScrollBehavior {
   };
 
   _cancelCheckWindowScroll() {
-    requestAnimationFrame.cancel(this._checkWindowScrollHandle);
+    cancelAnimationFrame(this._checkWindowScrollHandle);
     this._checkWindowScrollHandle = null;
   }
 
