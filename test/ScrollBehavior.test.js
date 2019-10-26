@@ -141,6 +141,32 @@ describe('ScrollBehavior', () => {
             },
           ]);
         });
+
+        it('should save position even if it does not change', done => {
+          const history = withRoutes(
+            withScroll(createHistory(), (prevLoc, loc) =>
+              loc.action === 'PUSH' ? [10, 20] : true,
+            ),
+          );
+
+          unlisten = run(history, [
+            () => {
+              history.push('/detail');
+            },
+            () => {
+              history.push('/');
+            },
+            () => {
+              history.push('/detail');
+            },
+            () => history.goBack(),
+            () => {
+              expect(scrollLeft(window)).to.equal(10);
+              expect(scrollTop(window)).to.equal(20);
+              done();
+            },
+          ]);
+        });
       });
 
       describe('scroll element', () => {

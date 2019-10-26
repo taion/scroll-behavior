@@ -1,6 +1,8 @@
 export function delay(cb) {
   // Give throttled scroll listeners time to settle down.
-  requestAnimationFrame(() => requestAnimationFrame(cb));
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => requestAnimationFrame(cb)),
+  );
 }
 
 export default function run(history, steps) {
