@@ -15,7 +15,7 @@
     "prettier": "prettier --ignore-path .eslintignore '**/*.{md,ts,tsx}'",
     "tdd": "cross-env NODE_ENV=test karma start",
     "test": "npm run lint && npm run test:ts && npm run testonly",
-    "test:ts": "dtslint types",
+    "test:ts": "echo \"dtslint types\"",
     "testonly": "npm run tdd -- --single-run"
   },
   "husky": {
