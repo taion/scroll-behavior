@@ -92,6 +92,7 @@
     "prettier": "^1.18.2",
     "sinon": "^7.4.1",
     "sinon-chai": "^3.3.0",
+    "typescript": "^3.6.4",
     "webpack": "^4.39.2"
   }
 }
