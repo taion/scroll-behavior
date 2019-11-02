@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 
-import on from 'dom-helpers5/addEventListener';
-import off from 'dom-helpers5/removeEventListener';
+import on from 'dom-helpers/addEventListener';
+import off from 'dom-helpers/removeEventListener';
 import {
   request as requestAnimationFrame,
   cancel as cancelAnimationFrame,
-} from 'dom-helpers5/animationFrame';
-import scrollLeft from 'dom-helpers5/scrollLeft';
-import scrollTop from 'dom-helpers5/scrollTop';
+} from 'dom-helpers/animationFrame';
+import scrollLeft from 'dom-helpers/scrollLeft';
+import scrollTop from 'dom-helpers/scrollTop';
 import invariant from 'invariant';
 
 import {

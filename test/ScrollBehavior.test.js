@@ -1,7 +1,7 @@
 // import { offset } from 'dom-helpers5';
-import offset from 'dom-helpers/query/offset';
+import offset from 'dom-helpers/offset';
 // import offset from 'dom-helpers5/offset';
-import scrollLeft from 'dom-helpers5/scrollLeft';
+import scrollLeft from 'dom-helpers/scrollLeft';
 // import scrollTop from 'dom-helpers/query/scrollTop';
 
 import createBrowserHistory from 'history/lib/createBrowserHistory';
@@ -42,7 +42,6 @@ describe('ScrollBehavior', () => {
             () => {
               // This will be ignored, but will exercise the throttle logic.
               scrollTop(window, 10000);
-
               setTimeout(() => {
                 scrollTop(window, 15000);
                 delay(() => history.push('/detail'));
