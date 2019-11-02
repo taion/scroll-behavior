@@ -23,4 +23,4 @@ after_script:
 
 branches:
   only:
-    - master
+    - update-dom-helpers-to-5
