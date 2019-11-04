@@ -1,9 +1,6 @@
-// import { offset } from 'dom-helpers5';
 import offset from 'dom-helpers/offset';
-// import offset from 'dom-helpers5/offset';
 import scrollLeft from 'dom-helpers/scrollLeft';
-// import scrollTop from 'dom-helpers/query/scrollTop';
-
+import scrollTop from 'dom-helpers/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 
@@ -15,7 +12,6 @@ import {
 } from './routes';
 import run, { delay } from './run';
 import withScroll from './withScroll';
-import { scrollTop } from '../src/utils';
 
 describe('ScrollBehavior', () => {
   [
@@ -42,6 +38,7 @@ describe('ScrollBehavior', () => {
             () => {
               // This will be ignored, but will exercise the throttle logic.
               scrollTop(window, 10000);
+
               setTimeout(() => {
                 scrollTop(window, 15000);
                 delay(() => history.push('/detail'));
@@ -137,6 +134,32 @@ describe('ScrollBehavior', () => {
             () => {
               history.push('/');
             },
+            () => {
+              expect(scrollLeft(window)).to.equal(10);
+              expect(scrollTop(window)).to.equal(20);
+              done();
+            },
+          ]);
+        });
+
+        it('should save position even if it does not change', done => {
+          const history = withRoutes(
+            withScroll(createHistory(), (prevLoc, loc) =>
+              loc.action === 'PUSH' ? [10, 20] : true,
+            ),
+          );
+
+          unlisten = run(history, [
+            () => {
+              history.push('/detail');
+            },
+            () => {
+              history.push('/');
+            },
+            () => {
+              history.push('/detail');
+            },
+            () => history.goBack(),
             () => {
               expect(scrollLeft(window)).to.equal(10);
               expect(scrollTop(window)).to.equal(20);

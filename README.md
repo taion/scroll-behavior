@@ -1,5 +1,3 @@
-// https://github.com/doczjs/docz/issues/979
-
 # scroll-behavior [![Travis][build-badge]][build] [![npm][npm-badge]][npm]
 
 Pluggable browser scroll management.

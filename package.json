@@ -15,7 +15,7 @@
     "prettier": "prettier --ignore-path .eslintignore '**/*.{md,ts,tsx}'",
     "tdd": "cross-env NODE_ENV=test karma start",
     "test": "npm run lint && npm run test:ts && npm run testonly",
-    "test:ts": "echo \"dtslint types\"",
+    "test:ts": "dtslint types",
     "testonly": "npm run tdd -- --single-run"
   },
   "husky": {
@@ -69,7 +69,7 @@
     "cpy-cli": "^2.0.0",
     "cross-env": "^6.0.0",
     "dirty-chai": "^2.0.1",
-    "dtslint": "^0.9.8",
+    "dtslint": "^1.0.2",
     "eslint": "^6.1.0",
     "eslint-config-4catalyzer": "^1.0.0",
     "eslint-config-prettier": "^6.0.0",
@@ -88,11 +88,9 @@
     "karma-webpack": "^4.0.2",
     "lint-staged": "^9.2.1",
     "mocha": "^6.2.0",
-    "patch-package": "^6.2.0",
     "prettier": "^1.18.2",
     "sinon": "^7.4.1",
     "sinon-chai": "^3.3.0",
-    "typescript": "^3.6.4",
     "webpack": "^4.39.2"
   }
 }

@@ -1,19 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 
-import on from 'dom-helpers/addEventListener';
-import off from 'dom-helpers/removeEventListener';
-import {
-  request as requestAnimationFrame,
-  cancel as cancelAnimationFrame,
-} from 'dom-helpers/animationFrame';
 import scrollLeft from 'dom-helpers/scrollLeft';
 import scrollTop from 'dom-helpers/scrollTop';
+import * as animationFrame from 'dom-helpers/animationFrame';
 import invariant from 'invariant';
 
-import {
-  isMobileSafari,
-  //  , scrollTop
-} from './utils';
+import { isMobileSafari } from './utils';
 
 // Try at most this many times to scroll, to avoid getting stuck.
 const MAX_SCROLL_ATTEMPTS = 2;
@@ -47,7 +39,10 @@ export default class ScrollBehavior {
         // Scroll restoration persists across page reloads. We want to reset
         // this to the original value, so that we can let the browser handle
         // restoring the initial scroll position on server-rendered pages.
-        on(window, 'beforeunload', this._restoreScrollRestoration);
+        window.addEventListener(
+          'beforeunload',
+          this._restoreScrollRestoration,
+        );
       } catch (e) {
         this._oldScrollRestoration = null;
       }
@@ -65,15 +60,15 @@ export default class ScrollBehavior {
     // We have to listen to each window scroll update rather than to just
     // location updates, because some browsers will update scroll position
     // before emitting the location change.
-    on(window, 'scroll', this._onWindowScroll);
+    window.addEventListener('scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
-      cancelAnimationFrame(this._saveWindowPositionHandle);
+      animationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
       Object.keys(this._scrollElements).forEach(key => {
         const scrollElement = this._scrollElements[key];
-        cancelAnimationFrame(scrollElement.savePositionHandle);
+        animationFrame.cancel(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
 
         // It's fine to save element scroll positions here, though; the browser
@@ -101,15 +96,22 @@ export default class ScrollBehavior {
 
       onScroll() {
         if (!scrollElement.savePositionHandle) {
-          scrollElement.savePositionHandle = requestAnimationFrame(
+          scrollElement.savePositionHandle = animationFrame.request(
             saveElementPosition,
           );
         }
       },
     };
 
+    // In case no scrolling occurs, save the initial position
+    if (!scrollElement.savePositionHandle) {
+      scrollElement.savePositionHandle = animationFrame.request(
+        saveElementPosition,
+      );
+    }
+
     this._scrollElements[key] = scrollElement;
-    on(element, 'scroll', scrollElement.onScroll);
+    element.addEventListener('scroll', scrollElement.onScroll);
 
     this._updateElementScroll(key, null, context);
   }
@@ -125,14 +127,22 @@ export default class ScrollBehavior {
       key
     ];
 
-    off(element, 'scroll', onScroll);
-    cancelAnimationFrame(savePositionHandle);
+    element.removeEventListener('scroll', onScroll);
+    animationFrame.cancel(savePositionHandle);
 
     delete this._scrollElements[key];
   }
 
   updateScroll(prevContext, context) {
-    this._updateWindowScroll(prevContext, context);
+    this._updateWindowScroll(prevContext, context).then(() => {
+      // Save the position immediately after a transition so that if no
+      // scrolling occurs, there is still a saved position
+      if (!this._saveWindowPositionHandle) {
+        this._saveWindowPositionHandle = animationFrame.request(
+          this._saveWindowPosition,
+        );
+      }
+    });
 
     Object.keys(this._scrollElements).forEach(key => {
       this._updateElementScroll(key, prevContext, context);
@@ -153,7 +163,7 @@ export default class ScrollBehavior {
   stop() {
     this._restoreScrollRestoration();
 
-    off(window, 'scroll', this._onWindowScroll);
+    window.removeEventListener('scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
 
     this._removeTransitionHook();
@@ -165,7 +175,7 @@ export default class ScrollBehavior {
     // have to enqueue the update, then potentially cancel it if we observe a
     // location update.
     if (!this._saveWindowPositionHandle) {
-      this._saveWindowPositionHandle = requestAnimationFrame(
+      this._saveWindowPositionHandle = animationFrame.request(
         this._saveWindowPosition,
       );
     }
@@ -189,7 +199,7 @@ export default class ScrollBehavior {
   };
 
   _cancelCheckWindowScroll() {
-    cancelAnimationFrame(this._checkWindowScrollHandle);
+    animationFrame.cancel(this._checkWindowScrollHandle);
     this._checkWindowScrollHandle = null;
   }
 
@@ -222,7 +232,7 @@ export default class ScrollBehavior {
     // scroll it isn't enough. Instead, try to scroll a few times until it
     // works.
     this._numWindowScrollAttempts = 0;
-    this._checkWindowScrollPosition();
+    return this._checkWindowScrollPosition();
   }
 
   _updateElementScroll(key, prevContext, context) {
@@ -288,7 +298,7 @@ export default class ScrollBehavior {
     // Still, check anyway just in case.
     /* istanbul ignore if: paranoid guard */
     if (!this._windowScrollTarget) {
-      return;
+      return Promise.resolve();
     }
 
     this.scrollToTarget(window, this._windowScrollTarget);
@@ -297,13 +307,16 @@ export default class ScrollBehavior {
 
     /* istanbul ignore if: paranoid guard */
     if (this._numWindowScrollAttempts >= MAX_SCROLL_ATTEMPTS) {
+      // This might happen if the scroll position was already set to the target
       this._windowScrollTarget = null;
-      return;
+      return Promise.resolve();
     }
 
-    this._checkWindowScrollHandle = requestAnimationFrame(
-      this._checkWindowScrollPosition,
-    );
+    return new Promise(resolve => {
+      this._checkWindowScrollHandle = animationFrame.request(() =>
+        resolve(this._checkWindowScrollPosition()),
+      );
+    });
   };
 
   scrollToTarget(element, target) {
