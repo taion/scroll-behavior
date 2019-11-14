@@ -3,9 +3,9 @@
 
 
 "@4c/babel-preset@^7.0.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-7.2.0.tgz#0442c42cabbf03db725e31f0e60eaa685c0c8396"
-  integrity sha512-5zyKWR7+VjhhXK/+3z/UIBWqlgJtDsc/MYgLQdX0aZ0f2sjYLSlXC2pRM5lHDSar/DVZTuGhenAZ9ZNN/3EpcA==
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@4c/babel-preset/-/babel-preset-7.2.1.tgz#fc708d8add20f8ab653d26d97ebb7d4ae52e6352"
+  integrity sha512-Ue1WsKilTeE+gj+QYdYkpeq6frmWHe3shQWdjDFy8QshmBTV3yvrjEx4WyeIgxapCH4/xwjAc0zz5xNmr/5fcw==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.5.5"
     "@babel/plugin-proposal-export-default-from" "^7.5.2"
@@ -17,7 +17,7 @@
     "@babel/preset-env" "^7.5.5"
     "@babel/preset-react" "^7.0.0"
     babel-plugin-dev-expression "^0.2.2"
-    babel-plugin-react-intl "^4.1.12"
+    babel-plugin-react-intl "^5.1.0"
     browserslist "^4.6.6"
     lodash "^4.17.15"
     read-pkg-up "^7.0.0"
@@ -45,7 +45,7 @@
   dependencies:
     "@babel/highlight" "^7.0.0"
 
-"@babel/core@^7.4.5", "@babel/core@^7.5.5":
+"@babel/core@^7.5.5", "@babel/core@^7.7.2":
   version "7.7.2"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.7.2.tgz#ea5b99693bcfc058116f42fa1dd54da412b29d91"
   integrity sha512-eeD7VEZKfhK1KUXGiyPFettgF3m513f8FoBSWiQ1xTvl1RAopLs42Wp9+Ze911I6H0N9lNqJMDgoZT7gHsipeQ==
@@ -986,6 +986,11 @@
   resolved "https://registry.yarnpkg.com/@types/parsimmon/-/parsimmon-1.10.0.tgz#ffb81cb023ff435a41d4710a29ab23c561dc9fdf"
   integrity sha512-bsTIJFVQv7jnvNiC42ld2pQW2KRI+pAG243L+iATvqzy3X6+NH1obz2itRKDZZ8VVhN3wjwYax/VBGCcXzgTqQ==
 
+"@types/schema-utils@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/schema-utils/-/schema-utils-1.0.0.tgz#295d36f01e2cb8bc3207ca1d9a68e210db6b40cb"
+  integrity sha512-YesPanU1+WCigC/Aj1Mga8UCOjHIfMNHZ3zzDsUY7lI8GlKnh/Kv2QwJOQ+jNQ36Ru7IfzSedlG14hppYaN13A==
+
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.8.5.tgz#51b1c5fe6576a34953bf4b253df9f0d490d9e359"
@@ -1518,16 +1523,18 @@ babel-plugin-istanbul@^5.2.0:
     istanbul-lib-instrument "^3.3.0"
     test-exclude "^5.2.3"
 
-babel-plugin-react-intl@^4.1.12:
-  version "4.1.12"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-4.1.12.tgz#d45d06e247c6428dc453f3927dcf2c6455c8a2d1"
-  integrity sha512-dCw7LjfDCS03ugW0Oz1XG8J/OgAnEDsKqcyfzlDb4JL6aLiYz87XvM9sIdbMAdPZXaHLhj9GyK8CueyMIm66NQ==
+babel-plugin-react-intl@^5.1.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-5.1.2.tgz#64319e17b7e75fc687ec2aa7a99c0d13ff8cc021"
+  integrity sha512-PlgNqOJQNAbFKUQZ3Lwl4WfRnp9HmpVjlpi+XW7GirpFs+0KFGMBpk8bTe6GpwH9WNjpxB65YyxXrh1NTNp+Ug==
   dependencies:
-    "@babel/core" "^7.4.5"
+    "@babel/core" "^7.7.2"
     "@babel/helper-plugin-utils" "^7.0.0"
     "@types/babel__core" "^7.1.2"
+    "@types/schema-utils" "^1.0.0"
     fs-extra "^8.0.1"
-    intl-messageformat-parser "^3.0.7"
+    intl-messageformat-parser "^3.2.2"
+    schema-utils "^2.2.0"
 
 babel-polyfill@^6.26.0:
   version "6.26.0"
@@ -3979,10 +3986,10 @@ inquirer@^7.0.0:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-intl-messageformat-parser@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.0.7.tgz#d28493501a1bc40a094239b7ef26fe9412558e72"
-  integrity sha512-L16VbbV3NFaiZV65XwOIH9fBe52TS2EkOR0k8Y4ratsgTE7KPEbcUCUrz/iEQwJo7BcWY4ohkZbeYZRgAiPR1Q==
+intl-messageformat-parser@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.2.2.tgz#28cacc80a53823a28b5ecaf16b3b35d0a1d5f9d2"
+  integrity sha512-ax9639ST77YimAddTH/0Q9qhXuYS8ZVsoqOZinqnS90MbXaNuIq+KIdifaIndwI+lMEv3o+qNaGycXYvlh17rw==
 
 invariant@^2.0.0, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
@@ -6446,6 +6453,14 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
+
+schema-utils@^2.2.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-2.5.0.tgz#8f254f618d402cc80257486213c8970edfd7c22f"
+  integrity sha512-32ISrwW2scPXHUSusP8qMg5dLUawKkyV+/qIEV9JdXKx+rsM6mi8vZY8khg2M69Qom16rtroWXD3Ybtiws38gQ==
+  dependencies:
+    ajv "^6.10.2"
+    ajv-keywords "^3.4.1"
 
 semver-compare@^1.0.0:
   version "1.0.0"
