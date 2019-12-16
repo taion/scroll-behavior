@@ -66,7 +66,7 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "codecov": "^3.6.1",
-    "cpy-cli": "^2.0.0",
+    "cpy-cli": "^3.0.0",
     "cross-env": "^6.0.3",
     "dirty-chai": "^2.0.1",
     "dtslint": "^2.0.2",
