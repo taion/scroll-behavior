@@ -53,6 +53,7 @@ export default class ScrollBehavior {
     this._checkWindowScrollHandle = null;
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
+    this._ignoreScrollEvents = false;
 
     this._scrollElements = {};
 
@@ -72,7 +73,9 @@ export default class ScrollBehavior {
 
         // It's fine to save element scroll positions here, though; the browser
         // won't modify them.
-        this._saveElementPosition(key);
+        if (!this._ignoreScrollEvents) {
+          this._saveElementPosition(key);
+        }
       });
     });
   }
@@ -93,8 +96,8 @@ export default class ScrollBehavior {
       shouldUpdateScroll,
       savePositionHandle: null,
 
-      onScroll() {
-        if (!scrollElement.savePositionHandle) {
+      onScroll: () => {
+        if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
           scrollElement.savePositionHandle = requestAnimationFrame(
             saveElementPosition,
           );
@@ -103,7 +106,7 @@ export default class ScrollBehavior {
     };
 
     // In case no scrolling occurs, save the initial position
-    if (!scrollElement.savePositionHandle) {
+    if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
       scrollElement.savePositionHandle = requestAnimationFrame(
         saveElementPosition,
       );
@@ -168,7 +171,20 @@ export default class ScrollBehavior {
     this._removeTransitionHook();
   }
 
+  startIgnoringScrollEvents() {
+    this._ignoreScrollEvents = true;
+  }
+
+  stopIgnoringScrollEvents() {
+    this._ignoreScrollEvents = false;
+  }
+
   _onWindowScroll = () => {
+    if (this._ignoreScrollEvents) {
+      // Don't save the scroll position until the transition is complete
+      return;
+    }
+
     // It's possible that this scroll operation was triggered by what will be a
     // `POP` transition. Instead of updating the saved location immediately, we
     // have to enqueue the update, then potentially cancel it if we observe a

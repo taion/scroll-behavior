@@ -122,6 +122,34 @@ describe('ScrollBehavior', () => {
           ]);
         });
 
+        it('should ignore scroll events when startIgnoringScrollEvents is used', done => {
+          const history = withRoutes(withScroll(createHistory()));
+
+          unlisten = run(history, [
+            () => {
+              history.startIgnoringScrollEvents();
+              scrollTop(window, 5000);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(window)).to.equal(0);
+              history.stopIgnoringScrollEvents();
+              scrollTop(window, 2000);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(window)).to.equal(2000);
+              done();
+            },
+          ]);
+        });
+
         it('should allow custom position', done => {
           const history = withRoutes(
             withScroll(createHistory(), () => [10, 20]),
@@ -247,6 +275,36 @@ describe('ScrollBehavior', () => {
                   });
                 });
               });
+            },
+          ]);
+        });
+
+        it('should ignore scroll events when startIgnoringScrollEvents is used', done => {
+          const history = withScrollElement(
+            withRoutes(withScroll(createHistory())),
+          );
+
+          unlisten = run(history, [
+            () => {
+              history.startIgnoringScrollEvents();
+              scrollTop(history.container, 5432);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(history.container)).to.equal(0);
+              history.stopIgnoringScrollEvents();
+              scrollTop(history.container, 2000);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(history.container)).to.equal(2000);
+              done();
             },
           ]);
         });
