@@ -86,9 +86,19 @@ export default function withScroll(history, shouldUpdateScroll) {
     };
   }
 
+  function startIgnoringScrollEvents() {
+    scrollBehavior.startIgnoringScrollEvents();
+  }
+
+  function stopIgnoringScrollEvents() {
+    scrollBehavior.stopIgnoringScrollEvents();
+  }
+
   return {
     ...history,
     listen,
     registerScrollElement,
+    startIgnoringScrollEvents,
+    stopIgnoringScrollEvents,
   };
 }
