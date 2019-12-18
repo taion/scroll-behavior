@@ -28,6 +28,23 @@ describe('ScrollBehavior', () => {
         }
       });
 
+      it('pageshow/pagehide', done => {
+        const history = withScroll(createHistory());
+        expect(window.history.scrollRestoration).to.equal('auto');
+        unlisten = run(history, [
+          () => {
+            expect(window.history.scrollRestoration).to.equal('manual');
+            window.dispatchEvent(new Event('pageshow'));
+            expect(window.history.scrollRestoration).to.equal('manual');
+            window.dispatchEvent(new Event('pagehide'));
+            expect(window.history.scrollRestoration).to.equal('auto');
+            window.dispatchEvent(new Event('pageshow'));
+            expect(window.history.scrollRestoration).to.equal('manual');
+            done();
+          },
+        ]);
+      });
+
       describe('default behavior', () => {
         it('should emulate browser scroll behavior', done => {
           const history = withRoutes(withScroll(createHistory()));
