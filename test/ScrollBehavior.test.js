@@ -278,6 +278,36 @@ describe('ScrollBehavior', () => {
             },
           ]);
         });
+
+        it('should ignore scroll events when startIgnoringScrollEvents is used', done => {
+          const history = withScrollElement(
+            withRoutes(withScroll(createHistory())),
+          );
+
+          unlisten = run(history, [
+            () => {
+              history.startIgnoringScrollEvents();
+              scrollTop(history.container, 5432);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(history.container)).to.equal(0);
+              history.stopIgnoringScrollEvents();
+              scrollTop(history.container, 2000);
+              delay(() => history.push('/detail'));
+            },
+            () => {
+              delay(() => history.goBack());
+            },
+            () => {
+              expect(scrollTop(history.container)).to.equal(2000);
+              done();
+            },
+          ]);
+        });
       });
     });
   });

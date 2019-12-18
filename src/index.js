@@ -73,7 +73,9 @@ export default class ScrollBehavior {
 
         // It's fine to save element scroll positions here, though; the browser
         // won't modify them.
-        this._saveElementPosition(key);
+        if (!this._ignoreScrollEvents) {
+          this._saveElementPosition(key);
+        }
       });
     });
   }
@@ -94,13 +96,8 @@ export default class ScrollBehavior {
       shouldUpdateScroll,
       savePositionHandle: null,
 
-      onScroll() {
-        if (this._ignoreScrollEvents) {
-          // Don't save the scroll position until the transition is complete.
-          return;
-        }
-
-        if (!scrollElement.savePositionHandle) {
+      onScroll: () => {
+        if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
           scrollElement.savePositionHandle = requestAnimationFrame(
             saveElementPosition,
           );
@@ -109,7 +106,7 @@ export default class ScrollBehavior {
     };
 
     // In case no scrolling occurs, save the initial position
-    if (!scrollElement.savePositionHandle) {
+    if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
       scrollElement.savePositionHandle = requestAnimationFrame(
         saveElementPosition,
       );
