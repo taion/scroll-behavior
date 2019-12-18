@@ -53,8 +53,7 @@ export default class ScrollBehavior {
     this._checkWindowScrollHandle = null;
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
-
-    this._isTransitioning = false;
+    this._ignoreScrollEvents = false;
 
     this._scrollElements = {};
 
@@ -64,8 +63,6 @@ export default class ScrollBehavior {
     on(window, 'scroll', this._onWindowScroll);
 
     this._removeTransitionHook = addTransitionHook(() => {
-      this._isTransitioning = true;
-
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
@@ -97,8 +94,8 @@ export default class ScrollBehavior {
       shouldUpdateScroll,
       savePositionHandle: null,
 
-      onScroll: () => {
-        if (this._isTransitioning) {
+      onScroll() {
+        if (this._ignoreScrollEvents) {
           // Don't save the scroll position until the transition is complete.
           return;
         }
@@ -142,8 +139,6 @@ export default class ScrollBehavior {
   }
 
   updateScroll(prevContext, context) {
-    this._isTransitioning = false;
-
     this._updateWindowScroll(prevContext, context).then(() => {
       // Save the position immediately after a transition so that if no
       // scrolling occurs, there is still a saved position
@@ -179,9 +174,17 @@ export default class ScrollBehavior {
     this._removeTransitionHook();
   }
 
+  startIgnoringScrollEvents() {
+    this._ignoreScrollEvents = true;
+  }
+
+  stopIgnoringScrollEvents() {
+    this._ignoreScrollEvents = false;
+  }
+
   _onWindowScroll = () => {
-    if (this._isTransitioning) {
-      // Don't save the scroll position until the transition is complete.
+    if (this._ignoreScrollEvents) {
+      // Don't save the scroll position until the transition is complete
       return;
     }
 
