@@ -62,7 +62,7 @@
     "@babel/polyfill": "^7.7.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-plugin-istanbul": "^5.2.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "codecov": "^3.6.1",
