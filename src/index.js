@@ -6,6 +6,7 @@ import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import invariant from 'invariant';
+import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
 
 import { isMobileSafari } from './utils';
 
@@ -32,8 +33,14 @@ export default class ScrollBehavior {
     // Scroll restoration persists across page reloads. We want to reset
     // this to the original value, so that we can let the browser handle
     // restoring the initial scroll position on server-rendered pages.
-    on(window, 'pagehide', this._restoreScrollRestoration);
-    on(window, 'pageshow', this._setScrollRestoration);
+    PageLifecycle.addEventListener('statechange', ({ oldState, newState }) => {
+      if (newState === 'frozen' || newState === 'terminated') {
+        this._restoreScrollRestoration();
+      }
+      if (oldState === 'frozen') {
+        this._setScrollRestoration();
+      }
+    });
 
     this._saveWindowPositionHandle = null;
     this._checkWindowScrollHandle = null;

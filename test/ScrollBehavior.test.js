@@ -3,6 +3,8 @@ import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
+import sinon from 'sinon';
+import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
 
 import { createHashHistoryWithoutKey } from './histories';
 import {
@@ -12,6 +14,7 @@ import {
 } from './routes';
 import run, { delay } from './run';
 import withScroll from './withScroll';
+import { setEventListener, triggerEvent } from './mockPageLifecycle';
 
 describe('ScrollBehavior', () => {
   [
@@ -26,20 +29,35 @@ describe('ScrollBehavior', () => {
         if (unlisten) {
           unlisten();
         }
+        sinon.restore();
+        setEventListener();
       });
 
-      it('pageshow/pagehide', done => {
+      it('sets/restores/resets scrollRestoration on freeze/resume', done => {
+        sinon.replace(PageLifecycle, 'addEventListener', setEventListener);
         const history = withScroll(createHistory());
         expect(window.history.scrollRestoration).to.equal('auto');
         unlisten = run(history, [
           () => {
             expect(window.history.scrollRestoration).to.equal('manual');
-            window.dispatchEvent(new Event('pageshow'));
-            expect(window.history.scrollRestoration).to.equal('manual');
-            window.dispatchEvent(new Event('pagehide'));
+            triggerEvent('hidden', 'frozen');
             expect(window.history.scrollRestoration).to.equal('auto');
-            window.dispatchEvent(new Event('pageshow'));
+            triggerEvent('frozen', 'hidden');
             expect(window.history.scrollRestoration).to.equal('manual');
+            done();
+          },
+        ]);
+      });
+
+      it('sets/restores scrollRestoration on termination', done => {
+        sinon.replace(PageLifecycle, 'addEventListener', setEventListener);
+        const history = withScroll(createHistory());
+        expect(window.history.scrollRestoration).to.equal('auto');
+        unlisten = run(history, [
+          () => {
+            expect(window.history.scrollRestoration).to.equal('manual');
+            triggerEvent('hidden', 'terminated');
+            expect(window.history.scrollRestoration).to.equal('auto');
             done();
           },
         ]);
