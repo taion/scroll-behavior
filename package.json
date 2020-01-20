@@ -56,10 +56,10 @@
     "invariant": "^2.2.4"
   },
   "devDependencies": {
-    "@4c/babel-preset": "^7.2.4",
-    "@babel/cli": "^7.8.0",
-    "@babel/core": "^7.8.0",
-    "@babel/polyfill": "^7.8.0",
+    "@4c/babel-preset": "^7.3.0",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/polyfill": "^7.8.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-istanbul": "^6.0.0",
@@ -71,12 +71,12 @@
     "dirty-chai": "^2.0.1",
     "dtslint": "^2.0.5",
     "eslint": "^6.8.0",
-    "eslint-config-4catalyzer": "^1.0.1",
+    "eslint-config-4catalyzer": "^1.0.2",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-prettier": "^3.1.2",
     "history": "^2.1.2",
-    "husky": "^4.0.7",
+    "husky": "^4.0.10",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.1",
@@ -89,7 +89,7 @@
     "lint-staged": "^9.5.0",
     "mocha": "^7.0.0",
     "prettier": "^1.19.1",
-    "sinon": "^8.0.4",
+    "sinon": "^8.1.0",
     "sinon-chai": "^3.4.0",
     "webpack": "^4.41.5"
   }
