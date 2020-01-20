@@ -24,14 +24,8 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{md,ts,tsx}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": "eslint --fix",
+    "*.{md,ts,tsx}": "prettier --write"
   },
   "prettier": {
     "printWidth": 79,
@@ -86,7 +80,7 @@
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
-    "lint-staged": "^9.5.0",
+    "lint-staged": "^10.0.0",
     "mocha": "^7.0.0",
     "prettier": "^1.19.1",
     "sinon": "^8.1.0",
