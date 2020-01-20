@@ -24,14 +24,8 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{md,ts,tsx}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": "eslint --fix",
+    "*.{md,ts,tsx}": "prettier --write"
   },
   "prettier": {
     "printWidth": 79,
