@@ -25,6 +25,10 @@ describe('ScrollBehavior', () => {
     describe(createHistory.name, () => {
       let unlisten;
 
+      beforeEach(() => {
+        window.history.scrollRestoration = 'auto';
+      });
+
       afterEach(() => {
         if (unlisten) {
           unlisten();
