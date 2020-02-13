@@ -23,7 +23,6 @@ export default class ScrollBehavior {
     this._stateStorage = stateStorage;
     this._getCurrentLocation = getCurrentLocation;
     this._shouldUpdateScroll = shouldUpdateScroll;
-    this._hasSetScrollRestoration = false;
 
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
@@ -47,6 +46,7 @@ export default class ScrollBehavior {
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
     this._ignoreScrollEvents = false;
+    this._oldScrollRestoration = null;
 
     this._scrollElements = {};
 
@@ -145,7 +145,7 @@ export default class ScrollBehavior {
   }
 
   _setScrollRestoration = () => {
-    if (this._hasSetScrollRestoration) {
+    if (this._oldScrollRestoration) {
       // It's possible that the `pageshow` event occurs after we initialise
       return;
     }
@@ -163,10 +163,7 @@ export default class ScrollBehavior {
       } catch (e) {
         this._oldScrollRestoration = null;
       }
-    } else {
-      this._oldScrollRestoration = null;
     }
-    this._hasSetScrollRestoration = true;
   };
 
   _restoreScrollRestoration = () => {
@@ -177,8 +174,8 @@ export default class ScrollBehavior {
       } catch (e) {
         /* silence */
       }
+      this._oldScrollRestoration = null;
     }
-    this._hasSetScrollRestoration = false;
   };
 
   stop() {
