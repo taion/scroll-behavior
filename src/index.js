@@ -32,11 +32,14 @@ export default class ScrollBehavior {
     // Scroll restoration persists across page reloads. We want to reset
     // this to the original value, so that we can let the browser handle
     // restoring the initial scroll position on server-rendered pages.
-    PageLifecycle.addEventListener('statechange', ({ oldState, newState }) => {
-      if (newState === 'frozen' || newState === 'terminated') {
+    PageLifecycle.addEventListener('statechange', ({ newState }) => {
+      if (
+        newState === 'terminated' ||
+        newState === 'frozen' ||
+        newState === 'discarded'
+      ) {
         this._restoreScrollRestoration();
-      }
-      if (oldState === 'frozen') {
+      } else {
         this._setScrollRestoration();
       }
     });
