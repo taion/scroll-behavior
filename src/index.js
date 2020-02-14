@@ -149,7 +149,7 @@ export default class ScrollBehavior {
 
   _setScrollRestoration = () => {
     if (this._oldScrollRestoration) {
-      // It's possible that the `pageshow` event occurs after we initialise
+      // It's possible that we already set the scroll restoration
       return;
     }
     if (
