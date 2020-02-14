@@ -44,6 +44,8 @@ describe('ScrollBehavior', () => {
         unlisten = run(history, [
           () => {
             expect(window.history.scrollRestoration).to.equal('manual');
+            triggerEvent('frozen', 'hidden');
+            expect(window.history.scrollRestoration).to.equal('manual');
             triggerEvent('hidden', 'frozen');
             expect(window.history.scrollRestoration).to.equal('auto');
             triggerEvent('frozen', 'hidden');
