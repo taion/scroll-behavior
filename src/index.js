@@ -23,6 +23,7 @@ export default class ScrollBehavior {
     this._stateStorage = stateStorage;
     this._getCurrentLocation = getCurrentLocation;
     this._shouldUpdateScroll = shouldUpdateScroll;
+    this._oldScrollRestoration = null;
 
     // This helps avoid some jankiness in fighting against the browser's
     // default scroll behavior on `POP` transitions.
@@ -49,7 +50,6 @@ export default class ScrollBehavior {
     this._windowScrollTarget = null;
     this._numWindowScrollAttempts = 0;
     this._ignoreScrollEvents = false;
-    this._oldScrollRestoration = null;
 
     this._scrollElements = {};
 
