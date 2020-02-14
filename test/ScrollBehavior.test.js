@@ -55,8 +55,8 @@ describe('ScrollBehavior', () => {
 
       it('sets/restores scrollRestoration on termination', done => {
         sinon.replace(PageLifecycle, 'addEventListener', setEventListener);
-        const history = withScroll(createHistory());
         expect(window.history.scrollRestoration).to.equal('auto');
+        const history = withScroll(createHistory());
         unlisten = run(history, [
           () => {
             expect(window.history.scrollRestoration).to.equal('manual');
