@@ -63,7 +63,7 @@
     "cpy-cli": "^3.0.0",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
-    "dtslint": "^2.0.5",
+    "dtslint": "^3.0.0",
     "eslint": "^6.8.0",
     "eslint-config-4catalyzer": "^1.0.2",
     "eslint-config-prettier": "^6.10.0",
