@@ -50,7 +50,7 @@
     "invariant": "^2.2.4"
   },
   "devDependencies": {
-    "@4c/babel-preset": "^7.3.0",
+    "@4c/babel-preset": "^7.3.2",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/polyfill": "^7.8.3",
@@ -60,17 +60,17 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "codecov": "^3.6.5",
-    "cpy-cli": "^3.0.0",
+    "cpy-cli": "^3.1.0",
     "cross-env": "^7.0.0",
     "dirty-chai": "^2.0.1",
     "dtslint": "^3.0.0",
     "eslint": "^6.8.0",
-    "eslint-config-4catalyzer": "^1.0.2",
+    "eslint-config-4catalyzer": "^1.1.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "history": "^2.1.2",
-    "husky": "^4.2.1",
+    "husky": "^4.2.3",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.1",
@@ -85,6 +85,6 @@
     "prettier": "^1.19.1",
     "sinon": "^8.1.1",
     "sinon-chai": "^3.4.0",
-    "webpack": "^4.41.5"
+    "webpack": "^4.41.6"
   }
 }
