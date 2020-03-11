@@ -3,8 +3,11 @@ import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
+import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
+import sinon from 'sinon';
 
 import { createHashHistoryWithoutKey } from './histories';
+import { setEventListener, triggerEvent } from './mockPageLifecycle';
 import {
   withRoutes,
   withScrollElement,
@@ -22,10 +25,48 @@ describe('ScrollBehavior', () => {
     describe(createHistory.name, () => {
       let unlisten;
 
+      beforeEach(() => {
+        window.history.scrollRestoration = 'auto';
+      });
+
       afterEach(() => {
         if (unlisten) {
           unlisten();
         }
+        sinon.restore();
+        setEventListener();
+      });
+
+      it('sets/restores/resets scrollRestoration on freeze/resume', done => {
+        sinon.replace(PageLifecycle, 'addEventListener', setEventListener);
+        const history = withScroll(createHistory());
+        expect(window.history.scrollRestoration).to.equal('auto');
+        unlisten = run(history, [
+          () => {
+            expect(window.history.scrollRestoration).to.equal('manual');
+            triggerEvent('frozen', 'hidden');
+            expect(window.history.scrollRestoration).to.equal('manual');
+            triggerEvent('hidden', 'frozen');
+            expect(window.history.scrollRestoration).to.equal('auto');
+            triggerEvent('frozen', 'hidden');
+            expect(window.history.scrollRestoration).to.equal('manual');
+            done();
+          },
+        ]);
+      });
+
+      it('sets/restores scrollRestoration on termination', done => {
+        sinon.replace(PageLifecycle, 'addEventListener', setEventListener);
+        expect(window.history.scrollRestoration).to.equal('auto');
+        const history = withScroll(createHistory());
+        unlisten = run(history, [
+          () => {
+            expect(window.history.scrollRestoration).to.equal('manual');
+            triggerEvent('hidden', 'terminated');
+            expect(window.history.scrollRestoration).to.equal('auto');
+            done();
+          },
+        ]);
       });
 
       describe('default behavior', () => {
