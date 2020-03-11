@@ -57,6 +57,8 @@ declare module 'scroll-behavior' {
       target: ScrollPosition | string,
     ) => void;
 
+    stop(): void;
+
     startIgnoringScrollEvents(): void;
 
     stopIgnoringScrollEvents(): void;
