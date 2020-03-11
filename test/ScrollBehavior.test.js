@@ -3,10 +3,11 @@ import scrollLeft from 'dom-helpers/query/scrollLeft';
 import scrollTop from 'dom-helpers/query/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
-import sinon from 'sinon';
 import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
+import sinon from 'sinon';
 
 import { createHashHistoryWithoutKey } from './histories';
+import { setEventListener, triggerEvent } from './mockPageLifecycle';
 import {
   withRoutes,
   withScrollElement,
@@ -14,7 +15,6 @@ import {
 } from './routes';
 import run, { delay } from './run';
 import withScroll from './withScroll';
-import { setEventListener, triggerEvent } from './mockPageLifecycle';
 
 describe('ScrollBehavior', () => {
   [
