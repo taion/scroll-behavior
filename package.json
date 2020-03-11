@@ -1,6 +1,6 @@
 {
   "name": "scroll-behavior",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Pluggable browser scroll management",
   "files": [
     "lib"
@@ -24,14 +24,8 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{md,ts,tsx}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": "eslint --fix",
+    "*.{md,ts,tsx}": "prettier --write"
   },
   "prettier": {
     "printWidth": 79,
@@ -57,41 +51,41 @@
     "page-lifecycle": "^0.1.2"
   },
   "devDependencies": {
-    "@4c/babel-preset": "^7.2.4",
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/polyfill": "^7.7.0",
+    "@4c/babel-preset": "^7.3.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/polyfill": "^7.8.7",
     "babel-loader": "^8.0.6",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
-    "codecov": "^3.6.1",
-    "cpy-cli": "^3.0.0",
-    "cross-env": "^6.0.3",
+    "codecov": "^3.6.5",
+    "cpy-cli": "^3.1.0",
+    "cross-env": "^7.0.2",
     "dirty-chai": "^2.0.1",
-    "dtslint": "^2.0.3",
+    "dtslint": "^3.3.0",
     "eslint": "^6.8.0",
-    "eslint-config-4catalyzer": "^1.0.1",
-    "eslint-config-prettier": "^6.9.0",
-    "eslint-plugin-import": "^2.19.1",
+    "eslint-config-4catalyzer": "^1.1.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "history": "^2.1.2",
-    "husky": "^4.0.0",
+    "husky": "^4.2.3",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.1",
-    "karma-firefox-launcher": "^1.2.0",
+    "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
-    "lint-staged": "^9.5.0",
-    "mocha": "^7.0.0",
+    "lint-staged": "^10.0.8",
+    "mocha": "^7.1.0",
     "prettier": "^1.19.1",
-    "sinon": "^8.0.2",
-    "sinon-chai": "^3.4.0",
-    "webpack": "^4.41.5"
+    "sinon": "^9.0.0",
+    "sinon-chai": "^3.5.0",
+    "webpack": "^4.42.0"
   }
 }
