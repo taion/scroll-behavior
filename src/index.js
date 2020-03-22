@@ -62,7 +62,7 @@ export default class ScrollBehavior {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
-      Object.keys(this._scrollElements).forEach(key => {
+      Object.keys(this._scrollElements).forEach((key) => {
         const scrollElement = this._scrollElements[key];
         requestAnimationFrame.cancel(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
@@ -142,7 +142,7 @@ export default class ScrollBehavior {
       }
     });
 
-    Object.keys(this._scrollElements).forEach(key => {
+    Object.keys(this._scrollElements).forEach((key) => {
       this._updateElementScroll(key, prevContext, context);
     });
   }
@@ -346,7 +346,7 @@ export default class ScrollBehavior {
       return Promise.resolve();
     }
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this._checkWindowScrollHandle = requestAnimationFrame(() =>
         resolve(this._checkWindowScrollPosition()),
       );

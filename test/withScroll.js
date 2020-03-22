@@ -40,7 +40,7 @@ export default function withScroll(history, shouldUpdateScroll) {
     const prevLocation = currentLocation;
     currentLocation = location;
 
-    listeners.forEach(listener => {
+    listeners.forEach((listener) => {
       listener(location);
     });
 
@@ -64,7 +64,7 @@ export default function withScroll(history, shouldUpdateScroll) {
     listener(currentLocation);
 
     return () => {
-      listeners = listeners.filter(item => item !== listener);
+      listeners = listeners.filter((item) => item !== listener);
 
       if (listeners.length === 0) {
         scrollBehavior.stop();

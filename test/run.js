@@ -10,7 +10,7 @@ export default function run(history, steps) {
 
   let i = 0;
 
-  return history.listen(location => {
+  return history.listen((location) => {
     if (i === steps.length) {
       return;
     }
