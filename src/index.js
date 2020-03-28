@@ -15,7 +15,7 @@ const MAX_SCROLL_ATTEMPTS = 2;
 
 export default class ScrollBehavior {
   constructor({
-    addTransitionHook,
+    addNavigationListener,
     stateStorage,
     getCurrentLocation,
     shouldUpdateScroll,
@@ -26,7 +26,7 @@ export default class ScrollBehavior {
     this._oldScrollRestoration = null;
 
     // This helps avoid some jankiness in fighting against the browser's
-    //  default scroll behavior on `POP` transitions.
+    //  default scroll behavior on `POP` navigations.
     /* istanbul ignore else: Travis browsers all support this */
     this._setScrollRestoration();
 
@@ -43,7 +43,7 @@ export default class ScrollBehavior {
     //  before emitting the location change.
     on(window, 'scroll', this._onWindowScroll);
 
-    const handleTransition = (saveWindowPosition) => {
+    const handleNavigation = (saveWindowPosition) => {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
@@ -64,10 +64,10 @@ export default class ScrollBehavior {
       });
     };
 
-    this._removeTransitionHook = addTransitionHook(({ action }) => {
+    this._removeNavigationListener = addNavigationListener(({ action }) => {
       // Don't save window position on POP, as the browser may have already
       //  updated it.
-      handleTransition(action !== 'POP');
+      handleNavigation(action !== 'POP');
     });
 
     PageLifecycle.addEventListener('statechange', ({ newState }) => {
@@ -76,7 +76,7 @@ export default class ScrollBehavior {
         newState === 'frozen' ||
         newState === 'discarded'
       ) {
-        handleTransition(true);
+        handleNavigation(true);
 
         // Scroll restoration persists across page reloads. We want to reset
         //  this to the original value, so that we can let the browser handle
@@ -145,8 +145,8 @@ export default class ScrollBehavior {
 
   updateScroll(prevContext, context) {
     this._updateWindowScroll(prevContext, context).then(() => {
-      // Save the position immediately after a transition so that if no
-      //  scrolling occurs, there is still a saved position
+      // Save the position immediately after navigation so that if no scrolling
+      //  occurs, there is still a saved position.
       if (!this._saveWindowPositionHandle) {
         this._saveWindowPositionHandle = requestAnimationFrame(
           this._saveWindowPosition,
@@ -199,7 +199,7 @@ export default class ScrollBehavior {
     off(window, 'scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
 
-    this._removeTransitionHook();
+    this._removeNavigationListener();
   }
 
   startIgnoringScrollEvents() {
@@ -212,12 +212,12 @@ export default class ScrollBehavior {
 
   _onWindowScroll = () => {
     if (this._ignoreScrollEvents) {
-      // Don't save the scroll position until the transition is complete
+      // Don't save the scroll position until navigation is complete.
       return;
     }
 
     // It's possible that this scroll operation was triggered by what will be a
-    //  `POP` transition. Instead of updating the saved location immediately,
+    //  `POP` navigation. Instead of updating the saved location immediately,
     //  we have to enqueue the update, then potentially cancel it if we observe
     //  a location update.
     if (!this._saveWindowPositionHandle) {

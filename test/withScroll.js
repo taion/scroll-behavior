@@ -52,7 +52,7 @@ export default function withScroll(history, shouldUpdateScroll) {
   function listen(listener) {
     if (listeners.length === 0) {
       scrollBehavior = new ScrollBehavior({
-        addTransitionHook: history.listenBefore,
+        addNavigationListener: history.listenBefore,
         stateStorage: new HistoryStateStorage(history),
         getCurrentLocation,
         shouldUpdateScroll,
