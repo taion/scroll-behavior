@@ -64,10 +64,10 @@ export default class ScrollBehavior {
       });
     };
 
-    this._removeTransitionHook = addTransitionHook(() => {
-      // Don't save window position here, as the browser may have already
+    this._removeTransitionHook = addTransitionHook(({ action }) => {
+      // Don't save window position on POP, as the browser may have already
       //  updated it.
-      handleTransition(false);
+      handleTransition(action !== 'POP');
     });
 
     PageLifecycle.addEventListener('statechange', ({ newState }) => {
