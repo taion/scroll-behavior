@@ -47,7 +47,7 @@ export default class ScrollBehavior {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
-      if (saveWindowPosition) {
+      if (saveWindowPosition && !this._ignoreScrollEvents) {
         this._saveWindowPosition();
       }
 
