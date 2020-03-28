@@ -3,12 +3,17 @@
   "version": "0.10.0",
   "description": "Pluggable browser scroll management",
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "main": "lib/index.js",
+  "module": "es/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "babel src -d lib --delete-dir-on-start && cpy types/*.d.ts lib",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "babel -d lib --delete-dir-on-start src",
+    "build:esm": "babel --env-name esm -d es --delete-dir-on-start src",
+    "build:types": "cpy types/*.d.ts lib",
     "format": "eslint --fix . && npm run prettier -- --write",
     "lint": "eslint . && npm run prettier -- -l",
     "prepublish": "npm run build",
