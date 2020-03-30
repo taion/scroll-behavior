@@ -70,7 +70,7 @@ describe('ScrollBehavior', () => {
       });
 
       describe('default behavior', () => {
-        it.only('should emulate browser scroll behavior', (done) => {
+        it('should emulate browser scroll behavior', (done) => {
           const history = withRoutes(withScroll(createHistory()));
           const child1 = document.getElementById('child1');
           const child2 = document.getElementById('child2-id');

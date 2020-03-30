@@ -17,7 +17,7 @@ const location = {
 };
 
 const scrollBehavior = new ScrollBehavior<Location, Context>({
-  addTransitionHook: (_hook) => () => {},
+  addNavigationListener: (_listener) => () => {},
   stateStorage: {
     save: (_location, _key, _value) => {},
     read: (_location, _key) => [0, 0],
