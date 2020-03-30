@@ -26,24 +26,9 @@ export default class ScrollBehavior {
     this._oldScrollRestoration = null;
 
     // This helps avoid some jankiness in fighting against the browser's
-    // default scroll behavior on `POP` transitions.
+    //  default scroll behavior on `POP` transitions.
     /* istanbul ignore else: Travis browsers all support this */
     this._setScrollRestoration();
-
-    // Scroll restoration persists across page reloads. We want to reset
-    // this to the original value, so that we can let the browser handle
-    // restoring the initial scroll position on server-rendered pages.
-    PageLifecycle.addEventListener('statechange', ({ newState }) => {
-      if (
-        newState === 'terminated' ||
-        newState === 'frozen' ||
-        newState === 'discarded'
-      ) {
-        this._restoreScrollRestoration();
-      } else {
-        this._setScrollRestoration();
-      }
-    });
 
     this._saveWindowPositionHandle = null;
     this._checkWindowScrollHandle = null;
@@ -54,25 +39,52 @@ export default class ScrollBehavior {
     this._scrollElements = {};
 
     // We have to listen to each window scroll update rather than to just
-    // location updates, because some browsers will update scroll position
-    // before emitting the location change.
+    //  location updates, because some browsers will update scroll position
+    //  before emitting the location change.
     on(window, 'scroll', this._onWindowScroll);
 
-    this._removeTransitionHook = addTransitionHook(() => {
+    const handleTransition = (saveWindowPosition) => {
       requestAnimationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
+
+      if (saveWindowPosition && !this._ignoreScrollEvents) {
+        this._saveWindowPosition();
+      }
 
       Object.keys(this._scrollElements).forEach((key) => {
         const scrollElement = this._scrollElements[key];
         requestAnimationFrame.cancel(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
 
-        // It's fine to save element scroll positions here, though; the browser
-        // won't modify them.
+        // It's always fine to save element scroll positions here; the browser
+        //  won't modify them.
         if (!this._ignoreScrollEvents) {
           this._saveElementPosition(key);
         }
       });
+    };
+
+    this._removeTransitionHook = addTransitionHook(({ action }) => {
+      // Don't save window position on POP, as the browser may have already
+      //  updated it.
+      handleTransition(action !== 'POP');
+    });
+
+    PageLifecycle.addEventListener('statechange', ({ newState }) => {
+      if (
+        newState === 'terminated' ||
+        newState === 'frozen' ||
+        newState === 'discarded'
+      ) {
+        handleTransition(true);
+
+        // Scroll restoration persists across page reloads. We want to reset
+        //  this to the original value, so that we can let the browser handle
+        //  restoring the initial scroll position on server-rendered pages.
+        this._restoreScrollRestoration();
+      } else {
+        this._setScrollRestoration();
+      }
     });
   }
 
@@ -134,7 +146,7 @@ export default class ScrollBehavior {
   updateScroll(prevContext, context) {
     this._updateWindowScroll(prevContext, context).then(() => {
       // Save the position immediately after a transition so that if no
-      // scrolling occurs, there is still a saved position
+      //  scrolling occurs, there is still a saved position
       if (!this._saveWindowPositionHandle) {
         this._saveWindowPositionHandle = requestAnimationFrame(
           this._saveWindowPosition,
@@ -149,15 +161,15 @@ export default class ScrollBehavior {
 
   _setScrollRestoration = () => {
     if (this._oldScrollRestoration) {
-      // It's possible that we already set the scroll restoration
+      // It's possible that we already set the scroll restoration.
       return;
     }
     if (
       'scrollRestoration' in window.history &&
       // Unfortunately, Safari on iOS freezes for 2-6s after the user swipes to
-      // navigate through history with scrollRestoration being 'manual', so we
-      // need to detect this browser and exclude it from the following code
-      // until this bug is fixed by Apple.
+      //  navigate through history with scrollRestoration being 'manual', so we
+      //  need to detect this browser and exclude it from the following code
+      //  until this bug is fixed by Apple.
       !isMobileSafari()
     ) {
       this._oldScrollRestoration = window.history.scrollRestoration;
@@ -205,9 +217,9 @@ export default class ScrollBehavior {
     }
 
     // It's possible that this scroll operation was triggered by what will be a
-    // `POP` transition. Instead of updating the saved location immediately, we
-    // have to enqueue the update, then potentially cancel it if we observe a
-    // location update.
+    //  `POP` transition. Instead of updating the saved location immediately,
+    //  we have to enqueue the update, then potentially cancel it if we observe
+    //  a location update.
     if (!this._saveWindowPositionHandle) {
       this._saveWindowPositionHandle = requestAnimationFrame(
         this._saveWindowPosition,
@@ -263,8 +275,8 @@ export default class ScrollBehavior {
     );
 
     // Updating the window scroll position is really flaky. Just trying to
-    // scroll it isn't enough. Instead, try to scroll a few times until it
-    // works.
+    //  scroll it isn't enough. Instead, try to scroll a few times until it
+    //  works.
     this._numWindowScrollAttempts = 0;
     return this._checkWindowScrollPosition();
   }
@@ -283,7 +295,7 @@ export default class ScrollBehavior {
     }
 
     // Unlike with the window, there shouldn't be any flakiness to deal with
-    // here.
+    //  here.
     this.scrollToTarget(element, scrollTarget);
   }
 
@@ -328,8 +340,8 @@ export default class ScrollBehavior {
     this._checkWindowScrollHandle = null;
 
     // We can only get here if scrollTarget is set. Every code path that unsets
-    // scroll target also cancels the handle to avoid calling this handler.
-    // Still, check anyway just in case.
+    //  scroll target also cancels the handle to avoid calling this handler.
+    //  Still, check anyway just in case.
     /* istanbul ignore if: paranoid guard */
     if (!this._windowScrollTarget) {
       return Promise.resolve();
