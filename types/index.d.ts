@@ -1,7 +1,7 @@
 // TypeScript Version: 3.0
 
 declare module 'scroll-behavior' {
-  interface TransitionHook {
+  interface NavigationListener {
     (): void;
   }
 
@@ -19,7 +19,7 @@ declare module 'scroll-behavior' {
   }
 
   interface ScrollBehaviorOptions<TLocation extends LocationBase, TContext> {
-    addTransitionHook: (hook: TransitionHook) => () => void;
+    addNavigationListener: (listener: NavigationListener) => () => void;
     stateStorage: {
       save: (
         location: TLocation,

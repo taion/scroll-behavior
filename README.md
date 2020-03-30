@@ -18,13 +18,13 @@ import ScrollBehavior from 'scroll-behavior';
 /* ... */
 
 const scrollBehavior = new ScrollBehavior({
-  addTransitionHook,
+  addNavigationListener,
   stateStorage,
   getCurrentLocation,
   /* shouldUpdateScroll, */
 });
 
-// After a transition:
+// After navigation:
 scrollBehavior.updateScroll(/* prevContext, context */);
 ```
 
@@ -40,15 +40,15 @@ $ npm i -S scroll-behavior
 
 Create a `ScrollBehavior` object with the following arguments:
 
-- `addTransitionHook`: this function should take a transition hook function and return an unregister function
-  - The transition hook function should be called immediately before a transition updates the page
-  - The unregister function should remove the transition hook when called
+- `addNavigationListener`: this function should take a navigation listener function and return an unlisten function
+  - The navigation listener function should be called immediately before navigation updates the page
+  - The unlisten function should remove the navigation listener when called
 - `stateStorage`: this object should implement `read` and `save` methods
   - The `save` method should take a location object, a nullable element key, and a truthy value; it should save that value for the duration of the page session
   - The `read` method should take a location object and a nullable element key; it should return the value that `save` was called with for that location and element key, or a falsy value if no saved value is available
 - `getCurrentLocation`: this function should return the current location object
 
-This object will keep track of the scroll position. Call the `updateScroll` method on this object after transitions to emulate the default browser scroll behavior on page changes.
+This object will keep track of the scroll position. Call the `updateScroll` method on this object after navigation to emulate the default browser scroll behavior on page changes.
 
 Call the `stop` method to tear down all listeners.
 
