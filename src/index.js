@@ -1,10 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 
-import off from 'dom-helpers/events/off';
-import on from 'dom-helpers/events/on';
-import scrollLeft from 'dom-helpers/query/scrollLeft';
-import scrollTop from 'dom-helpers/query/scrollTop';
-import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
+import * as animationFrame from 'dom-helpers/animationFrame';
+import scrollLeft from 'dom-helpers/scrollLeft';
+import scrollTop from 'dom-helpers/scrollTop';
 import invariant from 'invariant';
 import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
 
@@ -41,10 +39,10 @@ export default class ScrollBehavior {
     // We have to listen to each window scroll update rather than to just
     //  location updates, because some browsers will update scroll position
     //  before emitting the location change.
-    on(window, 'scroll', this._onWindowScroll);
+    window.addEventListener('scroll', this._onWindowScroll);
 
     const handleTransition = (saveWindowPosition) => {
-      requestAnimationFrame.cancel(this._saveWindowPositionHandle);
+      animationFrame.cancel(this._saveWindowPositionHandle);
       this._saveWindowPositionHandle = null;
 
       if (saveWindowPosition && !this._ignoreScrollEvents) {
@@ -53,7 +51,7 @@ export default class ScrollBehavior {
 
       Object.keys(this._scrollElements).forEach((key) => {
         const scrollElement = this._scrollElements[key];
-        requestAnimationFrame.cancel(scrollElement.savePositionHandle);
+        animationFrame.cancel(scrollElement.savePositionHandle);
         scrollElement.savePositionHandle = null;
 
         // It's always fine to save element scroll positions here; the browser
@@ -106,7 +104,7 @@ export default class ScrollBehavior {
 
       onScroll: () => {
         if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
-          scrollElement.savePositionHandle = requestAnimationFrame(
+          scrollElement.savePositionHandle = animationFrame.request(
             saveElementPosition,
           );
         }
@@ -115,13 +113,13 @@ export default class ScrollBehavior {
 
     // In case no scrolling occurs, save the initial position
     if (!scrollElement.savePositionHandle && !this._ignoreScrollEvents) {
-      scrollElement.savePositionHandle = requestAnimationFrame(
+      scrollElement.savePositionHandle = animationFrame.request(
         saveElementPosition,
       );
     }
 
     this._scrollElements[key] = scrollElement;
-    on(element, 'scroll', scrollElement.onScroll);
+    element.addEventListener('scroll', scrollElement.onScroll);
 
     this._updateElementScroll(key, null, context);
   }
@@ -137,8 +135,8 @@ export default class ScrollBehavior {
       key
     ];
 
-    off(element, 'scroll', onScroll);
-    requestAnimationFrame.cancel(savePositionHandle);
+    element.removeEventListener('scroll', onScroll);
+    animationFrame.cancel(savePositionHandle);
 
     delete this._scrollElements[key];
   }
@@ -148,7 +146,7 @@ export default class ScrollBehavior {
       // Save the position immediately after a transition so that if no
       //  scrolling occurs, there is still a saved position
       if (!this._saveWindowPositionHandle) {
-        this._saveWindowPositionHandle = requestAnimationFrame(
+        this._saveWindowPositionHandle = animationFrame.request(
           this._saveWindowPosition,
         );
       }
@@ -196,7 +194,7 @@ export default class ScrollBehavior {
   stop() {
     this._restoreScrollRestoration();
 
-    off(window, 'scroll', this._onWindowScroll);
+    window.removeEventListener('scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
 
     this._removeTransitionHook();
@@ -221,7 +219,7 @@ export default class ScrollBehavior {
     //  we have to enqueue the update, then potentially cancel it if we observe
     //  a location update.
     if (!this._saveWindowPositionHandle) {
-      this._saveWindowPositionHandle = requestAnimationFrame(
+      this._saveWindowPositionHandle = animationFrame.request(
         this._saveWindowPosition,
       );
     }
@@ -245,7 +243,7 @@ export default class ScrollBehavior {
   };
 
   _cancelCheckWindowScroll() {
-    requestAnimationFrame.cancel(this._checkWindowScrollHandle);
+    animationFrame.cancel(this._checkWindowScrollHandle);
     this._checkWindowScrollHandle = null;
   }
 
@@ -359,7 +357,7 @@ export default class ScrollBehavior {
     }
 
     return new Promise((resolve) => {
-      this._checkWindowScrollHandle = requestAnimationFrame(() =>
+      this._checkWindowScrollHandle = animationFrame.request(() =>
         resolve(this._checkWindowScrollPosition()),
       );
     });

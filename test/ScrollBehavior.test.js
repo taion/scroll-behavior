@@ -1,6 +1,6 @@
-import offset from 'dom-helpers/query/offset';
-import scrollLeft from 'dom-helpers/query/scrollLeft';
-import scrollTop from 'dom-helpers/query/scrollTop';
+import offset from 'dom-helpers/offset';
+import scrollLeft from 'dom-helpers/scrollLeft';
+import scrollTop from 'dom-helpers/scrollTop';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 import PageLifecycle from 'page-lifecycle/dist/lifecycle.es5';
@@ -70,7 +70,7 @@ describe('ScrollBehavior', () => {
       });
 
       describe('default behavior', () => {
-        it('should emulate browser scroll behavior', (done) => {
+        it.only('should emulate browser scroll behavior', (done) => {
           const history = withRoutes(withScroll(createHistory()));
           const child1 = document.getElementById('child1');
           const child2 = document.getElementById('child2-id');
