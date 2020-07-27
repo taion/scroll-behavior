@@ -65,11 +65,11 @@
     "babel-plugin-istanbul": "^6.0.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
-    "codecov": "^3.7.1",
+    "codecov": "^3.7.2",
     "cpy-cli": "^3.1.1",
     "cross-env": "^7.0.2",
     "dirty-chai": "^2.0.1",
-    "dtslint": "^3.6.12",
+    "dtslint": "^3.6.14",
     "eslint": "^7.5.0",
     "eslint-config-4catalyzer": "^1.1.2",
     "eslint-config-prettier": "^6.11.0",
@@ -79,7 +79,7 @@
     "husky": "^4.2.5",
     "karma": "^5.1.0",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-coverage": "^2.0.2",
+    "karma-coverage": "^2.0.3",
     "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
@@ -92,6 +92,6 @@
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
     "typescript": "^3.9.7",
-    "webpack": "^4.43.0"
+    "webpack": "^4.44.0"
   }
 }
