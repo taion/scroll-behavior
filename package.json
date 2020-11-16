@@ -60,7 +60,7 @@
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
     "@babel/polyfill": "^7.12.1",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.2.1",
     "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-polyfill": "^6.26.0",
