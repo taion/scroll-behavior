@@ -72,7 +72,7 @@
     "dtslint": "^3.7.0",
     "eslint": "^7.17.0",
     "eslint-config-4catalyzer": "^1.1.5",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
     "history": "^2.1.2",
