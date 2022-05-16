@@ -56,7 +56,7 @@
     "page-lifecycle": "^0.1.2"
   },
   "devDependencies": {
-    "@4c/babel-preset": "^7.4.1",
+    "@4c/babel-preset": "^9.1.0",
     "@babel/cli": "^7.12.13",
     "@babel/core": "^7.12.13",
     "@babel/polyfill": "^7.12.1",
