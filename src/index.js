@@ -68,7 +68,7 @@ export default class ScrollBehavior {
       handleNavigation(action !== 'POP');
     });
 
-    PageLifecycle.addEventListener('statechange', ({ newState }) => {
+    this._pageLifecycleListener = ({ newState }) => {
       if (
         newState === 'terminated' ||
         newState === 'frozen' ||
@@ -83,7 +83,9 @@ export default class ScrollBehavior {
       } else {
         this._setScrollRestoration();
       }
-    });
+    };
+
+    PageLifecycle.addEventListener('statechange', this._pageLifecycleListener);
   }
 
   registerElement(key, element, shouldUpdateScroll, context) {
@@ -196,6 +198,8 @@ export default class ScrollBehavior {
 
     window.removeEventListener('scroll', this._onWindowScroll);
     this._cancelCheckWindowScroll();
+
+    PageLifecycle.removeEventListener('statechange', this._pageLifecycleListener);
 
     this._removeNavigationListener();
   }
