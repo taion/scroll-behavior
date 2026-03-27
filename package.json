@@ -64,7 +64,7 @@
     "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-polyfill": "^6.26.0",
-    "chai": "^4.3.0",
+    "chai": "^6.2.2",
     "codecov": "^3.8.1",
     "cpy-cli": "^3.1.1",
     "cross-env": "^7.0.3",
